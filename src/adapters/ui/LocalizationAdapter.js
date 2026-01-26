@@ -1,15 +1,28 @@
 import ILocalization from '../../ports/ILocalization.js';
 
 export default class LocalizationAdapter extends ILocalization {
-  constructor(basePath = '/src/i18n/locales') {
+  constructor(basePath = null, moduleUrl = import.meta.url) {
     super();
-    this.basePath = basePath.replace(/\/$/, '');
+    const resolvedBasePath = basePath || this._resolveModuleBasePath(moduleUrl);
+    this.basePath = this._normalizeBasePath(resolvedBasePath);
     this.cache = {};
     this.language = 'en';
   }
 
   setLanguage(lang) {
     this.language = lang;
+  }
+
+  _resolveModuleBasePath(moduleUrl) {
+    if (!moduleUrl) return '/src/i18n/locales';
+    const baseUrl = new URL('../../i18n/locales/', moduleUrl);
+    return baseUrl.href;
+  }
+
+  _normalizeBasePath(basePath) {
+    const fallback = '/src/i18n/locales';
+    if (!basePath) return fallback;
+    return basePath.replace(/\/$/, '');
   }
 
   async _loadDomain(lang, domain) {
