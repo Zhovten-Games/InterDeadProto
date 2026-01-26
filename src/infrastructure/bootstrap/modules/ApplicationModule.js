@@ -111,6 +111,7 @@ export default class ApplicationModule {
           visibilityService: container.resolve('ChatLauncherVisibilityService'),
           modalAdapter: container.resolve('HostModalAdapter'),
           embeddingResolver: container.resolve('EmbeddingModeResolver'),
+          embedPermissionsResolver: container.resolve('EmbedPermissionsResolver'),
           documentRef: typeof document !== 'undefined' ? document : null,
           logger: container.resolve('Logger')
         }),

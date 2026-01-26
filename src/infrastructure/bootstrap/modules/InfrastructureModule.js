@@ -16,6 +16,7 @@ import CanvasFactoryAdapter from '../../../adapters/ui/CanvasFactoryAdapter.js';
 import NotificationAdapter from '../../../adapters/notification/NotificationAdapter.js';
 import ItemDetectionAdapter from '../../../adapters/ai/ItemDetectionAdapter.js';
 import EmbeddingModeResolver from '../EmbeddingModeResolver.js';
+import EmbedPermissionsResolver from '../EmbedPermissionsResolver.js';
 import AuthVisibilityAdapter from '../../../adapters/auth/AuthVisibilityAdapter.js';
 import HostModalAdapter from '../../../adapters/modal/HostModalAdapter.js';
 import FullAppBootstrapper from '../FullAppBootstrapper.js';
@@ -150,6 +151,16 @@ export default class InfrastructureModule {
       'EmbeddingModeResolver',
       () =>
         new EmbeddingModeResolver({
+          logger: container.resolve('Logger'),
+          documentRef: typeof document !== 'undefined' ? document : null
+        }),
+      { priority: 7 }
+    );
+
+    container.register(
+      'EmbedPermissionsResolver',
+      () =>
+        new EmbedPermissionsResolver({
           logger: container.resolve('Logger'),
           documentRef: typeof document !== 'undefined' ? document : null
         }),

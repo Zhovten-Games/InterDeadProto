@@ -4,6 +4,7 @@ export default class ChatLauncherService {
     visibilityService,
     modalAdapter,
     embeddingResolver,
+    embedPermissionsResolver,
     documentRef = null,
     logger = console
   } = {}) {
@@ -11,6 +12,7 @@ export default class ChatLauncherService {
     this.visibilityService = visibilityService;
     this.modalAdapter = modalAdapter;
     this.embeddingResolver = embeddingResolver;
+    this.embedPermissionsResolver = embedPermissionsResolver;
     this.documentRef = documentRef || (typeof document !== 'undefined' ? document : null);
     this.logger = logger || console;
     this._iframe = null;
@@ -51,6 +53,8 @@ export default class ChatLauncherService {
     const iframe = this.documentRef.createElement('iframe');
     iframe.className = 'interdead-launcher-modal__iframe';
     iframe.src = this._resolveAppSrc();
+    const allow = this.embedPermissionsResolver?.resolveAllowAttribute?.();
+    if (allow) iframe.allow = allow;
     this._iframe = iframe;
     return iframe;
   }
