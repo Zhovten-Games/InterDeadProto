@@ -1,0 +1,20 @@
+{
+  "unlock": "all",
+  "avatar": "/assets/images/pencil.png",
+  "sounds": {
+    "message": {
+      "ghost": "/assets/audio/ghost_effect.mp3",
+      "user": "/assets/audio/type_sound.mp3"
+    },
+    "detection": "/assets/audio/ghost_effect.mp3"
+  },
+  "stages": [
+    {
+      "event": { "id": "start", "messages": [{"author": "ghost", "text": "hello"}] },
+      "quest": { "id": "find-item", "type": "item" }
+    },
+    {
+      "event": { "id": "end", "messages": [{"author": "ghost", "text": "bye"}] }
+    }
+  ]
+}

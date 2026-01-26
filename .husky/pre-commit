@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+node code-map/tools/run-map-all.js
+
+git add code-map/generated
