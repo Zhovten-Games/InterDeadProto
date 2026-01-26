@@ -1,16 +1,18 @@
+import { resolveAssetUrl } from '../assetsBaseUrl.js';
+
 export default {
   id: 'guide',
-  avatar: '/assets/images/pencil.png',
+  avatar: resolveAssetUrl('images/pencil.png'),
   reactions: {
     'guide-intro': ['🙂'],
     'guide-outro': ['🤔']
   },
   sounds: {
     message: {
-      ghost: '/assets/audio/ghost_effect.mp3',
-      user: '/assets/audio/type_sound.mp3'
+      ghost: resolveAssetUrl('audio/ghost_effect.mp3'),
+      user: resolveAssetUrl('audio/type_sound.mp3')
     },
-    detection: '/assets/audio/ghost_effect.mp3'
+    detection: resolveAssetUrl('audio/ghost_effect.mp3')
   },
   stages: [
     {
@@ -90,4 +92,3 @@ export default {
     'scroll-down': [{ type: 'always' }]
   }
 };
-

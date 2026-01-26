@@ -2,6 +2,7 @@ import loadScript from '../../utils/loadScript.js';
 
 import NullEventBus from '../../core/events/NullEventBus.js';
 import IDetection from '../../ports/IDetection.js';
+import { resolveAssetUrl } from '../../config/assetsBaseUrl.js';
 
 export default class DetectionService extends IDetection {
   constructor(logger, stateService = null, eventBus = new NullEventBus()) {
@@ -18,8 +19,8 @@ export default class DetectionService extends IDetection {
   }
 
   async loadAssets() {
-    await loadScript('/assets/libs/tf.min.js');
-    await loadScript('/assets/libs/coco-ssd.min.js');
+    await loadScript(resolveAssetUrl('libs/tf.min.js'));
+    await loadScript(resolveAssetUrl('libs/coco-ssd.min.js'));
   }
 
   async loadModel() {
@@ -27,7 +28,7 @@ export default class DetectionService extends IDetection {
       this.logger.warn('cocoSsd global not found');
       return;
     }
-    this.model = await cocoSsd.load({ modelUrl: '/assets/models/coco-ssd/model.json' });
+    this.model = await cocoSsd.load({ modelUrl: resolveAssetUrl('models/coco-ssd/model.json') });
     this.logger.info('COCO-SSD model loaded from assets');
   }
 

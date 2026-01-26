@@ -1,12 +1,12 @@
 {
   "unlock": "all",
-  "avatar": "/assets/images/pencil.png",
+  "avatar": "assets/images/pencil.png",
   "sounds": {
     "message": {
-      "ghost": "/assets/audio/ghost_effect.mp3",
-      "user": "/assets/audio/type_sound.mp3"
+      "ghost": "assets/audio/ghost_effect.mp3",
+      "user": "assets/audio/type_sound.mp3"
     },
-    "detection": "/assets/audio/ghost_effect.mp3"
+    "detection": "assets/audio/ghost_effect.mp3"
   },
   "stages": [
     {

@@ -5,7 +5,7 @@ if (typeof window !== 'undefined') {
     await new Promise((resolve, reject) => {
       const script = document.createElement('script');
       // Load the UMD bundle which exposes initSqlJs on the window object
-      script.src = new URL('./sql-wasm.js', import.meta.url).pathname;
+      script.src = new URL('./sql-wasm.js', import.meta.url).toString();
       script.onload = resolve;
       script.onerror = reject;
       document.head.appendChild(script);

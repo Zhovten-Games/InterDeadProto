@@ -1,6 +1,8 @@
+import { resolveAssetUrl } from '../assetsBaseUrl.js';
+
 export default {
   id: 'guest1',
-  avatar: '/assets/images/static-image.webp',
+  avatar: resolveAssetUrl('images/static-image.webp'),
   reactions: {
     'guest1-chat-1': ['😮'],
     'guest1-chat-2': ['😍'],
@@ -8,10 +10,10 @@ export default {
   },
   sounds: {
     message: {
-      ghost: '/assets/audio/ghost_effect.mp3',
-      user: '/assets/audio/type_sound.mp3'
+      ghost: resolveAssetUrl('audio/ghost_effect.mp3'),
+      user: resolveAssetUrl('audio/type_sound.mp3')
     },
-    detection: '/assets/audio/ghost_effect.mp3'
+    detection: resolveAssetUrl('audio/ghost_effect.mp3')
   },
   stages: [
     {

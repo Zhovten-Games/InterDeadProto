@@ -3,6 +3,7 @@
 import initSqlJs from '../../../assets/libs/db/sql-wasm.esm.js';
 
 import IDatabase from '../../ports/IDatabase.js';
+import { resolveAssetUrl } from '../../config/assetsBaseUrl.js';
 
 export default class DatabaseService extends IDatabase {
   constructor(path = ':memory:', logger, initOverride, persistence = null) {
@@ -21,7 +22,7 @@ export default class DatabaseService extends IDatabase {
       const init = this._initSqlJs || initSqlJs;
       // When running in the browser we always load assets from the public path.
       // Node.js tests may override `_initSqlJs` to provide a custom initializer.
-      const basePath = '/assets/libs/db/';
+      const basePath = resolveAssetUrl('libs/db/');
       const SQL = await init({
         locateFile: file => `${basePath}${file}`,
       });
