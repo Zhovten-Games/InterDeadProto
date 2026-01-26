@@ -120,7 +120,8 @@ export default class InfrastructureModule {
         new DetectionAdapter(
           container.resolve('Logger'),
           container.resolve('StateService'),
-          container.resolve('IEventBus')
+          container.resolve('IEventBus'),
+          config
         ),
       { priority: 110 }
     );

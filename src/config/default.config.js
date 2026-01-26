@@ -19,5 +19,8 @@ export default {
     "initialScreen": "welcome",
     "clearDatabase": true,
     "clearStorage": true
+  },
+  "ai": {
+    "cocoSsdFallbackUrl": "https://storage.googleapis.com/tfjs-models/tfjs/coco-ssd/model.json"
   }
 };

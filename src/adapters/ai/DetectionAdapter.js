@@ -5,11 +5,12 @@ import IDetection from '../../ports/IDetection.js';
 import { resolveAssetUrl } from '../../config/assetsBaseUrl.js';
 
 export default class DetectionService extends IDetection {
-  constructor(logger, stateService = null, eventBus = new NullEventBus()) {
+  constructor(logger, stateService = null, eventBus = new NullEventBus(), config = {}) {
     super();
     this.logger = logger;
     this.stateService = stateService;
     this.eventBus = eventBus;
+    this.config = config;
     this.model = null;
     /**
      * Internal mutex to avoid parallel model inference.
@@ -28,8 +29,19 @@ export default class DetectionService extends IDetection {
       this.logger.warn('cocoSsd global not found');
       return;
     }
-    this.model = await cocoSsd.load({ modelUrl: resolveAssetUrl('models/coco-ssd/model.json') });
-    this.logger.info('COCO-SSD model loaded from assets');
+    const modelUrl = resolveAssetUrl('models/coco-ssd/model.json');
+    const fallbackUrl = this.config?.ai?.cocoSsdFallbackUrl;
+    try {
+      const result = await this.loadModelWithFallback(modelUrl, fallbackUrl);
+      this.model = result?.model || null;
+      if (this.model) {
+        const label = result.source === modelUrl ? 'assets' : 'fallback CDN';
+        this.logger.info(`COCO-SSD model loaded from ${label}`);
+      }
+    } catch (error) {
+      this.model = null;
+      this.logger.error('Failed to load COCO-SSD model.', error);
+    }
   }
 
   async boot() {
@@ -93,6 +105,22 @@ export default class DetectionService extends IDetection {
       return { ok, box: { x, y, width, height }, mask };
     } finally {
       this.busy = false;
+    }
+  }
+
+  async loadModelWithFallback(modelUrl, fallbackUrl) {
+    try {
+      const model = await cocoSsd.load({ modelUrl });
+      return { model, source: modelUrl };
+    } catch (error) {
+      if (!fallbackUrl || fallbackUrl === modelUrl) {
+        throw error;
+      }
+      this.logger.warn(
+        `Failed to load COCO-SSD model from ${modelUrl}. Switching to fallback ${fallbackUrl}.`
+      );
+      const model = await cocoSsd.load({ modelUrl: fallbackUrl });
+      return { model, source: fallbackUrl };
     }
   }
 }
