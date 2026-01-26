@@ -1,9 +1,11 @@
 import ITemplateRenderer from '../../ports/ITemplateRenderer.js';
+import { resolveTemplateBaseUrl } from '../../config/templateBaseUrl.js';
 
 export default class TemplateService extends ITemplateRenderer {
-  constructor(baseUrl = '/src/presentation/templates/', logger) {
+  constructor(baseUrl = '/src/presentation/templates/', logger, moduleUrl = import.meta.url) {
     super();
-    this.baseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    const resolvedBase = baseUrl || resolveTemplateBaseUrl(moduleUrl);
+    this.baseUrl = resolvedBase.endsWith('/') ? resolvedBase : `${resolvedBase}/`;
     this.logger = logger;
   }
 
@@ -44,4 +46,3 @@ export default class TemplateService extends ITemplateRenderer {
     }
   }
 }
-

@@ -20,6 +20,7 @@ import AuthVisibilityAdapter from '../../../adapters/auth/AuthVisibilityAdapter.
 import HostModalAdapter from '../../../adapters/modal/HostModalAdapter.js';
 import FullAppBootstrapper from '../FullAppBootstrapper.js';
 import LauncherBootstrapper from '../LauncherBootstrapper.js';
+import { resolveTemplateBaseUrl } from '../../../config/templateBaseUrl.js';
 
 /**
  * Registers cross-cutting infrastructure adapters and shared services.
@@ -67,7 +68,12 @@ export default class InfrastructureModule {
 
     container.register(
       'TemplateService',
-      () => new TemplateAdapter('/src/presentation/templates/', container.resolve('Logger')),
+      () =>
+        new TemplateAdapter(
+          resolveTemplateBaseUrl(import.meta.url),
+          container.resolve('Logger'),
+          import.meta.url
+        ),
       { priority: 40 }
     );
 

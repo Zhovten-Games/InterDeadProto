@@ -5,6 +5,7 @@ import {
   DIALOG_AWAITING_INPUT_CHANGED
 } from '../../../core/events/constants.js';
 import { scrollControls } from '../../../config/controls.config.js';
+import { resolveTemplateUrl } from '../../../config/templateBaseUrl.js';
 
 export default class ControlPanel {
   static HIDDEN_CLASS = 'panel--hidden';
@@ -24,7 +25,7 @@ export default class ControlPanel {
     this.selector = selector;
     this.bus = bus;
     this.showEmojiDrum = showEmojiDrum;
-    this.templateUrl = '/src/presentation/templates/panel.html';
+    this.templateUrl = resolveTemplateUrl('/src/presentation/templates/panel.html', import.meta.url);
     this.currentScreen = null;
     this._awaiting = { awaits: false };
     this._handler = evt => {
