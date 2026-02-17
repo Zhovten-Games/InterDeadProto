@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build dist + ensure WASM + zip
+    name: Build dist + ensure libs + zip
     runs-on: ubuntu-latest
 
     steps:
@@ -34,38 +34,76 @@ jobs:
           VITE_CACHE_BUILD_ID: ${{ github.sha }}
         run: npm run build
 
-      - name: Ensure SQL.js WASM
+      - name: Ensure runtime libs
         shell: bash
         run: |
           set -euo pipefail
 
-          DEST_DIR="dist/assets/libs/db"
-          DEST_WASM="${DEST_DIR}/sql-wasm.wasm"
-          mkdir -p "${DEST_DIR}"
+          mkdir -p "dist/assets/libs/db"
 
-          if [ -f "${DEST_WASM}" ]; then exit 0; fi
-
-          if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
-            cp "proto-dev/assets/libs/db/sql-wasm.wasm" "${DEST_WASM}"
-            exit 0
+          # sql-wasm.wasm
+          if [ ! -f "dist/assets/libs/db/sql-wasm.wasm" ]; then
+            if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
+              cp "proto-dev/assets/libs/db/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
+            elif [ -f "node_modules/sql.js/dist/sql-wasm.wasm" ]; then
+              cp "node_modules/sql.js/dist/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
+            else
+              echo "sql-wasm.wasm not found"
+              exit 1
+            fi
           fi
 
-          if [ -f "node_modules/sql.js/dist/sql-wasm.wasm" ]; then
-            cp "node_modules/sql.js/dist/sql-wasm.wasm" "${DEST_WASM}"
-            exit 0
+          # tf.min.js + coco-ssd.min.js
+          for f in "tf.min.js" "coco-ssd.min.js"; do
+            if [ ! -f "dist/assets/libs/${f}" ]; then
+              if [ -f "proto-dev/assets/libs/${f}" ]; then
+                cp "proto-dev/assets/libs/${f}" "dist/assets/libs/${f}"
+              elif [ -f "assets/libs/${f}" ]; then
+                cp "assets/libs/${f}" "dist/assets/libs/${f}"
+              else
+                echo "${f} not found"
+                exit 1
+              fi
+            fi
+          done
+
+      - name: Patch absolute i18n paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          find dist -type f \( -name "*.js" -o -name "index.html" \) -print0 \
+            | xargs -0 sed -i 's|/i18n/|i18n/|g'
+
+      - name: Ensure i18n in dist
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -d "proto-dev/i18n" ] && [ ! -d "dist/i18n" ]; then
+            cp -R "proto-dev/i18n" "dist/i18n"
           fi
 
-          FOUND="$(find proto-dev -type f -name 'sql-wasm.wasm' -print -quit || true)"
-          if [ -n "${FOUND}" ]; then
-            cp "${FOUND}" "${DEST_WASM}"
-            exit 0
+          test -f "dist/i18n/locales/en/ui.json"
+
+      - name: Ensure favicon
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f "dist/favicon.ico" ]; then
+            if [ -f "proto-dev/favicon.ico" ]; then
+              cp "proto-dev/favicon.ico" "dist/favicon.ico"
+            elif [ -f "proto-dev/assets/favicon.ico" ]; then
+              cp "proto-dev/assets/favicon.ico" "dist/favicon.ico"
+            fi
           fi
 
-          echo "sql-wasm.wasm not found"
-          exit 1
-
-      - name: Verify WASM path
-        run: test -f "dist/assets/libs/db/sql-wasm.wasm"
+      - name: Verify key files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "dist/assets/libs/db/sql-wasm.wasm"
+          test -f "dist/assets/libs/tf.min.js"
+          test -f "dist/assets/libs/coco-ssd.min.js"
 
       - name: Create zip
         shell: bash
