@@ -41,7 +41,6 @@ jobs:
 
           mkdir -p "dist/assets/libs/db"
 
-          # sql-wasm.wasm
           if [ ! -f "dist/assets/libs/db/sql-wasm.wasm" ]; then
             if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
               cp "proto-dev/assets/libs/db/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
@@ -53,7 +52,6 @@ jobs:
             fi
           fi
 
-          # tf.min.js + coco-ssd.min.js
           for f in "tf.min.js" "coco-ssd.min.js"; do
             if [ ! -f "dist/assets/libs/${f}" ]; then
               if [ -f "proto-dev/assets/libs/${f}" ]; then
@@ -79,8 +77,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [ -d "proto-dev/i18n" ] && [ ! -d "dist/i18n" ]; then
-            cp -R "proto-dev/i18n" "dist/i18n"
+          if [ ! -d "dist/i18n" ]; then
+            if [ -d "proto-dev/src/i18n" ]; then
+              cp -R "proto-dev/src/i18n" "dist/i18n"
+            elif [ -d "src/i18n" ]; then
+              cp -R "src/i18n" "dist/i18n"
+            else
+              echo "i18n source folder not found"
+              exit 1
+            fi
           fi
 
           test -f "dist/i18n/locales/en/ui.json"
@@ -104,6 +109,7 @@ jobs:
           test -f "dist/assets/libs/db/sql-wasm.wasm"
           test -f "dist/assets/libs/tf.min.js"
           test -f "dist/assets/libs/coco-ssd.min.js"
+          test -f "dist/i18n/locales/en/ui.json"
 
       - name: Create zip
         shell: bash
