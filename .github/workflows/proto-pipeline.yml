@@ -12,6 +12,10 @@ jobs:
     name: Build dist + ensure WASM + zip
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: proto-dev
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,6 +25,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: proto-dev/package-lock.json
 
       - name: Install
         run: npm ci
@@ -38,24 +43,34 @@ jobs:
 
           DEST_DIR="dist/assets/libs/db"
           DEST_WASM="${DEST_DIR}/sql-wasm.wasm"
-
           mkdir -p "${DEST_DIR}"
 
           if [ -f "${DEST_WASM}" ]; then
-            echo "WASM already present"
-          elif [ -f "assets/libs/db/sql-wasm.wasm" ]; then
-            cp "assets/libs/db/sql-wasm.wasm" "${DEST_WASM}"
-          elif [ -f "node_modules/sql.js/dist/sql-wasm.wasm" ]; then
-            cp "node_modules/sql.js/dist/sql-wasm.wasm" "${DEST_WASM}"
-          else
-            echo "sql-wasm.wasm not found"
-            exit 1
+            exit 0
           fi
+
+          if [ -f "assets/libs/db/sql-wasm.wasm" ]; then
+            cp "assets/libs/db/sql-wasm.wasm" "${DEST_WASM}"
+            exit 0
+          fi
+
+          if [ -f "node_modules/sql.js/dist/sql-wasm.wasm" ]; then
+            cp "node_modules/sql.js/dist/sql-wasm.wasm" "${DEST_WASM}"
+            exit 0
+          fi
+
+          FOUND="$(find . -type f -name 'sql-wasm.wasm' -print -quit || true)"
+          if [ -n "${FOUND}" ]; then
+            cp "${FOUND}" "${DEST_WASM}"
+            exit 0
+          fi
+
+          echo "sql-wasm.wasm not found"
+          exit 1
 
       - name: Verify WASM path
         run: test -f "dist/assets/libs/db/sql-wasm.wasm"
 
-      # Create itch.io zip
       - name: Create zip
         shell: bash
         run: |
@@ -68,13 +83,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist
+          path: proto-dev/dist
 
       - name: Upload zip
         uses: actions/upload-artifact@v4
         with:
           name: itch-zip
-          path: InterDeadProto_*.zip
+          path: proto-dev/InterDeadProto_*.zip
 
   deploy-proto:
     name: Deploy to proto branch
