@@ -42,7 +42,7 @@ jobs:
           mkdir -p "dist/assets/libs"
           mkdir -p "dist/assets/libs/db"
 
-          # SQL.js WASM -> dist/assets/libs/db/sql-wasm.wasm
+          # SQL.js WASM
           if [ ! -f "dist/assets/libs/db/sql-wasm.wasm" ]; then
             if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
               cp "proto-dev/assets/libs/db/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
@@ -56,7 +56,7 @@ jobs:
             fi
           fi
 
-          # tf.min.js + coco-ssd.min.js -> dist/assets/libs/
+          # tf.min.js + coco-ssd.min.js
           for f in "tf.min.js" "coco-ssd.min.js"; do
             if [ ! -f "dist/assets/libs/${f}" ]; then
               if [ -f "proto-dev/assets/libs/${f}" ]; then
@@ -87,34 +87,31 @@ jobs:
 
           mkdir -p "dist/assets/models/coco-ssd"
           cp -R "${SRC}/." "dist/assets/models/coco-ssd/"
-
           test -f "dist/assets/models/coco-ssd/model.json"
 
-      - name: Ensure templates in dist
+      - name: Ensure templates in dist (mirror proto-dev/src)
         shell: bash
         run: |
           set -euo pipefail
 
-          DEST="dist/src/presentation/templates"
-          rm -rf "$DEST" || true
-          mkdir -p "$DEST"
-
+          SRC=""
           if [ -d "proto-dev/src/presentation/templates" ]; then
-            cp -R "proto-dev/src/presentation/templates/." "$DEST/"
+            SRC="proto-dev/src/presentation/templates"
           elif [ -d "src/presentation/templates" ]; then
-            cp -R "src/presentation/templates/." "$DEST/"
-          elif [ -d "proto-dev/presentation/templates" ]; then
-            cp -R "proto-dev/presentation/templates/." "$DEST/"
-          elif [ -d "presentation/templates" ]; then
-            cp -R "presentation/templates/." "$DEST/"
+            SRC="src/presentation/templates"
           else
             echo "templates source folder not found"
             exit 1
           fi
 
+          mkdir -p "dist/src/presentation/templates"
+          rm -rf "dist/src/presentation/templates" || true
+          mkdir -p "dist/src/presentation/templates"
+          cp -R "${SRC}/." "dist/src/presentation/templates/"
+
           test -f "dist/src/presentation/templates/welcome.html"
 
-      - name: Ensure i18n in dist (JSON + JS wrappers)
+      - name: Ensure i18n in dist (mirror proto-dev/src)
         shell: bash
         run: |
           set -euo pipefail
@@ -129,6 +126,7 @@ jobs:
             exit 1
           fi
 
+          # runtime может обращаться к разным базам — кладём в несколько мест
           rm -rf "dist/i18n" "dist/src/i18n" "dist/assets/i18n" || true
           mkdir -p "dist/i18n/locales" "dist/src/i18n/locales" "dist/assets/i18n/locales"
 
@@ -136,65 +134,7 @@ jobs:
           cp -R "${SRC}/." "dist/src/i18n/locales/"
           cp -R "${SRC}/." "dist/assets/i18n/locales/"
 
-          # JSON -> JS wrapper рядом (export default …)
-          node - <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-
-          const roots = [
-            'dist/i18n/locales',
-            'dist/src/i18n/locales',
-            'dist/assets/i18n/locales'
-          ];
-
-          function walk(dir, out = []) {
-            for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
-              const p = path.join(dir, ent.name);
-              if (ent.isDirectory()) walk(p, out);
-              else if (ent.isFile() && ent.name.endsWith('.json')) out.push(p);
-            }
-            return out;
-          }
-
-          for (const r of roots) {
-            if (!fs.existsSync(r)) continue;
-            const files = walk(r);
-            for (const f of files) {
-              const js = f.replace(/\.json$/, '.js');
-              const raw = fs.readFileSync(f, 'utf8');
-              let data;
-              try { data = JSON.parse(raw); } catch { continue; }
-              fs.writeFileSync(js, 'export default ' + JSON.stringify(data) + ';\n', 'utf8');
-            }
-          }
-          NODE
-
-          test -f "dist/i18n/locales/en/ui.json"
-          test -f "dist/i18n/locales/en/ui.js"
-
-      - name: Patch dist (i18n import + base paths + coco fallback + strip sourcemaps)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          # 1) JSON import assertions -> plain import()
-          perl -pi -e 's/import\(([^,]+),\s*\{\s*with:\s*\{\s*type:\s*["'\'']json["'\'']\s*\}\s*\}\s*\)/import($1)/g' dist/assets/*.js || true
-
-          # 2) i18n *.json -> *.js (только для i18n/locales/*)
-          perl -pi -e 's|(i18n/locales/[^"'\'']+?)\.json|\$1.js|g' dist/assets/*.js dist/index.html || true
-
-          # 3) Убираем абсолютные пути, чтобы не уходить в корень домена (GitHub Pages project path)
-          #    /src/i18n/locales  -> i18n/locales
-          #    /i18n/locales      -> i18n/locales
-          perl -pi -e 's|/src/i18n/locales|i18n/locales|g' dist/assets/*.js dist/index.html || true
-          perl -pi -e 's|/i18n/locales|i18n/locales|g' dist/assets/*.js dist/index.html || true
-
-          # 4) COCO-SSD fallback -> локальная модель (на случай, если primary провалится)
-          perl -pi -e 's|https://storage\.googleapis\.com/tfjs-models/tfjs/coco-ssd/model\.json|assets/models/coco-ssd/model.json|g' dist/assets/*.js || true
-
-          # 5) Убираем sourcemap-метки и сами .map (чтобы DevTools не пытался грузить "null")
-          perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' dist/assets/*.js || true
-          rm -f dist/assets/*.map || true
+          test -f "dist/src/i18n/locales/en/ui.json"
 
       - name: Ensure sw.js
         shell: bash
@@ -212,19 +152,44 @@ jobs:
             fi
           fi
 
-      - name: Ensure favicon
+      - name: Ensure favicon (from proto-dev/assets/favicons)
         shell: bash
         run: |
           set -euo pipefail
+
           if [ ! -f "dist/favicon.ico" ]; then
-            if [ -f "proto-dev/favicon.ico" ]; then
+            if [ -f "proto-dev/assets/favicons/favicon.ico" ]; then
+              cp "proto-dev/assets/favicons/favicon.ico" "dist/favicon.ico"
+            elif [ -f "proto-dev/favicon.ico" ]; then
               cp "proto-dev/favicon.ico" "dist/favicon.ico"
             elif [ -f "favicon.ico" ]; then
               cp "favicon.ico" "dist/favicon.ico"
-            elif [ -f "proto-dev/assets/favicon.ico" ]; then
-              cp "proto-dev/assets/favicon.ico" "dist/favicon.ico"
             fi
           fi
+
+          test -f "dist/favicon.ico"
+
+      - name: Patch dist (fix absolute /src + broken ..i18n + favicon href; strip sourcemaps)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Патчим JS во всех подкаталогах (включая libs)
+          shopt -s globstar nullglob
+
+          # 1) Абсолютные /src/... -> относительные src/...
+          perl -pi -e 's|(["'\''])/src/|\$1src/|g' dist/**/*.js dist/index.html || true
+
+          # 2) Убираем "../i18n" (чтобы не нормализовалось в корень домена) и чинит кейс "..i18n"
+          perl -pi -e 's|\.\./i18n/|i18n/|g' dist/**/*.js dist/index.html || true
+          perl -pi -e 's|\.\.i18n/|i18n/|g' dist/**/*.js dist/index.html || true
+
+          # 3) Убираем абсолютный favicon (/favicon.ico) -> favicon.ico (внутри /InterDeadProto/)
+          perl -pi -e 's|href=["'\'']/favicon\.ico["'\'']|href="favicon.ico"|g' dist/index.html || true
+
+          # 4) Source maps: чистим marker и удаляем *.map (чтобы не было "URL карты кода: null")
+          perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' dist/**/*.js || true
+          rm -f dist/**/*.map || true
 
       - name: Verify key files
         shell: bash
@@ -235,7 +200,8 @@ jobs:
           test -f "dist/assets/libs/coco-ssd.min.js"
           test -f "dist/assets/models/coco-ssd/model.json"
           test -f "dist/src/presentation/templates/welcome.html"
-          test -f "dist/i18n/locales/en/ui.js"
+          test -f "dist/src/i18n/locales/en/ui.json"
+          test -f "dist/favicon.ico"
 
       - name: Create zip
         shell: bash
