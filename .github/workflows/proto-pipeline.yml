@@ -2,9 +2,9 @@ name: InterDeadProto Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ proto-dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ proto-dev ]
   workflow_dispatch:
 
 permissions:
@@ -29,10 +29,26 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Apply CI-only compatibility overrides
+        shell: bash
+        run: ./.github/scripts/apply-ci-overrides.sh
+
       - name: Build
         env:
           VITE_CACHE_BUILD_ID: ${{ github.sha }}
         run: npm run build
+
+
+      - name: Mirror static assets to dist
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p "dist/assets"
+          cp -R "proto-dev/assets/." "dist/assets/"
+
+          test -f "dist/assets/images/logo.png"
+          test -f "dist/assets/audio/ghost_effect.mp3"
 
       - name: Ensure runtime libs
         shell: bash
@@ -201,6 +217,8 @@ jobs:
           test -f "dist/assets/models/coco-ssd/model.json"
           test -f "dist/src/presentation/templates/welcome.html"
           test -f "dist/src/i18n/locales/en/ui.json"
+          test -f "dist/i18n/locales/en/ui.json"
+          test -f "dist/assets/images/logo.png"
           test -f "dist/favicon.ico"
 
       - name: Create zip
@@ -225,7 +243,7 @@ jobs:
 
   deploy-proto:
     name: Deploy dist to proto branch
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/proto-dev'
     needs: build
     runs-on: ubuntu-latest
 
