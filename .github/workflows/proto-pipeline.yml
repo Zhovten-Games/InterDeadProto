@@ -169,25 +169,25 @@ jobs:
 
           test -f "dist/favicon.ico"
 
-      - name: Patch dist (fix absolute /src + broken ..i18n + favicon href; strip sourcemaps)
+      - name: Patch dist (safe path fixes; strip sourcemaps)
         shell: bash
         run: |
           set -euo pipefail
-
-          # Патчим JS во всех подкаталогах (включая libs)
           shopt -s globstar nullglob
 
-          # 1) Абсолютные /src/... -> относительные src/...
-          perl -pi -e 's|(["'\''])/src/|\$1src/|g' dist/**/*.js dist/index.html || true
+          # Apply to all JS (incl. minified bundles), and index.html
+          TARGETS=(dist/**/*.js dist/index.html)
 
-          # 2) Убираем "../i18n" (чтобы не нормализовалось в корень домена) и чинит кейс "..i18n"
-          perl -pi -e 's|\.\./i18n/|i18n/|g' dist/**/*.js dist/index.html || true
-          perl -pi -e 's|\.\.i18n/|i18n/|g' dist/**/*.js dist/index.html || true
+          # 1) /src/... -> src/... (avoid domain root on GitHub Pages)
+          perl -pi -e 's|"/src/|"src/|g; s|'\''/src/|'\''src/|g' "${TARGETS[@]}" || true
 
-          # 3) Убираем абсолютный favicon (/favicon.ico) -> favicon.ico (внутри /InterDeadProto/)
-          perl -pi -e 's|href=["'\'']/favicon\.ico["'\'']|href="favicon.ico"|g' dist/index.html || true
+          # 2) ../i18n/... -> i18n/...  AND the broken "..i18n/..." -> i18n/...
+          perl -pi -e 's|\.\./i18n/|i18n/|g; s|\.\.i18n/|i18n/|g' "${TARGETS[@]}" || true
 
-          # 4) Source maps: чистим marker и удаляем *.map (чтобы не было "URL карты кода: null")
+          # 3) favicon absolute -> relative inside project
+          perl -pi -e 's|href="/favicon\.ico"|href="favicon.ico"|g; s|href='\''/favicon\.ico'\''|href='\''favicon.ico'\''|g' dist/index.html || true
+
+          # 4) Strip sourcemap markers and delete map files
           perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' dist/**/*.js || true
           rm -f dist/**/*.map || true
 
