@@ -2,57 +2,94 @@ name: InterDeadProto Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build compressed artifact
+    name: Build dist + ensure WASM + zip
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Install
         run: npm ci
 
-      - name: Build compressed artifact
+      - name: Build
+        env:
+          VITE_CACHE_BUILD_ID: ${{ github.sha }}
         run: npm run build
 
+      # Ensure sql-wasm.wasm exists in dist/assets/libs/db
+      - name: Ensure SQL.js WASM
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          DEST_DIR="dist/assets/libs/db"
+          DEST_WASM="${DEST_DIR}/sql-wasm.wasm"
+
+          mkdir -p "${DEST_DIR}"
+
+          if [ -f "${DEST_WASM}" ]; then
+            echo "WASM already present"
+          elif [ -f "assets/libs/db/sql-wasm.wasm" ]; then
+            cp "assets/libs/db/sql-wasm.wasm" "${DEST_WASM}"
+          elif [ -f "node_modules/sql.js/dist/sql-wasm.wasm" ]; then
+            cp "node_modules/sql.js/dist/sql-wasm.wasm" "${DEST_WASM}"
+          else
+            echo "sql-wasm.wasm not found"
+            exit 1
+          fi
+
+      - name: Verify WASM path
+        run: test -f "dist/assets/libs/db/sql-wasm.wasm"
+
+      # Create itch.io zip
+      - name: Create zip
+        shell: bash
+        run: |
+          set -euo pipefail
+          BUILD_TAG="${GITHUB_SHA:0:8}"
+          ZIP_NAME="InterDeadProto_${BUILD_TAG}.zip"
+          (cd dist && zip -r "../${ZIP_NAME}" .)
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Upload zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: itch-zip
+          path: InterDeadProto_*.zip
+
   deploy-proto:
-    name: Deploy build to proto branch
+    name: Deploy to proto branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download dist
+        uses: actions/download-artifact@v4
         with:
-          node-version: 20
-          cache: npm
+          name: dist
+          path: dist
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build compressed artifact
-        run: npm run build
-
-      - name: Deploy to proto branch
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: proto
