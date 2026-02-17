@@ -40,6 +40,7 @@ jobs:
           set -euo pipefail
 
           mkdir -p "dist/assets/libs/db"
+          mkdir -p "dist/assets/libs"
 
           if [ ! -f "dist/assets/libs/db/sql-wasm.wasm" ]; then
             if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
@@ -65,27 +66,60 @@ jobs:
             fi
           done
 
-      - name: Patch absolute i18n paths
+      - name: Ensure COCO-SSD model in dist
         shell: bash
         run: |
           set -euo pipefail
+
+          mkdir -p "dist/assets/models"
+
+          if [ -d "proto-dev/assets/models/coco-ssd" ]; then
+            cp -R "proto-dev/assets/models/coco-ssd" "dist/assets/models/coco-ssd"
+          elif [ -d "assets/models/coco-ssd" ]; then
+            cp -R "assets/models/coco-ssd" "dist/assets/models/coco-ssd"
+          else
+            echo "coco-ssd model folder not found"
+            exit 1
+          fi
+
+          test -f "dist/assets/models/coco-ssd/model.json"
+
+      - name: Patch COCO-SSD model URL
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          find dist -type f -name "*.js" -print0 \
+            | xargs -0 sed -i \
+              -e 's|https://storage.googleapis.com/tfjs-models/tfjs/coco-ssd/model.json|assets/models/coco-ssd/model.json|g'
+
+      - name: Patch i18n paths
+        shell: bash
+        run: |
+          set -euo pipefail
+
           find dist -type f \( -name "*.js" -o -name "index.html" \) -print0 \
-            | xargs -0 sed -i 's|/i18n/|i18n/|g'
+            | xargs -0 sed -i \
+              -e 's|/i18n/|i18n/|g' \
+              -e 's|\.\./i18n/|i18n/|g' \
+              -e 's|\.\.i18n/|i18n/|g' \
+              -e 's|\.\./\./i18n/|i18n/|g' \
+              -e 's|\.\./\.\./i18n/|i18n/|g'
 
       - name: Ensure i18n in dist
         shell: bash
         run: |
           set -euo pipefail
 
-          if [ ! -d "dist/i18n" ]; then
-            if [ -d "proto-dev/src/i18n" ]; then
-              cp -R "proto-dev/src/i18n" "dist/i18n"
-            elif [ -d "src/i18n" ]; then
-              cp -R "src/i18n" "dist/i18n"
-            else
-              echo "i18n source folder not found"
-              exit 1
-            fi
+          rm -rf "dist/i18n" || true
+
+          if [ -d "proto-dev/src/i18n" ]; then
+            cp -R "proto-dev/src/i18n" "dist/i18n"
+          elif [ -d "src/i18n" ]; then
+            cp -R "src/i18n" "dist/i18n"
+          else
+            echo "i18n source folder not found"
+            exit 1
           fi
 
           test -f "dist/i18n/locales/en/ui.json"
@@ -110,6 +144,7 @@ jobs:
           test -f "dist/assets/libs/tf.min.js"
           test -f "dist/assets/libs/coco-ssd.min.js"
           test -f "dist/i18n/locales/en/ui.json"
+          test -f "dist/assets/models/coco-ssd/model.json"
 
       - name: Create zip
         shell: bash
