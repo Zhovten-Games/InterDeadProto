@@ -2,9 +2,9 @@ name: InterDeadProto Pipeline
 
 on:
   push:
-    branches: [ proto-dev ]
+    branches: [ main, proto-dev ]
   pull_request:
-    branches: [ proto-dev ]
+    branches: [ main, proto-dev ]
   workflow_dispatch:
 
 permissions:
@@ -243,7 +243,7 @@ jobs:
 
   deploy-proto:
     name: Deploy dist to proto branch
-    if: github.event_name == 'push' && github.ref == 'refs/heads/proto-dev'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
 
