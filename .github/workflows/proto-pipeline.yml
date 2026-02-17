@@ -7,6 +7,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build dist + ensure WASM + zip
@@ -31,7 +34,6 @@ jobs:
           VITE_CACHE_BUILD_ID: ${{ github.sha }}
         run: npm run build
 
-      # Ensure sql-wasm.wasm exists in dist/assets/libs/db
       - name: Ensure SQL.js WASM
         shell: bash
         run: |
@@ -41,9 +43,7 @@ jobs:
           DEST_WASM="${DEST_DIR}/sql-wasm.wasm"
           mkdir -p "${DEST_DIR}"
 
-          if [ -f "${DEST_WASM}" ]; then
-            exit 0
-          fi
+          if [ -f "${DEST_WASM}" ]; then exit 0; fi
 
           if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
             cp "proto-dev/assets/libs/db/sql-wasm.wasm" "${DEST_WASM}"
@@ -88,22 +88,28 @@ jobs:
           path: InterDeadProto_*.zip
 
   deploy-proto:
-    name: Deploy to proto branch
+    name: Deploy dist to proto branch
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download dist
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download dist artifact
         uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
 
-      - name: Deploy
+      - name: Deploy to proto branch
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: proto
           folder: dist
           clean: true
           single-commit: true
+          token: ${{ secrets.INTERDEAD_PROTO_DEPLOY_TOKEN }}
