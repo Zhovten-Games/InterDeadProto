@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build dist + ensure libs + zip
+    name: Build dist + ensure runtime + zip
     runs-on: ubuntu-latest
 
     steps:
@@ -39,12 +39,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          mkdir -p "dist/assets/libs/db"
           mkdir -p "dist/assets/libs"
+          mkdir -p "dist/assets/libs/db"
 
+          # SQL.js WASM -> dist/assets/libs/db/sql-wasm.wasm
           if [ ! -f "dist/assets/libs/db/sql-wasm.wasm" ]; then
             if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
               cp "proto-dev/assets/libs/db/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
+            elif [ -f "assets/libs/db/sql-wasm.wasm" ]; then
+              cp "assets/libs/db/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
             elif [ -f "node_modules/sql.js/dist/sql-wasm.wasm" ]; then
               cp "node_modules/sql.js/dist/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
             else
@@ -53,6 +56,7 @@ jobs:
             fi
           fi
 
+          # tf.min.js + coco-ssd.min.js -> dist/assets/libs/
           for f in "tf.min.js" "coco-ssd.min.js"; do
             if [ ! -f "dist/assets/libs/${f}" ]; then
               if [ -f "proto-dev/assets/libs/${f}" ]; then
@@ -66,63 +70,118 @@ jobs:
             fi
           done
 
-      - name: Ensure COCO-SSD model in dist
+      - name: Ensure templates in dist
         shell: bash
         run: |
           set -euo pipefail
 
-          mkdir -p "dist/assets/models"
+          DEST="dist/src/presentation/templates"
+          rm -rf "$DEST" || true
+          mkdir -p "$DEST"
 
-          if [ -d "proto-dev/assets/models/coco-ssd" ]; then
-            cp -R "proto-dev/assets/models/coco-ssd" "dist/assets/models/coco-ssd"
-          elif [ -d "assets/models/coco-ssd" ]; then
-            cp -R "assets/models/coco-ssd" "dist/assets/models/coco-ssd"
+          # Candidates (pick first existing)
+          if [ -d "proto-dev/src/presentation/templates" ]; then
+            cp -R "proto-dev/src/presentation/templates/." "$DEST/"
+          elif [ -d "src/presentation/templates" ]; then
+            cp -R "src/presentation/templates/." "$DEST/"
+          elif [ -d "proto-dev/presentation/templates" ]; then
+            cp -R "proto-dev/presentation/templates/." "$DEST/"
+          elif [ -d "presentation/templates" ]; then
+            cp -R "presentation/templates/." "$DEST/"
           else
-            echo "coco-ssd model folder not found"
+            echo "templates source folder not found"
             exit 1
           fi
 
-          test -f "dist/assets/models/coco-ssd/model.json"
+          test -f "dist/src/presentation/templates/welcome.html"
 
-      - name: Patch COCO-SSD model URL
+      - name: Ensure i18n in dist (JSON + JS wrappers)
         shell: bash
         run: |
           set -euo pipefail
 
-          find dist -type f -name "*.js" -print0 \
-            | xargs -0 sed -i \
-              -e 's|https://storage.googleapis.com/tfjs-models/tfjs/coco-ssd/model.json|assets/models/coco-ssd/model.json|g'
-
-      - name: Patch i18n paths
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          find dist -type f \( -name "*.js" -o -name "index.html" \) -print0 \
-            | xargs -0 sed -i \
-              -e 's|/i18n/|i18n/|g' \
-              -e 's|\.\./i18n/|i18n/|g' \
-              -e 's|\.\.i18n/|i18n/|g' \
-              -e 's|\.\./\./i18n/|i18n/|g' \
-              -e 's|\.\./\.\./i18n/|i18n/|g'
-
-      - name: Ensure i18n in dist
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          rm -rf "dist/i18n" || true
-
-          if [ -d "proto-dev/src/i18n" ]; then
-            cp -R "proto-dev/src/i18n" "dist/i18n"
-          elif [ -d "src/i18n" ]; then
-            cp -R "src/i18n" "dist/i18n"
+          SRC=""
+          if [ -d "proto-dev/src/i18n/locales" ]; then
+            SRC="proto-dev/src/i18n/locales"
+          elif [ -d "src/i18n/locales" ]; then
+            SRC="src/i18n/locales"
           else
-            echo "i18n source folder not found"
+            echo "i18n locales not found"
             exit 1
           fi
+
+          # Provide both common bases used by runtime fallbacks/relative URL math
+          rm -rf "dist/i18n" "dist/src/i18n" "dist/assets/i18n" || true
+          mkdir -p "dist/i18n/locales" "dist/src/i18n/locales" "dist/assets/i18n/locales"
+
+          cp -R "${SRC}/." "dist/i18n/locales/"
+          cp -R "${SRC}/." "dist/src/i18n/locales/"
+          cp -R "${SRC}/." "dist/assets/i18n/locales/"
+
+          # Build JS wrappers next to JSON: ui.json -> ui.js (export default …)
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const roots = [
+            'dist/i18n/locales',
+            'dist/src/i18n/locales',
+            'dist/assets/i18n/locales'
+          ];
+
+          function walk(dir, out = []) {
+            for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+              const p = path.join(dir, ent.name);
+              if (ent.isDirectory()) walk(p, out);
+              else if (ent.isFile() && ent.name.endsWith('.json')) out.push(p);
+            }
+            return out;
+          }
+
+          for (const r of roots) {
+            if (!fs.existsSync(r)) continue;
+            const files = walk(r);
+            for (const f of files) {
+              const js = f.replace(/\.json$/, '.js');
+              const raw = fs.readFileSync(f, 'utf8');
+              let data;
+              try { data = JSON.parse(raw); } catch { continue; }
+              const content = 'export default ' + JSON.stringify(data) + ';\n';
+              fs.writeFileSync(js, content, 'utf8');
+            }
+          }
+          NODE
 
           test -f "dist/i18n/locales/en/ui.json"
+          test -f "dist/i18n/locales/en/ui.js"
+
+      - name: Patch dist (i18n JSON import + optional coco model)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # 1) Replace JSON module import assertion -> plain import(...)
+          # 2) Replace i18n *.json -> *.js (only under i18n/locales/)
+          # 3) Optional: force coco-ssd model base to local (if you host it)
+          perl -pi -e 's/import\(([^,]+),\s*\{\s*with:\s*\{\s*type:\s*["'\'']json["'\'']\s*\}\s*\}\s*\)/import($1)/g' dist/assets/*.js || true
+          perl -pi -e 's|(i18n/locales/[^"'\'']+?)\.json|\$1.js|g' dist/assets/*.js dist/index.html || true
+          perl -pi -e 's|https://storage\.googleapis\.com/tfjs-models/tfjs/coco-ssd/|assets/libs/coco-ssd/|g' dist/assets/*.js || true
+
+      - name: Ensure sw.js
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ ! -f "dist/sw.js" ]; then
+            if [ -f "proto-dev/sw.js" ]; then
+              cp "proto-dev/sw.js" "dist/sw.js"
+            elif [ -f "sw.js" ]; then
+              cp "sw.js" "dist/sw.js"
+            else
+              echo "sw.js not found (will skip)"
+              exit 0
+            fi
+          fi
 
       - name: Ensure favicon
         shell: bash
@@ -131,6 +190,8 @@ jobs:
           if [ ! -f "dist/favicon.ico" ]; then
             if [ -f "proto-dev/favicon.ico" ]; then
               cp "proto-dev/favicon.ico" "dist/favicon.ico"
+            elif [ -f "favicon.ico" ]; then
+              cp "favicon.ico" "dist/favicon.ico"
             elif [ -f "proto-dev/assets/favicon.ico" ]; then
               cp "proto-dev/assets/favicon.ico" "dist/favicon.ico"
             fi
@@ -143,16 +204,16 @@ jobs:
           test -f "dist/assets/libs/db/sql-wasm.wasm"
           test -f "dist/assets/libs/tf.min.js"
           test -f "dist/assets/libs/coco-ssd.min.js"
-          test -f "dist/i18n/locales/en/ui.json"
-          test -f "dist/assets/models/coco-ssd/model.json"
+          test -f "dist/src/presentation/templates/welcome.html"
+          test -f "dist/i18n/locales/en/ui.js"
 
       - name: Create zip
         shell: bash
         run: |
           set -euo pipefail
-          BUILD_TAG="${GITHUB_SHA:0:8}"
-          ZIP_NAME="InterDeadProto_${BUILD_TAG}.zip"
-          (cd dist && zip -r "../${ZIP_NAME}" .)
+          TAG="${GITHUB_SHA:0:8}"
+          ZIP="InterDeadProto_${TAG}.zip"
+          (cd dist && zip -r "../${ZIP}" .)
 
       - name: Upload dist
         uses: actions/upload-artifact@v4
@@ -173,18 +234,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Download dist artifact
+      - name: Download dist
         uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
 
-      - name: Deploy to proto branch
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: proto
