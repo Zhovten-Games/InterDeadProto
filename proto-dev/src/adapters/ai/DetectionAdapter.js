@@ -5,6 +5,7 @@ import IDetection from '../../ports/IDetection.js';
 import { resolveAssetUrl } from '../../config/assetsBaseUrl.js';
 import { appendCacheBuildParam } from '../../config/cacheBuildId.js';
 import { AI_STATE_CHANGED } from '../../core/events/constants.js';
+import ModelLoadStrategy from './ModelLoadStrategy.js';
 
 const AI_STATES = Object.freeze({
   IDLE: 'IDLE',
@@ -12,7 +13,7 @@ const AI_STATES = Object.freeze({
   LOADING_MODEL: 'LOADING_MODEL',
   WARMUP: 'WARMUP',
   READY: 'READY',
-  FAILED: 'FAILED'
+  FAILED: 'FAILED',
 });
 let cacheFetchWrapped = false;
 
@@ -61,7 +62,7 @@ export default class DetectionService extends IDetection {
     const fallbackBase = this.config?.ai?.cocoSsdFallbackUrl || '';
     const fallbackUrl = fallbackBase ? appendCacheBuildParam(fallbackBase) : '';
     this._modelPromise = this.loadModelWithFallback(modelUrl, fallbackUrl)
-      .then(result => {
+      .then((result) => {
         this.model = result?.model || null;
         if (this.model) {
           const label = result.source === modelUrl ? 'assets' : 'fallback CDN';
@@ -69,7 +70,7 @@ export default class DetectionService extends IDetection {
         }
         return this.model;
       })
-      .catch(error => {
+      .catch((error) => {
         this.model = null;
         this.logger.error('Failed to load COCO-SSD model.', error);
         throw error;
@@ -165,7 +166,7 @@ export default class DetectionService extends IDetection {
       const bitmap = await createImageBitmap(image);
       const preds = await this.model.detect(bitmap);
       this.logger.info(`Detection: ${preds.length} objects`);
-      const found = preds.find(p => p.class === target && p.score > 0.5);
+      const found = preds.find((p) => p.class === target && p.score > 0.5);
       const ok = !!found;
       if (this.stateService) {
         const alreadyPresent = this.stateService.presence?.[target];
@@ -199,8 +200,8 @@ export default class DetectionService extends IDetection {
             { x, y },
             { x: x + width, y },
             { x: x + width, y: y + height },
-            { x, y: y + height }
-          ]
+            { x, y: y + height },
+          ],
         };
       }
 
@@ -211,19 +212,14 @@ export default class DetectionService extends IDetection {
   }
 
   async loadModelWithFallback(modelUrl, fallbackUrl) {
-    try {
-      const model = await cocoSsd.load({ modelUrl });
-      return { model, source: modelUrl };
-    } catch (error) {
-      if (!fallbackUrl || fallbackUrl === modelUrl) {
-        throw error;
-      }
-      this.logger.warn(
-        `Failed to load COCO-SSD model from ${modelUrl}. Switching to fallback ${fallbackUrl}.`
-      );
-      const model = await cocoSsd.load({ modelUrl: fallbackUrl });
-      return { model, source: fallbackUrl };
-    }
+    const strategy = new ModelLoadStrategy({
+      logger: this.logger,
+      loadModel: (url) => cocoSsd.load({ modelUrl: url }),
+    });
+    return strategy.loadWithFallback({
+      primaryUrl: modelUrl,
+      fallbackUrl,
+    });
   }
 
   _setState(state, error = null) {
@@ -232,7 +228,7 @@ export default class DetectionService extends IDetection {
     this.eventBus.emit({
       type: AI_STATE_CHANGED,
       state,
-      error: error ? String(error.message || error) : null
+      error: error ? String(error.message || error) : null,
     });
   }
 
@@ -245,6 +241,7 @@ export default class DetectionService extends IDetection {
       return originalFetch(next, init);
     };
     cacheFetchWrapped = true;
+    this.logger?.info?.('[AI] Installed cache-build fetch wrapper for AI assets');
   }
 
   _withCacheBuildParam(input) {
@@ -252,9 +249,6 @@ export default class DetectionService extends IDetection {
     if (!url) return input;
     if (!this._isAiAssetUrl(url)) return input;
     const nextUrl = appendCacheBuildParam(url);
-    if (input instanceof Request) {
-      return new Request(nextUrl, input);
-    }
     return nextUrl;
   }
 
