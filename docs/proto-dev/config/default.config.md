@@ -14,12 +14,14 @@ used_by:
 
 # Default Application Configuration
 
-Defines baseline runtime settings such as log level, chat batching, and the default ghost selection. The `textAnimation` block supplies initial/replay effects for dialog rendering, while `controlPanel.showEmojiDrum` toggles the emoji drum in the bottom panel.[^1]
+Defines baseline runtime settings for logging, chat rendering, default ghost selection, control panel visibility, launcher policy, reset behavior, and AI model warmup/loading defaults.[^1]
 
-Launcher and reset behavior are configured here as well: `launcher.visibility` controls whether the chat launcher is hidden until authentication, and the `reset` block governs the screen and storage/database clearing strategy for `ResetService`.[^2]
+`chatDisplay`, `chatMessageBatchSize`, and `chatScrollStep` are derived from `chat.config.js` so chat pacing can be tuned from a single source.[^1]
 
-AI warmup defaults live under `ai`, including the COCO-SSD fallback model URL and warmup gating flags that drive `AiWarmupService` and `DetectionAdapter` behavior.[^3]
+`reset` controls the initial screen and cleanup semantics (`clearDatabase`, `clearStorage`), while `launcher.visibility` gates launcher behavior for embedded/authenticated flows.[^2]
 
-[^1]: Chat display defaults, ghost fallback, animations, and control panel flag [src/config/default.config.js#L1-L17](../../src/config/default.config.js#L1-L17)
-[^2]: Launcher visibility and reset policy [src/config/default.config.js#L18-L25](../../src/config/default.config.js#L18-L25)
-[^3]: AI warmup and fallback model settings [src/config/default.config.js#L26-L31](../../src/config/default.config.js#L26-L31)
+The `ai` block defines fallback model URL plus warmup toggles (`warmupAfterAuth`, `warmupEnabled`, `warmupWithDummyFrame`) used by warmup and detection services.[^3]
+
+[^1]: Chat, ghost, and panel defaults [src/config/default.config.js#L1-L14](../../src/config/default.config.js#L1-L14)
+[^2]: Launcher and reset settings [src/config/default.config.js#L15-L21](../../src/config/default.config.js#L15-L21)
+[^3]: AI fallback and warmup flags [src/config/default.config.js#L22-L28](../../src/config/default.config.js#L22-L28)

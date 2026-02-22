@@ -143,9 +143,10 @@ export default class DialogWidget {
               this.messages[idx] = { ...this.messages[idx], ...msg };
               const node = this.container.children[idx];
               if (node) {
+                const safeAvatar = this._sanitizeUrl(msg.avatar);
                 const avatarHtml =
-                  msg.avatar && msg.avatar.trim() !== ''
-                    ? `<img class="dialog__avatar" src="${msg.avatar}" alt="avatar" />`
+                  safeAvatar
+                    ? `<img class="dialog__avatar" src="${safeAvatar}" alt="avatar" />`
                     : '<div class="dialog__avatar dialog__avatar--placeholder"></div>';
                 const avatarEl = node.querySelector('.dialog__avatar');
                 if (avatarEl) avatarEl.outerHTML = avatarHtml;
@@ -340,9 +341,10 @@ export default class DialogWidget {
   }
 
   async _toTemplateData(msg) {
+    const safeAvatar = this._sanitizeUrl(msg.avatar);
     const avatarBlock =
-      msg.avatar && msg.avatar.trim() !== ''
-        ? `<img class="dialog__avatar" src="${msg.avatar}" alt="avatar" />`
+      safeAvatar
+        ? `<img class="dialog__avatar" src="${safeAvatar}" alt="avatar" />`
         : '<div class="dialog__avatar dialog__avatar--placeholder"></div>';
 
     if (msg.type === 'image') {
@@ -401,11 +403,14 @@ export default class DialogWidget {
 
     if (!src) return '';
 
+    const safeSrc = this._sanitizeUrl(src);
+    if (!safeSrc) return '';
+
     const reactionBlock = this._buildReactionBlock(msg);
     const mediaAttr = msg.media?.id ? ` data-media-id="${this._escapeAttr(msg.media.id)}"` : '';
     return `
       <div class="dialog__analysis" data-js="dialog-analysis">
-        <img class="dialog__image dialog__analysis-image" src="${src}" alt=""${mediaAttr} />
+        <img class="dialog__image dialog__analysis-image" src="${safeSrc}" alt=""${mediaAttr} />
         ${reactionBlock}
       </div>
     `;
@@ -425,7 +430,8 @@ export default class DialogWidget {
     const alt = msg.youtubeAlt || 'YouTube thumbnail';
     if (!videoId || !thumb) return '';
     const safeId = this._escapeAttr(videoId);
-    const safeThumb = this._escapeAttr(thumb);
+    const safeThumb = this._sanitizeUrl(thumb);
+    if (!safeThumb) return '';
     const safeAlt = this._escapeAttr(alt);
     return `
       <div class="dialog__youtube" data-js="dialog-youtube" data-video-id="${safeId}">
@@ -633,6 +639,29 @@ export default class DialogWidget {
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/'/g, '&#39;');
+  }
+
+  _sanitizeUrl(value) {
+    if (typeof value !== 'string') return '';
+    const trimmed = value.trim();
+    if (!trimmed) return '';
+    if (trimmed.startsWith('blob:')) {
+      return this._escapeAttr(trimmed);
+    }
+
+    try {
+      const parsed = new URL(trimmed, typeof window !== 'undefined' ? window.location.origin : undefined);
+      const protocol = parsed.protocol.toLowerCase();
+      if (protocol === 'http:' || protocol === 'https:') {
+        return this._escapeAttr(parsed.toString());
+      }
+      if (protocol === 'data:' && /^data:image\//i.test(trimmed)) {
+        return this._escapeAttr(trimmed);
+      }
+      return '';
+    } catch {
+      return '';
+    }
   }
 
   _initializeNoteBlock(node, msg) {
