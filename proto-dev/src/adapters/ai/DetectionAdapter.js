@@ -16,6 +16,9 @@ const AI_STATES = Object.freeze({
   FAILED: 'FAILED',
 });
 let cacheFetchWrapped = false;
+const DEFAULT_DETECTION_THRESHOLD = 0.5;
+const MIN_DETECTION_THRESHOLD = 0.1;
+const MAX_DETECTION_THRESHOLD = 0.95;
 
 export default class DetectionService extends IDetection {
   constructor(logger, stateService = null, eventBus = new NullEventBus(), config = {}) {
@@ -29,6 +32,7 @@ export default class DetectionService extends IDetection {
     this._bootPromise = null;
     this._runtimePromise = null;
     this._modelPromise = null;
+    this.detectionThreshold = this._resolveDetectionThreshold(config);
     /**
      * Internal mutex to avoid parallel model inference.
      * @private
@@ -130,6 +134,7 @@ export default class DetectionService extends IDetection {
         this._setState(AI_STATES.WARMUP);
         await this._warmupModel();
       }
+      this.logger?.info?.(`[AI] Detection threshold active: ${this.detectionThreshold.toFixed(2)}`);
       this._setState(AI_STATES.READY);
       return this.model;
     } catch (err) {
@@ -166,7 +171,7 @@ export default class DetectionService extends IDetection {
       const bitmap = await createImageBitmap(image);
       const preds = await this.model.detect(bitmap);
       this.logger.info(`Detection: ${preds.length} objects`);
-      const found = preds.find((p) => p.class === target && p.score > 0.5);
+      const found = preds.find((p) => p.class === target && p.score >= this.detectionThreshold);
       const ok = !!found;
       if (this.stateService) {
         const alreadyPresent = this.stateService.presence?.[target];
@@ -256,6 +261,30 @@ export default class DetectionService extends IDetection {
     if (typeof input === 'string') return input;
     if (input instanceof Request) return input.url;
     return null;
+  }
+
+  _resolveDetectionThreshold(config = {}) {
+    const requested = config?.ai?.detectionThreshold;
+    return this._clampDetectionThreshold(requested);
+  }
+
+  _clampDetectionThreshold(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return DEFAULT_DETECTION_THRESHOLD;
+    if (numeric < MIN_DETECTION_THRESHOLD) return MIN_DETECTION_THRESHOLD;
+    if (numeric > MAX_DETECTION_THRESHOLD) return MAX_DETECTION_THRESHOLD;
+    return numeric;
+  }
+
+  getDetectionThreshold() {
+    return this.detectionThreshold;
+  }
+
+  setDetectionThreshold(value) {
+    const next = this._clampDetectionThreshold(value);
+    this.detectionThreshold = next;
+    this.logger?.info?.(`[AI] Detection threshold updated to ${next.toFixed(2)}`);
+    return next;
   }
 
   _isAiAssetUrl(url) {

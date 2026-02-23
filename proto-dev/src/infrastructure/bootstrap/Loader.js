@@ -6,6 +6,12 @@ const NULL_BUS = {
   unsubscribe: () => {},
 };
 
+const NULL_CHANNEL = {
+  postMessage: () => {},
+  addEventListener: () => {},
+  removeEventListener: () => {},
+};
+
 /**
  * Loader emits overlay events during application boot.
  * It no longer touches the DOM directly; instead, a view
@@ -29,7 +35,7 @@ export default class Loader {
     this.timeout = 5000;
     this.heartbeatInterval = 1000;
 
-    this.channel = new BroadcastChannel('app-loading');
+    this.channel = this._createChannel();
     this.tabId = this._getOrCreateTabId();
 
     // Boot lifecycle guard (prevents double boot inside the same tab/app instance).
@@ -49,7 +55,7 @@ export default class Loader {
     this.storageOk = this._probePersistence();
 
     // BroadcastChannel message handler: accept both legacy string messages and structured messages.
-    this.channel.addEventListener('message', e => {
+    this._onChannelMessage((e) => {
       const msg = e?.data;
 
       // Legacy protocol support (older tabs may send plain strings).
@@ -74,7 +80,7 @@ export default class Loader {
 
       if (msg.type === 'LEADER_PING') {
         if (this.isLeader || (this.storageOk && this._isMyTabActive())) {
-          this.channel.postMessage({ type: 'LEADER_ACK', tabId: this.tabId });
+          this._sendChannelMessage({ type: 'LEADER_ACK', tabId: this.tabId });
         }
         return;
       }
@@ -101,7 +107,7 @@ export default class Loader {
     });
 
     // Storage events only make sense when persistence is actually working.
-    window.addEventListener('storage', e => {
+    window.addEventListener('storage', (e) => {
       if (!this.storageOk) return;
 
       if (e.key === 'activeTab') {
@@ -149,7 +155,7 @@ export default class Loader {
       } else {
         // Clean stale states proactively (supports "storage not cleared" situations).
         const active = this._getActiveTabState(); // removes stale on read
-        const loading = this._getLoadingState();  // removes stale on read
+        const loading = this._getLoadingState(); // removes stale on read
 
         // Another active tab OR another loading tab => block.
         if ((active && active.value !== this.tabId) || loading) {
@@ -167,13 +173,13 @@ export default class Loader {
       // 2) Boot overlay.
       this._markLoadingInProgress();
       // Notify other contexts (both legacy + structured).
-      this.channel.postMessage('start');
-      this.channel.postMessage({ type: 'BOOT_START', tabId: this.tabId });
+      this._sendChannelMessage('start');
+      this._sendChannelMessage({ type: 'BOOT_START', tabId: this.tabId });
 
       this.bus.emit({ type: 'OVERLAY_SHOW', i18nKey: 'loading' });
 
       // 3) Subscribe to boot progress events.
-      const handler = evt => {
+      const handler = (evt) => {
         if (evt.type === 'BOOT_COMPLETE') {
           this.bus.unsubscribe(handler);
           if (this.bootHandler === handler) this.bootHandler = null;
@@ -182,8 +188,8 @@ export default class Loader {
           this._clearLoadingState();
 
           // Notify other contexts (both legacy + structured).
-          this.channel.postMessage('done');
-          this.channel.postMessage({ type: 'BOOT_DONE', tabId: this.tabId });
+          this._sendChannelMessage('done');
+          this._sendChannelMessage({ type: 'BOOT_DONE', tabId: this.tabId });
 
           this.bootState = 'booted';
         }
@@ -222,19 +228,45 @@ export default class Loader {
 
   /* ------------------------- Leader detection (BroadcastChannel fallback) ------------------------- */
 
+  _createChannel() {
+    if (typeof BroadcastChannel === 'undefined') {
+      this.logger?.warn?.('[Loader] BroadcastChannel unavailable, running in storage-only mode');
+      return NULL_CHANNEL;
+    }
+
+    try {
+      return new BroadcastChannel('app-loading');
+    } catch {
+      this.logger?.warn?.('[Loader] BroadcastChannel unavailable, running in storage-only mode');
+      return NULL_CHANNEL;
+    }
+  }
+
+  _onChannelMessage(handler) {
+    this.channel.addEventListener('message', handler);
+  }
+
+  _offChannelMessage(handler) {
+    this.channel.removeEventListener('message', handler);
+  }
+
+  _sendChannelMessage(message) {
+    this.channel.postMessage(message);
+  }
+
   async _detectForeignLeader() {
     // Ask any leader to respond quickly.
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       let done = false;
 
-      const cleanup = result => {
+      const cleanup = (result) => {
         if (done) return;
         done = true;
-        this.channel.removeEventListener('message', onMsg);
+        this._offChannelMessage(onMsg);
         resolve(result);
       };
 
-      const onMsg = e => {
+      const onMsg = (e) => {
         const msg = e?.data;
         if (!msg || typeof msg !== 'object') return;
         if (msg.tabId && msg.tabId === this.tabId) return;
@@ -243,8 +275,8 @@ export default class Loader {
         }
       };
 
-      this.channel.addEventListener('message', onMsg);
-      this.channel.postMessage({ type: 'LEADER_PING', tabId: this.tabId });
+      this._onChannelMessage(onMsg);
+      this._sendChannelMessage({ type: 'LEADER_PING', tabId: this.tabId });
 
       // If nobody answers quickly, we assume no leader exists.
       setTimeout(() => cleanup(false), 250);
@@ -256,7 +288,7 @@ export default class Loader {
     this.bcHeartbeat = setInterval(() => {
       // Heartbeat is optional here; leadership is primarily established by handshakes.
       // Keeping it can help other contexts decide UX (if needed later).
-      this.channel.postMessage({ type: 'LEADER_HEARTBEAT', tabId: this.tabId });
+      this._sendChannelMessage({ type: 'LEADER_HEARTBEAT', tabId: this.tabId });
     }, this.heartbeatInterval);
   }
 
@@ -371,8 +403,8 @@ export default class Loader {
       if (this.storageOk) this._clearActiveTab();
 
       // Notify other contexts (both legacy + structured).
-      this.channel.postMessage('done');
-      this.channel.postMessage({ type: 'BOOT_DONE', tabId: this.tabId });
+      this._sendChannelMessage('done');
+      this._sendChannelMessage({ type: 'BOOT_DONE', tabId: this.tabId });
     };
 
     // pagehide is more reliable than beforeunload in modern browsers (bfcache/embeds).
@@ -400,8 +432,8 @@ export default class Loader {
     this.bus.emit({ type: 'OVERLAY_HIDE' });
 
     // Notify other contexts (both legacy + structured).
-    this.channel.postMessage('done');
-    this.channel.postMessage({ type: 'BOOT_DONE', tabId: this.tabId });
+    this._sendChannelMessage('done');
+    this._sendChannelMessage({ type: 'BOOT_DONE', tabId: this.tabId });
   }
 
   /* ------------------------- Tab id ------------------------- */

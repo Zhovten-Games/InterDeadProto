@@ -1,10 +1,11 @@
 import NullEventBus from '../../core/events/NullEventBus.js';
 import CameraWidget from './CameraWidget.js';
+import DetectionSensitivityControl from './DetectionSensitivityControl.js';
 import {
   BUTTON_STATE_UPDATED,
   DETECTION_DONE_EVENT,
   DETECTION_SEARCH,
-  DETECTION_STOPPED
+  DETECTION_STOPPED,
 } from '../../core/events/constants.js';
 
 /**
@@ -18,11 +19,12 @@ export default class CameraStatusWidget extends CameraWidget {
    * @param {*} languageService Service for translations and i18n.
    * @param {*} bus Application-wide event bus.
    */
-  constructor(container, languageService, bus = new NullEventBus()) {
+  constructor(container, languageService, bus = new NullEventBus(), sensitivityOptions = {}) {
     super(container);
     this.language = languageService;
     this.bus = bus;
-    this._handler = async evt => {
+    this.sensitivityControl = new DetectionSensitivityControl(container, sensitivityOptions);
+    this._handler = async (evt) => {
       if (evt.type === DETECTION_SEARCH) {
         this._handleStatus('searching');
       }
@@ -49,12 +51,14 @@ export default class CameraStatusWidget extends CameraWidget {
   boot() {
     this.bus.subscribe(this._handler);
     this._attachRetryHandler();
+    this.sensitivityControl.mount();
   }
 
   /** Unsubscribe from bus events and detach listeners. */
   dispose() {
     this.bus.unsubscribe(this._handler);
     this._detachRetryHandler();
+    this.sensitivityControl.dispose();
   }
 
   _query(sel) {
@@ -72,7 +76,7 @@ export default class CameraStatusWidget extends CameraWidget {
       const map = {
         checking: 'checking',
         searching: 'searching',
-        not_found: 'object_not_found'
+        not_found: 'object_not_found',
       };
       statusEl.setAttribute('data-i18n', map[key] || key);
       this.language?.applyLanguage(statusEl);

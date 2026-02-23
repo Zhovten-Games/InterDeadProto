@@ -2,7 +2,7 @@ import IEventBus from '../../ports/IEventBus.js';
 import {
   APP_RESET_REQUESTED,
   PROFILE_IMPORT_REQUESTED,
-  PROFILE_EXPORT_REQUESTED
+  PROFILE_EXPORT_REQUESTED,
 } from '../../core/events/constants.js';
 
 export default class ButtonService {
@@ -14,7 +14,7 @@ export default class ButtonService {
     this.bus = bus;
     this.storage = persistence;
 
-    this._handler = evt => {
+    this._handler = (evt) => {
       if (evt.type === 'BUTTON_ACTION') {
         this.handleAction(evt);
       }
@@ -30,14 +30,16 @@ export default class ButtonService {
 
   async renderButtons(defs = []) {
     const parts = await Promise.all(
-      defs.map(d => {
+      defs.map((d) => {
         const data = {
           ...d,
           icon: d.icon || '',
-          i18nKey: d.i18n || d.action
+          i18nKey: d.i18n || d.action,
+          iconPositionClass: d.iconPosition ? `control-button--icon-${d.iconPosition}` : '',
+          mobileLabelClass: d.keepLabelOnMobile ? 'control-button--mobile-label' : '',
         };
         return this.templateService.render(`buttons/${d.template}`, data);
-      })
+      }),
     );
     return parts.join('');
   }
@@ -77,7 +79,7 @@ export default class ButtonService {
       this.profileRegService.setName(value);
       this.bus.emit({
         type: 'NEXT_BUTTON_ENABLE',
-        enabled: this.profileRegService.canProceed()
+        enabled: this.profileRegService.canProceed(),
       });
       this.bus.emit({ type: 'enter-name', payload: { value } });
       return;
@@ -86,4 +88,3 @@ export default class ButtonService {
     this.bus.emit({ type: action, payload });
   }
 }
-

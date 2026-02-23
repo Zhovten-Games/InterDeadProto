@@ -13,7 +13,7 @@ import ChatLauncherWidget from '../../../presentation/widgets/ChatLauncher/index
 import {
   controlPanelOptions,
   sections as controls,
-  screenMap
+  screenMap,
 } from '../../../config/controls.config.js';
 
 /**
@@ -39,31 +39,27 @@ export default class PresentationModule {
         new ChatLauncherWidget({
           documentRef: typeof document !== 'undefined' ? document : null,
           language: container.resolve('LanguageService'),
-          logger: container.resolve('Logger')
+          logger: container.resolve('Logger'),
         }),
-      { priority: 52 }
+      { priority: 52 },
     );
 
     container.register(
       'AiLoaderView',
-      () =>
-        new AiLoaderView(
-          container.resolve('IEventBus'),
-          container.resolve('LanguageService')
-        ),
-      { priority: 26 }
+      () => new AiLoaderView(container.resolve('IEventBus'), container.resolve('LanguageService')),
+      { priority: 26 },
     );
 
     container.register(
       'StatusWidget',
       () => new StatusWidget(null, container.resolve('IEventBus')),
-      { priority: 27 }
+      { priority: 27 },
     );
 
     container.register(
       'ButtonAdapter',
       () => new ButtonAdapter(container.resolve('IEventBus'), container.resolve('LanguageService')),
-      { priority: 59 }
+      { priority: 59 },
     );
 
     container.register(
@@ -87,12 +83,12 @@ export default class PresentationModule {
           container.resolve('IEventBus'),
           '[data-js="bottom-panel"]',
           container.resolve('DrumLayoutService'),
-          controlPanelOptions.showEmojiDrum
+          controlPanelOptions.showEmojiDrum,
         ),
       {
         priority: 120,
-        deps: ['DrumLayoutService', 'ModalService']
-      }
+        deps: ['DrumLayoutService', 'ModalService'],
+      },
     );
 
     container.register(
@@ -103,7 +99,7 @@ export default class PresentationModule {
           documentRef: typeof document !== 'undefined' ? document : null,
           windowRef: typeof window !== 'undefined' ? window : null,
         }),
-      { priority: 121, deps: ['PanelService'] }
+      { priority: 121, deps: ['PanelService'] },
     );
 
     container.register(
@@ -113,15 +109,20 @@ export default class PresentationModule {
           bus: container.resolve('IEventBus'),
           documentRef: typeof document !== 'undefined' ? document : null,
           windowRef: typeof window !== 'undefined' ? window : null,
-          screenService: container.resolve('ScreenService')
+          screenService: container.resolve('ScreenService'),
         }),
-      { priority: 122, deps: ['PanelService'] }
+      { priority: 122, deps: ['PanelService'] },
     );
 
     container.register(
       'ModalWidget',
-      () => new ModalWidget(document.body, container.resolve('IEventBus'), container.resolve('LanguageService')),
-      { priority: 146 }
+      () =>
+        new ModalWidget(
+          document.body,
+          container.resolve('IEventBus'),
+          container.resolve('LanguageService'),
+        ),
+      { priority: 146 },
     );
 
     container.register(
@@ -130,12 +131,12 @@ export default class PresentationModule {
         const lightbox = new MediaLightbox(
           container.resolve('MediaRepository'),
           container.resolve('ModalService'),
-          container.resolve('IEventBus')
+          container.resolve('IEventBus'),
         );
         lightbox.boot?.();
         return lightbox;
       },
-      { priority: 147, deps: ['ModalWidget'] }
+      { priority: 147, deps: ['ModalWidget'] },
     );
 
     container.register(
@@ -147,9 +148,10 @@ export default class PresentationModule {
           container.resolve('LanguageService'),
           container.resolve('IEventBus'),
           container.resolve('MediaRepository'),
-          container.resolve('Logger')
+          container.resolve('Logger'),
+          container.resolve('DetectionService'),
         ),
-      { priority: 131 }
+      { priority: 131 },
     );
 
     container.register(
@@ -158,15 +160,20 @@ export default class PresentationModule {
         new ViewAdapter(
           container.resolve('IEventBus'),
           container.resolve('DialogHistoryService'),
-          container.resolve('GhostService')
+          container.resolve('GhostService'),
         ),
-      { priority: 132 }
+      { priority: 132 },
     );
 
     container.register(
       'Loader',
-      () => new Loader(container.resolve('Logger'), container.resolve('IPersistence'), container.resolve('IEventBus')),
-      { priority: 30 }
+      () =>
+        new Loader(
+          container.resolve('Logger'),
+          container.resolve('IPersistence'),
+          container.resolve('IEventBus'),
+        ),
+      { priority: 30 },
     );
   }
 }

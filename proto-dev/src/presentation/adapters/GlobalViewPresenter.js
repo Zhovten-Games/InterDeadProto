@@ -30,7 +30,7 @@ import {
   RESET_OPTIONS_REQUESTED,
   GHOST_RESET_REQUESTED,
   APP_RESET_REQUESTED,
-  GHOST_REBOOT_REQUESTED
+  GHOST_REBOOT_REQUESTED,
 } from '../../core/events/constants.js';
 
 export default class GlobalViewPresenter {
@@ -40,7 +40,8 @@ export default class GlobalViewPresenter {
     languageManager,
     bus = new NullEventBus(),
     mediaRepository = null,
-    logger = console
+    logger = console,
+    detectionService = null,
   ) {
     this.templateService = templateService;
     this.panelService = panelService;
@@ -48,6 +49,7 @@ export default class GlobalViewPresenter {
     this.bus = bus;
     this.mediaRepository = mediaRepository;
     this.logger = logger;
+    this.detectionService = detectionService;
     this.currentScreen = null;
     this.dialogWidget = null;
     this.cameraUi = null;
@@ -140,10 +142,7 @@ export default class GlobalViewPresenter {
       if (this.currentScreen === 'registration') {
         this._teardownRegistration();
       }
-      if (
-        this.currentScreen === 'apartment-plan' &&
-        screen !== 'apartment-plan'
-      ) {
+      if (this.currentScreen === 'apartment-plan' && screen !== 'apartment-plan') {
         this.locationWidget = null;
       }
       if (this.currentScreen === 'camera' || this.currentScreen === 'registration-camera') {
@@ -170,7 +169,7 @@ export default class GlobalViewPresenter {
           this.templateService,
           this.languageManager,
           this.bus,
-          this.mediaRepository
+          this.mediaRepository,
         );
         await this.dialogWidget.boot();
         this._handleDialogState({ type: 'INIT' });
@@ -208,7 +207,11 @@ export default class GlobalViewPresenter {
     const widgetContainer = container?.querySelector('[data-js="camera-widget"]');
     if (widgetContainer) {
       this._disposeCamera();
-      this.cameraUi = new CameraStatusWidget(widgetContainer, this.languageManager, this.bus);
+      this.cameraUi = new CameraStatusWidget(widgetContainer, this.languageManager, this.bus, {
+        getThreshold: () => this.detectionService?.getDetectionThreshold?.() ?? 0.5,
+        setThreshold: (value) => this.detectionService?.setDetectionThreshold?.(value) ?? value,
+        logger: this.logger,
+      });
       this.cameraUi.render();
       this.cameraUi.boot();
     }
@@ -433,7 +436,10 @@ export default class GlobalViewPresenter {
     const meta = evt?.payload?.meta || {};
     const ghost = meta.currentGhost || 'profile';
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const blob = blobData instanceof Blob ? blobData : new Blob([blobData], { type: 'application/octet-stream' });
+    const blob =
+      blobData instanceof Blob
+        ? blobData
+        : new Blob([blobData], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
@@ -475,14 +481,17 @@ export default class GlobalViewPresenter {
 
     const title = document.createElement('h2');
     title.className = 'profile-transfer__title';
-    title.setAttribute('data-i18n', mode === 'import' ? 'profile_import_title' : 'profile_export_title');
+    title.setAttribute(
+      'data-i18n',
+      mode === 'import' ? 'profile_import_title' : 'profile_export_title',
+    );
     container.appendChild(title);
 
     const description = document.createElement('p');
     description.className = 'profile-transfer__description';
     description.setAttribute(
       'data-i18n',
-      mode === 'import' ? 'profile_import_description' : 'profile_export_description'
+      mode === 'import' ? 'profile_import_description' : 'profile_export_description',
     );
     container.appendChild(description);
 
@@ -506,7 +515,7 @@ export default class GlobalViewPresenter {
     const passLabel = document.createElement('span');
     passLabel.setAttribute(
       'data-i18n',
-      mode === 'import' ? 'profile_import_password_label' : 'profile_export_password_label'
+      mode === 'import' ? 'profile_import_password_label' : 'profile_export_password_label',
     );
     passwordField.appendChild(passLabel);
     const passwordInput = document.createElement('input');
@@ -524,7 +533,10 @@ export default class GlobalViewPresenter {
     const confirm = document.createElement('button');
     confirm.className = 'button';
     confirm.type = 'button';
-    confirm.setAttribute('data-i18n', mode === 'import' ? 'profile_import_confirm' : 'profile_export_confirm');
+    confirm.setAttribute(
+      'data-i18n',
+      mode === 'import' ? 'profile_import_confirm' : 'profile_export_confirm',
+    );
     const cancel = document.createElement('button');
     cancel.className = 'button button--ghost';
     cancel.type = 'button';
@@ -533,14 +545,14 @@ export default class GlobalViewPresenter {
     actions.appendChild(cancel);
     container.appendChild(actions);
 
-    const setError = key => {
+    const setError = (key) => {
       if (!key) {
         errorEl.textContent = '';
         return;
       }
       this.languageManager
         ?.translate?.(key)
-        .then(msg => {
+        .then((msg) => {
           errorEl.textContent = msg || '';
         })
         .catch(() => {
@@ -566,14 +578,14 @@ export default class GlobalViewPresenter {
             payload: {
               name: file.name,
               buffer,
-              password: passwordInput.value || ''
-            }
+              password: passwordInput.value || '',
+            },
           });
           this._hideModal();
         } else {
           this.bus.emit({
             type: PROFILE_EXPORT_CONFIRMED,
-            payload: { password: passwordInput.value || '' }
+            payload: { password: passwordInput.value || '' },
           });
         }
       } catch (err) {
@@ -604,7 +616,7 @@ export default class GlobalViewPresenter {
     this._modalNode = null;
   }
 
-  _handleRegistrationInput = evt => {
+  _handleRegistrationInput = (evt) => {
     this.bus.emit({ type: REGISTRATION_NAME_CHANGED, payload: { value: evt.target.value } });
   };
 }

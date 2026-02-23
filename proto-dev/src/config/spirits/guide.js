@@ -1,4 +1,5 @@
 import { resolveAssetUrl } from '../assetsBaseUrl.js';
+import { SOUND_PRESETS } from '../sound.config.js';
 
 export default {
   id: 'guide',
@@ -6,14 +7,14 @@ export default {
   reactions: {
     'guide-intro': ['🙂'],
     'guide-camera': ['🙂'],
-    'guide-outro': ['🤔']
+    'guide-outro': ['🤔'],
   },
   sounds: {
     message: {
-      ghost: resolveAssetUrl('audio/ghost_effect.mp3'),
-      user: resolveAssetUrl('audio/type_sound.mp3')
+      ghost: SOUND_PRESETS.ghostMessage,
+      user: SOUND_PRESETS.userMessage,
     },
-    detection: resolveAssetUrl('audio/ghost_effect.mp3')
+    detection: SOUND_PRESETS.detectionLoop,
   },
   stages: [
     {
@@ -26,15 +27,15 @@ export default {
         messages: [
           {
             author: 'ghost',
-            text: 'guide.stage1'
+            text: 'guide.stage1',
           },
           { author: 'user', text: 'guide.user.reply1' },
           { author: 'ghost', text: 'guide.stage2' },
           { author: 'user', text: 'guide.user.reply2' },
           { author: 'ghost', text: 'guide.stage3' },
-          { author: 'user', text: 'guide.user.reply3' }
-        ]
-      }
+          { author: 'user', text: 'guide.user.reply3' },
+        ],
+      },
     },
     {
       id: 'guide-camera',
@@ -43,7 +44,7 @@ export default {
       event: {
         id: 'camera-stage',
         autoStart: true,
-        messages: [{ author: 'ghost', text: 'guide.stage4' }]
+        messages: [{ author: 'ghost', text: 'guide.stage4' }],
       },
       quest: {
         id: 'find-person',
@@ -52,9 +53,9 @@ export default {
         overlay: {
           mode: 'detected-only',
           x: 0,
-          y: 0
-        }
-      }
+          y: 0,
+        },
+      },
     },
     {
       id: 'guide-outro',
@@ -70,11 +71,11 @@ export default {
           {
             author: 'ghost',
             text: 'guide.stage6',
-            effects: { reactionFinale: true }
-          }
-        ]
-      }
-    }
+            effects: { reactionFinale: true },
+          },
+        ],
+      },
+    },
   ],
   unlock: { requires: [] },
   // Messenger rules to keep control panel interactive during the guide flow
@@ -84,6 +85,6 @@ export default {
     'toggle-camera': [{ type: 'localAuthReady' }, { type: 'aiReady' }],
     'reset-data': [{ type: 'always' }],
     'scroll-up': [{ type: 'always' }],
-    'scroll-down': [{ type: 'always' }]
-  }
+    'scroll-down': [{ type: 'always' }],
+  },
 };

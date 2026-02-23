@@ -7,21 +7,52 @@ class DummyStore {
   constructor() {
     this.data = new Map();
   }
-  load(k) { return this.data.get(k); }
-  save(k, v) { this.data.set(k, v); }
-  remove(k) { this.data.delete(k); }
+
+  load(k) {
+    return this.data.get(k);
+  }
+  save(k, v) {
+    this.data.set(k, v);
+  }
+  remove(k) {
+    this.data.delete(k);
+  }
 }
 
 class DummyBC {
-  constructor() { this.messages = []; }
-  postMessage(m) { this.messages.push(m); }
+  constructor() {
+    this.messages = [];
+  }
+
+  postMessage(m) {
+    this.messages.push(m);
+  }
+
   addEventListener() {}
+
+  removeEventListener() {}
 }
 
-class DummyLogger { constructor(){ this.errors = []; } info(){} warn(){} error(m){ this.errors.push(m); } }
+class DummyLogger {
+  constructor() {
+    this.errors = [];
+    this.warnings = [];
+  }
+
+  info() {}
+
+  warn(message) {
+    this.warnings.push(message);
+  }
+
+  error(message) {
+    this.errors.push(message);
+  }
+}
 
 describe('Loader.js', () => {
   let dom;
+
   beforeEach(() => {
     dom = new JSDOM('<body></body>', { url: 'http://localhost' });
     global.document = dom.window.document;
@@ -42,12 +73,58 @@ describe('Loader.js', () => {
     const store = new DummyStore();
     const bus = new Observer();
     const loader = new Loader(logger, store, bus);
-    const p = loader.load(async () => {
+
+    await loader.load(async () => {
       bus.emit({ type: 'BOOT_COMPLETE' });
     });
-    await p;
+
     const channel = loader.channel;
-    assert.deepStrictEqual(channel.messages, ['start', 'done']);
+    assert.deepStrictEqual(channel.messages, [
+      'start',
+      { type: 'BOOT_START', tabId: loader.tabId },
+      'done',
+      { type: 'BOOT_DONE', tabId: loader.tabId },
+    ]);
+    assert.strictEqual(store.load('appLoading'), undefined);
+    clearInterval(loader.heartbeat);
+  });
+
+  it('uses a null-channel shim and logs warning when BroadcastChannel is missing', () => {
+    delete global.BroadcastChannel;
+
+    const logger = new DummyLogger();
+    const loader = new Loader(logger, new DummyStore(), new Observer());
+
+    assert.deepStrictEqual(logger.warnings, [
+      '[Loader] BroadcastChannel unavailable, running in storage-only mode',
+    ]);
+    assert.doesNotThrow(() => loader._sendChannelMessage('safe-noop'));
+  });
+
+  it('does not throw and still emits overlay lifecycle events without BroadcastChannel', async () => {
+    delete global.BroadcastChannel;
+
+    const logger = new DummyLogger();
+    const store = new DummyStore();
+    const bus = new Observer();
+    const events = [];
+    bus.subscribe((evt) => events.push(evt));
+
+    assert.doesNotThrow(() => new Loader(logger, store, bus));
+
+    const loader = new Loader(logger, store, bus);
+    await loader.load(async () => {
+      bus.emit({ type: 'BOOT_COMPLETE' });
+    });
+
+    assert.strictEqual(
+      events.some((evt) => evt.type === 'OVERLAY_SHOW' && evt.i18nKey === 'loading'),
+      true,
+    );
+    assert.strictEqual(
+      events.some((evt) => evt.type === 'OVERLAY_HIDE'),
+      true,
+    );
     assert.strictEqual(store.load('appLoading'), undefined);
     clearInterval(loader.heartbeat);
   });
