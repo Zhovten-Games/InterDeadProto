@@ -1,0 +1,10 @@
+# Local overrides
+config.env
+
+# Local runtime artifacts
+.tmp/
+logs/
+
+# Optional local outputs if redirected into this folder
+public/
+out/

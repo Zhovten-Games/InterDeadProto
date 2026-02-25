@@ -36,7 +36,7 @@ jobs:
       - name: Build
         env:
           VITE_CACHE_BUILD_ID: ${{ github.sha }}
-        run: npm run build
+        run: npm run build:deploy
 
 
       - name: Mirror static assets to dist
@@ -127,31 +127,6 @@ jobs:
 
           test -f "dist/src/presentation/templates/welcome.html"
 
-      - name: Ensure i18n in dist (mirror proto-dev/src)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          SRC=""
-          if [ -d "proto-dev/src/i18n/locales" ]; then
-            SRC="proto-dev/src/i18n/locales"
-          elif [ -d "src/i18n/locales" ]; then
-            SRC="src/i18n/locales"
-          else
-            echo "i18n locales not found"
-            exit 1
-          fi
-
-          # runtime может обращаться к разным базам — кладём в несколько мест
-          rm -rf "dist/i18n" "dist/src/i18n" "dist/assets/i18n" || true
-          mkdir -p "dist/i18n/locales" "dist/src/i18n/locales" "dist/assets/i18n/locales"
-
-          cp -R "${SRC}/." "dist/i18n/locales/"
-          cp -R "${SRC}/." "dist/src/i18n/locales/"
-          cp -R "${SRC}/." "dist/assets/i18n/locales/"
-
-          test -f "dist/src/i18n/locales/en/ui.json"
-
       - name: Ensure sw.js
         shell: bash
         run: |
@@ -216,8 +191,6 @@ jobs:
           test -f "dist/assets/libs/coco-ssd.min.js"
           test -f "dist/assets/models/coco-ssd/model.json"
           test -f "dist/src/presentation/templates/welcome.html"
-          test -f "dist/src/i18n/locales/en/ui.json"
-          test -f "dist/i18n/locales/en/ui.json"
           test -f "dist/assets/images/logo.png"
           test -f "dist/favicon.ico"
 

@@ -89,6 +89,15 @@ Legacy README narrative mapping:
 - Narrative cross-references → `docs/proto-dev/technical/10-cross-references.md`
 - Reading order for newcomers → `docs/proto-dev/technical/11-reading-order.md`
 
+## Local pipeline (isolated workflow replica)
+
+For repeatable non-production validation, use Local Build Lab:
+
+- `proto-dev/tests/local-build-lab/README.md`
+
+This runner reproduces key CI build stages in an isolated workspace and writes disposable output to `.local-dist/` by default.
+Compatibility rewrites are restricted to `.local-lab-workspace/` and must not mutate `proto-dev/` files in the main checkout.
+
 ## Local development
 
 ```bash

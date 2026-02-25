@@ -78,6 +78,7 @@ state_text = state_text.replace(
 )
 state_path.write_text(state_text)
 
+
 dialog_path = Path('proto-dev/src/application/services/DialogOrchestratorService.js')
 dialog_text = dialog_path.read_text()
 dialog_text = dialog_text.replace(
@@ -94,6 +95,169 @@ dialog_text = dialog_text.replace(
 """,
 )
 dialog_path.write_text(dialog_text)
+
+assets_path = Path('proto-dev/src/config/assetsBaseUrl.js')
+assets_text = assets_path.read_text()
+
+if '_ensureTrailingSlash(path)' not in assets_text:
+    assets_text = assets_text.replace(
+        """    const sourceMarker = '/src/';
+    const sourceIndex = url.pathname.lastIndexOf(sourceMarker);
+    if (sourceIndex !== -1) {
+      const appRoot = url.pathname.slice(0, sourceIndex + 1);
+      if (url.origin === 'null') return `${appRoot}assets/`;
+      return `${url.origin}${appRoot}assets/`;
+    }
+""",
+        """    const sourceMarker = '/src/';
+    const sourceIndex = url.pathname.lastIndexOf(sourceMarker);
+    if (sourceIndex !== -1) {
+      const appRoot = this._ensureTrailingSlash(url.pathname.slice(0, sourceIndex + 1));
+      if (url.origin === 'null') return `${appRoot}assets/`;
+      return `${url.origin}${appRoot}assets/`;
+    }
+""",
+    )
+
+    assets_text = assets_text.replace(
+        """  _stripAssetsPrefix(assetPath) {
+""",
+        """  _ensureTrailingSlash(path) {
+    if (!path) return '/';
+    return path.endsWith('/') ? path : `${path}/`;
+  }
+
+  _normalizeRuntimeRoot(path) {
+    const normalized = this._ensureTrailingSlash(path);
+    if (normalized === '/s/') return '/';
+    return normalized;
+  }
+
+  _stripAssetsPrefix(assetPath) {
+""",
+    )
+
+if 'this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1))' not in assets_text:
+    assets_text = assets_text.replace(
+        """    const sourceMarker = '/src/';
+    const sourceIndex = url.pathname.lastIndexOf(sourceMarker);
+    if (sourceIndex !== -1) {
+      const appRoot = this._ensureTrailingSlash(url.pathname.slice(0, sourceIndex + 1));
+      if (url.origin === 'null') return `${appRoot}assets/`;
+      return `${url.origin}${appRoot}assets/`;
+    }
+""",
+        """    const sourceMarker = '/src/';
+    const sourceIndex = url.pathname.lastIndexOf(sourceMarker);
+    if (sourceIndex !== -1) {
+      const appRoot = this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1));
+      if (url.origin === 'null') return `${appRoot}assets/`;
+      return `${url.origin}${appRoot}assets/`;
+    }
+""",
+    )
+
+if 'const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);' not in assets_text:
+    assets_text = assets_text.replace(
+        """      const directoryPath = hasTrailingSlash
+        ? pathname
+        : looksLikeFile
+          ? pathname.slice(0, pathname.lastIndexOf('/') + 1)
+          : `${pathname}/`;
+      if (url.origin === 'null') return `${directoryPath}assets/`;
+      return `${url.origin}${directoryPath}assets/`;
+""",
+        """      const directoryPath = hasTrailingSlash
+        ? pathname
+        : looksLikeFile
+          ? pathname.slice(0, pathname.lastIndexOf('/') + 1)
+          : `${pathname}/`;
+      const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);
+      if (url.origin === 'null') return `${normalizedDirectory}assets/`;
+      return `${url.origin}${normalizedDirectory}assets/`;
+""",
+    )
+
+if 'if (!fromModule) return normalized;' in assets_text:
+    assets_text = assets_text.replace(
+        """  _normalizeBaseUrl(baseUrl) {
+    if (!baseUrl) return 'assets/';
+    const normalized = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    if (this._isAbsolute(normalized) || normalized.startsWith('/')) return normalized;
+
+    const fromModule = this._resolveFromModuleUrl();
+    if (!fromModule) return normalized;
+
+    if (normalized === 'assets/' && fromModule.endsWith('/assets/')) {
+      return fromModule;
+    }
+
+    try {
+      return new URL(normalized, fromModule).toString();
+    } catch (_error) {
+      return normalized;
+    }
+
+    const fromLocation = this._resolveFromLocationUrl();
+    if (fromLocation) {
+      if (normalized === 'assets/' && fromLocation.endsWith('/assets/')) {
+        return fromLocation;
+      }
+      try {
+        return new URL(normalized, fromLocation).toString();
+      } catch (_error) {
+        // Keep original relative path as the final fallback.
+      }
+    }
+
+    return normalized;
+  }
+""",
+        """  _normalizeBaseUrl(baseUrl) {
+    if (!baseUrl) return 'assets/';
+    const normalized = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+    if (this._isAbsolute(normalized) || normalized.startsWith('/')) return normalized;
+
+    const fromModule = this._resolveFromModuleUrl();
+    if (fromModule) {
+      if (normalized === 'assets/' && fromModule.endsWith('/assets/')) {
+        return fromModule;
+      }
+      try {
+        return new URL(normalized, fromModule).toString();
+      } catch (_error) {
+        // Fallback to location-based resolution.
+      }
+    }
+
+    const fromLocation = this._resolveFromLocationUrl();
+    if (fromLocation) {
+      if (normalized === 'assets/' && fromLocation.endsWith('/assets/')) {
+        return fromLocation;
+      }
+      try {
+        return new URL(normalized, fromLocation).toString();
+      } catch (_error) {
+        // Keep original relative path as the final fallback.
+      }
+    }
+
+    return normalized;
+  }
+""",
+    )
+
+if 'if (!fromModule) return normalized;' in assets_text:
+    raise RuntimeError('AssetsBaseUrlResolver hotfix was not applied in workspace override script.')
+
+if 'const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);' not in assets_text:
+    raise RuntimeError('Runtime root normalization hotfix for location URL was not applied.')
+
+if 'this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1))' not in assets_text:
+    raise RuntimeError('Runtime root normalization hotfix for module URL was not applied.')
+
+assets_path.write_text(assets_text)
+
 PY
 
 echo "CI compatibility overrides applied."

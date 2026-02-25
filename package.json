@@ -7,7 +7,11 @@
     "dev": "vite --config vite.config.js",
     "build": "vite build --config vite.config.js",
     "format": "prettier --write \"proto-dev/src/**/*.{js,json}\" \"proto-dev/tests/**/*.js\" \"proto-dev/index.html\" \"*.{md,js,json}\" \".github/workflows/*.yml\"",
-    "format:check": "prettier --check \"proto-dev/src/**/*.{js,json}\" \"proto-dev/tests/**/*.js\" \"proto-dev/index.html\" \"*.{md,js,json}\" \".github/workflows/*.yml\""
+    "format:check": "prettier --check \"proto-dev/src/**/*.{js,json}\" \"proto-dev/tests/**/*.js\" \"proto-dev/index.html\" \"*.{md,js,json}\" \".github/workflows/*.yml\"",
+    "local:pipeline": "bash ./proto-dev/tests/local-build-lab/run-local-pipeline.sh",
+    "local:pipeline:serve": "bash ./proto-dev/tests/local-build-lab/run-local-pipeline.sh --serve",
+    "local:pipeline:smoke": "bash ./proto-dev/tests/local-build-lab/run-local-pipeline.sh --smoke",
+    "build:deploy": "vite build --config vite.deploy.config.js"
   },
   "devDependencies": {
     "jsdom": "^28.1.0",
