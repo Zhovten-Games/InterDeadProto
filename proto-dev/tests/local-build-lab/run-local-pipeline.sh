@@ -5,10 +5,10 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck disable=SC1091
 source "$SCRIPT_DIR/pipeline.lib.sh"
 
-REPO_ROOT="$(resolve_repo_root)"
-LAB_ROOT="$REPO_ROOT/proto-dev/tests/local-build-lab"
-WORKSPACE_DIR="$REPO_ROOT/.local-lab-workspace"
-OUTPUT_DIR="$REPO_ROOT/.local-dist"
+PROJECT_ROOT="$(resolve_repo_root)"
+LAB_ROOT="$PROJECT_ROOT/tests/local-build-lab"
+WORKSPACE_DIR="$PROJECT_ROOT/.local-lab-workspace"
+OUTPUT_DIR="$PROJECT_ROOT/.local-dist"
 ENV_FILE="$LAB_ROOT/config.env"
 PORT="4173"
 SERVE="0"
@@ -17,7 +17,7 @@ INSTALL_MODE="auto"
 
 usage() {
   cat <<USAGE
-Usage: proto-dev/tests/local-build-lab/run-local-pipeline.sh [options]
+Usage: tests/local-build-lab/run-local-pipeline.sh [options]
 
 Options:
   --serve                 Start local preview server after build
@@ -25,7 +25,7 @@ Options:
   --port <port>           Preview server port (default: 4173)
   --output <dir>          Isolated output directory (default: .local-dist)
   --workspace <dir>       Isolated workspace directory (default: .local-lab-workspace)
-  --env-file <file>       Optional env override file (default: proto-dev/tests/local-build-lab/config.env)
+  --env-file <file>       Optional env override file (default: tests/local-build-lab/config.env)
   --install-mode <mode>   auto|ci|install (default: auto)
   --help                  Show this help message
 USAGE
@@ -85,14 +85,14 @@ OUTPUT_DIR="${LOCAL_BUILD_OUTPUT_DIR:-$OUTPUT_DIR}"
 WORKSPACE_DIR="${LOCAL_BUILD_WORKSPACE_DIR:-$WORKSPACE_DIR}"
 
 log_step "Local pipeline started"
-log_step "Repository root: $REPO_ROOT"
+log_step "Project root: $PROJECT_ROOT"
 log_step "Workspace dir: $WORKSPACE_DIR"
 log_step "Output dir: $OUTPUT_DIR"
 
 [[ "$WORKSPACE_DIR" == *".local-lab-workspace"* ]] || die "Workspace must be an isolated .local-lab-workspace path"
-verify_repo_localization_adapter "$REPO_ROOT"
+verify_repo_localization_adapter "$PROJECT_ROOT"
 
-sync_workspace "$REPO_ROOT" "$WORKSPACE_DIR"
+sync_workspace "$PROJECT_ROOT" "$WORKSPACE_DIR"
 
 if [[ "$INSTALL_MODE" == "ci" ]]; then
   log_step "Installing dependencies with forced npm ci"

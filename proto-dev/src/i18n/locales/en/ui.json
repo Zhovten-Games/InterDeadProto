@@ -152,5 +152,6 @@
   "emoji_protocol.range_label": "RANGE",
   "emoji_protocol.policy_label": "POLICY",
   "emoji_protocol.output_label": "OUTPUT",
-  "reset_modal_reboot": "Reboot current ghost"
+  "reset_modal_reboot": "Reboot current ghost",
+  "chat_new_messages": "New messages"
 }

@@ -1,20 +1,26 @@
 import NullEventBus from '../../../core/events/NullEventBus.js';
 import {
-    EVENT_MESSAGE_READY,
-    DIALOG_CLEAR,
-    CHAT_LOAD_OLDER,
-    MEDIA_OPEN,
-    OVERLAY_SHOW,
-    REACTION_REMINDER_READY,
-    REACTION_SELECTED,
-    REACTION_OVERLAY_REQUESTED,
-    REACTION_FINALE_STATE_UPDATED,
-  REACTION_FINALE_RECALCULATE_REQUESTED
-  } from '../../../core/events/constants.js';
+  EVENT_MESSAGE_READY,
+  DIALOG_CLEAR,
+  CHAT_LOAD_OLDER,
+  MEDIA_OPEN,
+  OVERLAY_SHOW,
+  REACTION_REMINDER_READY,
+  REACTION_SELECTED,
+  REACTION_OVERLAY_REQUESTED,
+  REACTION_FINALE_STATE_UPDATED,
+  REACTION_FINALE_RECALCULATE_REQUESTED,
+} from '../../../core/events/constants.js';
 import config from '../../../config/index.js';
 import { chatDisplayModes } from '../../../config/chat.config.js';
 import MessageDeduplicator from './MessageDeduplicator.js';
+import NewMessagesIndicator from './NewMessagesIndicator.js';
 import { resolveYoutubeId } from '../../../utils/youtube.js';
+
+const chatScrollModes = Object.freeze({
+  AUTO: 'auto',
+  NEW_MESSAGES_BUTTON: 'new-messages-button',
+});
 
 /**
  * Renders dialog messages reactively from EventBus events.
@@ -25,7 +31,7 @@ export default class DialogWidget {
     templateService,
     languageService,
     bus = new NullEventBus(),
-    mediaRepository = null
+    mediaRepository = null,
   ) {
     this.container = typeof container === 'string' ? document.querySelector(container) : container;
     this.tpl = templateService;
@@ -45,6 +51,12 @@ export default class DialogWidget {
     this.lastRenderedIndex = 0;
     this.scrollContainer = this.container;
     this._booted = false;
+    this.scrollMode = this._resolveScrollMode(config);
+    this._firstUnreadMessageId = null;
+    this._newMessagesIndicator = new NewMessagesIndicator(
+      this.container?.parentElement || null,
+      this.language,
+    );
     /**
      * Sequence counter for messages rendered by this widget.
      * Used as fallback id for messages lacking one.
@@ -85,8 +97,11 @@ export default class DialogWidget {
       if (scrollTop <= 0) {
         this.bus.emit({ type: CHAT_LOAD_OLDER });
       }
+      if (this._isNearBottom()) {
+        this._clearUnreadState();
+      }
     };
-    this._handler = async evt => {
+    this._handler = async (evt) => {
       if (evt.type === DIALOG_CLEAR) {
         this.container.innerHTML = '';
         this.messages = [];
@@ -95,6 +110,7 @@ export default class DialogWidget {
         this._dedupe.clear();
         this.mediaRepository?.revokeAll();
         this._noteSelections.clear();
+        this._clearUnreadState();
         return;
       }
       if (evt.type === REACTION_SELECTED) {
@@ -120,34 +136,29 @@ export default class DialogWidget {
           id: typeof raw.id === 'number' ? raw.id : this._msgSeq++,
           replay,
           reaction:
-            typeof raw.reaction === 'string' && raw.reaction.trim().length > 0
-              ? raw.reaction
-              : '',
+            typeof raw.reaction === 'string' && raw.reaction.trim().length > 0 ? raw.reaction : '',
           reactionOrigin:
             typeof raw.reactionOrigin === 'string' && raw.reactionOrigin.trim() !== ''
               ? raw.reactionOrigin.trim()
               : null,
           reactionLocked: raw.reactionLocked === true,
           revisionAllowed: !!raw.revisionAllowed,
-          _reactionPending: !!raw._reactionPending
+          _reactionPending: !!raw._reactionPending,
         };
         const existed = !this._dedupe.register(msg);
         if (existed) {
           if (replay) {
             const idx = this.messages.findIndex(
-              m =>
-                (msg.fingerprint && m.fingerprint === msg.fingerprint) ||
-                m.id === msg.id
+              (m) => (msg.fingerprint && m.fingerprint === msg.fingerprint) || m.id === msg.id,
             );
             if (idx !== -1) {
               this.messages[idx] = { ...this.messages[idx], ...msg };
               const node = this.container.children[idx];
               if (node) {
                 const safeAvatar = this._sanitizeUrl(msg.avatar);
-                const avatarHtml =
-                  safeAvatar
-                    ? `<img class="dialog__avatar" src="${safeAvatar}" alt="avatar" />`
-                    : '<div class="dialog__avatar dialog__avatar--placeholder"></div>';
+                const avatarHtml = safeAvatar
+                  ? `<img class="dialog__avatar" src="${safeAvatar}" alt="avatar" />`
+                  : '<div class="dialog__avatar dialog__avatar--placeholder"></div>';
                 const avatarEl = node.querySelector('.dialog__avatar');
                 if (avatarEl) avatarEl.outerHTML = avatarHtml;
                 this._refreshReactionNode(node, this.messages[idx]);
@@ -168,11 +179,11 @@ export default class DialogWidget {
           (a, b) =>
             (a.order ?? 0) - (b.order ?? 0) ||
             (a.timestamp ?? 0) - (b.timestamp ?? 0) ||
-            (a.id ?? 0) - (b.id ?? 0)
+            (a.id ?? 0) - (b.id ?? 0),
         );
+        const wasNearBottom = this._isNearBottom();
         await this.renderLatest();
-        // Always scroll to the latest message after rendering new content.
-        this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+        this._finalizeScrollAfterMessage(msg, wasNearBottom);
       }
       if (evt.type === CHAT_LOAD_OLDER) {
         await this.renderOlder();
@@ -185,6 +196,7 @@ export default class DialogWidget {
     this._booted = true;
     this.bus.subscribe(this._handler);
     this.scrollContainer.addEventListener('scroll', this._scrollListener);
+    this._newMessagesIndicator.ensure();
   }
 
   dispose() {
@@ -192,9 +204,74 @@ export default class DialogWidget {
     this.bus.unsubscribe(this._handler);
     this.scrollContainer.removeEventListener('scroll', this._scrollListener);
     this.mediaRepository?.revokeAll();
+    this._newMessagesIndicator.dispose();
     this.lastRenderedIndex = 0;
     this._noteSelections.clear();
     this._booted = false;
+  }
+
+  _resolveScrollMode(cfg) {
+    const mode = String(cfg?.chatScroll?.mode || '').toLowerCase();
+    if (mode === chatScrollModes.NEW_MESSAGES_BUTTON) {
+      return chatScrollModes.NEW_MESSAGES_BUTTON;
+    }
+    return chatScrollModes.AUTO;
+  }
+
+  _isNearBottom(thresholdPx = 16) {
+    const container = this.scrollContainer;
+    if (!container) return true;
+    const distance = container.scrollHeight - container.scrollTop - container.clientHeight;
+    return distance <= thresholdPx;
+  }
+
+  _finalizeScrollAfterMessage(msg, wasNearBottom) {
+    const isReplay = msg?.replay === true;
+
+    if (this.scrollMode === chatScrollModes.AUTO) {
+      this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+      this._clearUnreadState();
+      return;
+    }
+
+    // Replayed history must restore the latest viewport position and should
+    // never be marked as unread, otherwise reopening a chat regresses to an
+    // outdated anchor in the backlog.
+    if (isReplay) {
+      this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+      this._clearUnreadState();
+      return;
+    }
+
+    // In explicit "new messages button" mode live messages are never auto-
+    // followed: we always keep an unread anchor and surface a CTA.
+    void wasNearBottom;
+    if (this._firstUnreadMessageId == null) {
+      this._firstUnreadMessageId = msg?.id ?? null;
+    }
+    this._newMessagesIndicator.show(() => this._scrollToFirstUnreadMessage());
+  }
+
+  _scrollToFirstUnreadMessage() {
+    const firstUnread = this._firstUnreadMessageId;
+    if (firstUnread == null) {
+      this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+      this._clearUnreadState();
+      return;
+    }
+
+    const node = this.container.querySelector(`[data-dialog-message-id="${String(firstUnread)}"]`);
+    if (node?.scrollIntoView) {
+      node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+    }
+    this._clearUnreadState();
+  }
+
+  _clearUnreadState() {
+    this._firstUnreadMessageId = null;
+    this._newMessagesIndicator.hide();
   }
 
   _resolveDisplayMode(cfg) {
@@ -206,7 +283,7 @@ export default class DialogWidget {
     return {
       mode: isBatchMode ? chatDisplayModes.BATCH : chatDisplayModes.ALL,
       batchSize,
-      isBatchMode
+      isBatchMode,
     };
   }
 
@@ -231,23 +308,25 @@ export default class DialogWidget {
       this.bus.emit({
         type: 'log',
         level: 'info',
-        message: `DialogWidget.renderLatest: rendering message ${msg.id} (${isNew ? 'new' : 're-rendered'})`
+        message: `DialogWidget.renderLatest: rendering message ${msg.id} (${isNew ? 'new' : 're-rendered'})`,
       });
 
       if (!isNew) continue;
 
-      const avatarUsed =
-        msg.avatar && msg.avatar.trim() !== '' ? msg.avatar : 'placeholder avatar';
+      const avatarUsed = msg.avatar && msg.avatar.trim() !== '' ? msg.avatar : 'placeholder avatar';
       this.bus.emit({
         type: 'log',
         level: 'info',
-        message: `DialogWidget.renderLatest: avatar for message ${msg.id}: ${avatarUsed}`
+        message: `DialogWidget.renderLatest: avatar for message ${msg.id}: ${avatarUsed}`,
       });
 
       const data = await this._toTemplateData(msg);
       const html = await this.tpl.render('widgets/dialog-message', data);
       this.container.insertAdjacentHTML('beforeend', html);
       const node = this.container.lastElementChild;
+      if (node) {
+        node.dataset.dialogMessageId = String(msg.id);
+      }
       this._initializeNoteBlock(node, msg);
 
       if (msg._revoke) {
@@ -259,7 +338,7 @@ export default class DialogWidget {
 
       await this._animateMessage(node, msg, {
         isReplay: msg.replay === true,
-        isNew
+        isNew,
       });
     }
 
@@ -297,13 +376,16 @@ export default class DialogWidget {
       this.bus.emit({
         type: 'log',
         level: 'info',
-        message: `DialogWidget.renderOlder: rendering message ${msg.id}`
+        message: `DialogWidget.renderOlder: rendering message ${msg.id}`,
       });
 
       const data = await this._toTemplateData(msg);
       const html = await this.tpl.render('widgets/dialog-message', data);
       this.container.insertAdjacentHTML('afterbegin', html);
       const node = this.container.firstElementChild;
+      if (node) {
+        node.dataset.dialogMessageId = String(msg.id);
+      }
       this._initializeNoteBlock(node, msg);
 
       if (msg._revoke) {
@@ -315,7 +397,7 @@ export default class DialogWidget {
 
       await this._animateMessage(node, msg, {
         isReplay: true,
-        isNew: false
+        isNew: false,
       });
     }
 
@@ -342,10 +424,9 @@ export default class DialogWidget {
 
   async _toTemplateData(msg) {
     const safeAvatar = this._sanitizeUrl(msg.avatar);
-    const avatarBlock =
-      safeAvatar
-        ? `<img class="dialog__avatar" src="${safeAvatar}" alt="avatar" />`
-        : '<div class="dialog__avatar dialog__avatar--placeholder"></div>';
+    const avatarBlock = safeAvatar
+      ? `<img class="dialog__avatar" src="${safeAvatar}" alt="avatar" />`
+      : '<div class="dialog__avatar dialog__avatar--placeholder"></div>';
 
     if (msg.type === 'image') {
       const imageBlock = await this._buildImageBlock(msg);
@@ -355,7 +436,7 @@ export default class DialogWidget {
         avatarBlock,
         imageBlock,
         content: '',
-        reactionBlock: ''
+        reactionBlock: '',
       };
     }
 
@@ -366,7 +447,7 @@ export default class DialogWidget {
         avatarBlock,
         imageBlock: this._buildYoutubeBlock(msg),
         content: this._buildContentBlock(msg),
-        reactionBlock: ''
+        reactionBlock: '',
       };
     }
 
@@ -376,7 +457,7 @@ export default class DialogWidget {
       avatarBlock,
       imageBlock: '',
       content: this._buildContentBlock(msg),
-      reactionBlock: ''
+      reactionBlock: '',
     };
   }
 
@@ -396,7 +477,7 @@ export default class DialogWidget {
         this.bus.emit({
           type: 'log',
           level: 'warn',
-          message: `DialogWidget._toTemplateData: missing media record for id ${msg.media.id}`
+          message: `DialogWidget._toTemplateData: missing media record for id ${msg.media.id}`,
         });
       }
     }
@@ -422,7 +503,7 @@ export default class DialogWidget {
       msg.videoId,
       msg.youtubeUrl,
       msg.youtube?.id,
-      msg.youtube?.src
+      msg.youtube?.src,
     );
     const thumb =
       msg.youtubeThumb ||
@@ -458,7 +539,7 @@ export default class DialogWidget {
     if (layout === 'inline' && hasText) textClasses.push('dialog__message-text--emoji');
     const textBlock = hasText
       ? `<p class="${textClasses.join(
-          ' '
+          ' ',
         )}" data-i18n="${msg.text}" data-emoji-protocol="true" data-allow-links="true"></p>`
       : '';
     return `<div class="${contentClasses.join(' ')}">${textBlock}${noteBlock}</div>`;
@@ -471,17 +552,21 @@ export default class DialogWidget {
   }
 
   _buildNoteBlock(msg) {
-    const notes = Array.isArray(msg.notes) ? msg.notes.filter(n => typeof n === 'string' && n.trim() !== '') : [];
+    const notes = Array.isArray(msg.notes)
+      ? msg.notes.filter((n) => typeof n === 'string' && n.trim() !== '')
+      : [];
     if (!notes.length) return '';
     const layout = this._resolveNoteLayout(msg, true);
     const classes = ['dialog__message-note'];
-    classes.push(layout === 'inline' ? 'dialog__message-note--inline' : 'dialog__message-note--stacked');
+    classes.push(
+      layout === 'inline' ? 'dialog__message-note--inline' : 'dialog__message-note--stacked',
+    );
     const key = this._getLocatorKey(msg) || '';
     const safeKey = this._escapeAttr(key);
     const texts = notes
       .map(
         (noteKey, idx) =>
-          `<p class="dialog__message-note-text" data-js="dialog-note-text" data-note-index="${idx}" data-i18n="${noteKey}" data-allow-links="true"></p>`
+          `<p class="dialog__message-note-text" data-js="dialog-note-text" data-note-index="${idx}" data-i18n="${noteKey}" data-allow-links="true"></p>`,
       )
       .join('');
     const toggle =
@@ -544,7 +629,7 @@ export default class DialogWidget {
         this.bus.emit({
           type: 'log',
           level: 'warn',
-          message: `DialogWidget._updateFinaleState translation failed: ${err?.message || err}`
+          message: `DialogWidget._updateFinaleState translation failed: ${err?.message || err}`,
         });
       }
     }
@@ -556,7 +641,7 @@ export default class DialogWidget {
     const fingerprint = evt?.fingerprint || null;
     const stageId = evt?.stageId || null;
     return (
-      nodes.find(node => {
+      nodes.find((node) => {
         if (fingerprint && node.dataset.fingerprint === fingerprint) {
           return true;
         }
@@ -575,9 +660,7 @@ export default class DialogWidget {
     const fingerprintAttr = evt?.fingerprint
       ? ` data-fingerprint="${this._escapeAttr(evt.fingerprint)}"`
       : '';
-    const prompt = promptKey
-      ? `<p class="dialog__finale-text" data-i18n="${promptKey}"></p>`
-      : '';
+    const prompt = promptKey ? `<p class="dialog__finale-text" data-i18n="${promptKey}"></p>` : '';
     const buttonLabel = buttonKey
       ? `<span class="dialog__finale-button-label" data-i18n="${buttonKey}"></span>`
       : '';
@@ -613,7 +696,7 @@ export default class DialogWidget {
   _attachFinaleListeners(scope) {
     if (!scope) return;
     const buttons = scope.querySelectorAll('[data-js="dialog-finale-recalculate"]');
-    buttons.forEach(btn => {
+    buttons.forEach((btn) => {
       if (btn.dataset.bound === 'true') return;
       btn.dataset.bound = 'true';
       btn.addEventListener('click', () => {
@@ -625,7 +708,7 @@ export default class DialogWidget {
           type: REACTION_FINALE_RECALCULATE_REQUESTED,
           ghostId,
           fingerprint,
-          stageId
+          stageId,
         });
       });
     });
@@ -650,7 +733,10 @@ export default class DialogWidget {
     }
 
     try {
-      const parsed = new URL(trimmed, typeof window !== 'undefined' ? window.location.origin : undefined);
+      const parsed = new URL(
+        trimmed,
+        typeof window !== 'undefined' ? window.location.origin : undefined,
+      );
       const protocol = parsed.protocol.toLowerCase();
       if (protocol === 'http:' || protocol === 'https:') {
         return this._escapeAttr(parsed.toString());
@@ -696,7 +782,7 @@ export default class DialogWidget {
   }
 
   _attachNoteListeners(scope) {
-    scope.querySelectorAll('[data-js="dialog-note-toggle"]').forEach(btn => {
+    scope.querySelectorAll('[data-js="dialog-note-toggle"]').forEach((btn) => {
       if (btn.dataset.bound === 'true') return;
       btn.dataset.bound = 'true';
       btn.addEventListener('click', () => {
@@ -729,7 +815,7 @@ export default class DialogWidget {
    */
   _handleImageRevoke(img, msg) {
     const revoke = msg._revoke;
-    const schedule = cb =>
+    const schedule = (cb) =>
       typeof globalThis.requestAnimationFrame === 'function'
         ? globalThis.requestAnimationFrame(cb)
         : setTimeout(cb, 0);
@@ -744,7 +830,7 @@ export default class DialogWidget {
   }
 
   _attachImageListeners(scope) {
-    scope.querySelectorAll('.dialog__image').forEach(img => {
+    scope.querySelectorAll('.dialog__image').forEach((img) => {
       if (img.dataset.bound === 'true') return;
       img.dataset.bound = 'true';
       img.addEventListener('click', () => {
@@ -765,18 +851,19 @@ export default class DialogWidget {
         this.bus.emit({
           type: 'log',
           level: 'warn',
-          message: 'DialogWidget: unable to open image, missing media source'
+          message: 'DialogWidget: unable to open image, missing media source',
         });
       });
     });
   }
 
   _attachYoutubeListeners(scope) {
-    scope.querySelectorAll('[data-js="dialog-youtube-thumb"]').forEach(btn => {
+    scope.querySelectorAll('[data-js="dialog-youtube-thumb"]').forEach((btn) => {
       if (btn.dataset.bound === 'true') return;
       btn.dataset.bound = 'true';
       btn.addEventListener('click', () => {
-        const videoId = btn.dataset.videoId || btn.closest('[data-js="dialog-youtube"]')?.dataset.videoId;
+        const videoId =
+          btn.dataset.videoId || btn.closest('[data-js="dialog-youtube"]')?.dataset.videoId;
         this._openYoutubeModal(videoId);
       });
     });
@@ -803,7 +890,7 @@ export default class DialogWidget {
   }
 
   _attachReactionListeners(scope) {
-    scope.querySelectorAll('.dialog__reaction-trigger').forEach(btn => {
+    scope.querySelectorAll('.dialog__reaction-trigger').forEach((btn) => {
       if (btn.dataset.bound === 'true') return;
       if (btn.dataset.locked === 'true') return;
       btn.dataset.bound = 'true';
@@ -830,9 +917,7 @@ export default class DialogWidget {
     const locked = msg.reactionLocked === true || msg.reactionOrigin === 'system';
     if (locked) triggerClasses.push('dialog__reaction-trigger--locked');
     const reaction =
-      typeof msg.reaction === 'string' && msg.reaction.trim().length > 0
-        ? msg.reaction
-        : '';
+      typeof msg.reaction === 'string' && msg.reaction.trim().length > 0 ? msg.reaction : '';
     const hasReaction = reaction !== '';
     if (hasReaction) triggerClasses.push('dialog__reaction-trigger--filled');
     const allowRevision = msg.revisionAllowed === true;
@@ -866,7 +951,7 @@ export default class DialogWidget {
     return {
       messageId: Number.isNaN(messageId) ? null : messageId,
       fingerprint: el.dataset.fingerprint || null,
-      stageId: el.dataset.stageId || null
+      stageId: el.dataset.stageId || null,
     };
   }
 
@@ -877,8 +962,8 @@ export default class DialogWidget {
       typeof input.messageId === 'number' && !Number.isNaN(input.messageId)
         ? input.messageId
         : typeof input.id === 'number' && !Number.isNaN(input.id)
-        ? input.id
-        : null;
+          ? input.id
+          : null;
     if (candidate !== null) {
       return `id:${candidate}`;
     }
@@ -886,15 +971,11 @@ export default class DialogWidget {
   }
 
   _findMessageIndex({ messageId, fingerprint }) {
-    return this.messages.findIndex(msg => {
+    return this.messages.findIndex((msg) => {
       if (fingerprint && msg.fingerprint) {
         return msg.fingerprint === fingerprint;
       }
-      if (
-        typeof messageId === 'number' &&
-        !Number.isNaN(messageId) &&
-        typeof msg.id === 'number'
-      ) {
+      if (typeof messageId === 'number' && !Number.isNaN(messageId) && typeof msg.id === 'number') {
         return msg.id === messageId;
       }
       return false;
@@ -902,8 +983,7 @@ export default class DialogWidget {
   }
 
   _markReactionPending(evt) {
-    const messageId =
-      typeof evt.messageId === 'number' ? evt.messageId : Number(evt.messageId);
+    const messageId = typeof evt.messageId === 'number' ? evt.messageId : Number(evt.messageId);
     const payload = { messageId, fingerprint: evt.fingerprint || null };
     const idx = this._findMessageIndex(payload);
     if (idx === -1) {
@@ -915,8 +995,7 @@ export default class DialogWidget {
   }
 
   _applyReaction(evt) {
-    const messageId =
-      typeof evt.messageId === 'number' ? evt.messageId : Number(evt.messageId);
+    const messageId = typeof evt.messageId === 'number' ? evt.messageId : Number(evt.messageId);
     const payload = { messageId, fingerprint: evt.fingerprint || null };
     const idx = this._findMessageIndex(payload);
     if (idx === -1) return;
@@ -924,21 +1003,22 @@ export default class DialogWidget {
       typeof evt.emoji === 'string'
         ? evt.emoji
         : typeof evt.reaction === 'string'
-        ? evt.reaction
-        : '';
+          ? evt.reaction
+          : '';
     this.messages[idx].reaction = reaction;
     this.messages[idx].revisionAllowed = evt.allowRevision === true;
     const origin =
       typeof evt.origin === 'string' && evt.origin.trim() !== ''
         ? evt.origin.trim()
         : this.messages[idx].reactionOrigin || null;
-    const locked = evt.locked === true || origin === 'system' || this.messages[idx].reactionLocked === true;
+    const locked =
+      evt.locked === true || origin === 'system' || this.messages[idx].reactionLocked === true;
     this.messages[idx].reactionOrigin = origin;
     this.messages[idx].reactionLocked = locked;
     this._setReactionPending(idx, false);
     const key = this._getLocatorKey({
       messageId: this.messages[idx].id,
-      fingerprint: this.messages[idx].fingerprint || null
+      fingerprint: this.messages[idx].fingerprint || null,
     });
     if (key) this._pendingReactions.delete(key);
   }
@@ -951,10 +1031,7 @@ export default class DialogWidget {
 
   _updateReactionNode(index) {
     if (!this.container || !this.container.children?.length) return;
-    const firstRenderedIndex = Math.max(
-      0,
-      this.messages.length - this.container.children.length
-    );
+    const firstRenderedIndex = Math.max(0, this.messages.length - this.container.children.length);
     const domIndex = index - firstRenderedIndex;
     if (domIndex < 0 || domIndex >= this.container.children.length) return;
     const node = this.container.children[domIndex];
@@ -966,12 +1043,8 @@ export default class DialogWidget {
     if (!node) return;
     const trigger = node.querySelector('.dialog__reaction-trigger');
     if (trigger) {
-      trigger.classList.toggle(
-        'dialog__reaction-trigger--pending',
-        !!msg._reactionPending
-      );
-      const hasReaction =
-        typeof msg.reaction === 'string' && msg.reaction.trim() !== '';
+      trigger.classList.toggle('dialog__reaction-trigger--pending', !!msg._reactionPending);
+      const hasReaction = typeof msg.reaction === 'string' && msg.reaction.trim() !== '';
       const locked = msg.reactionLocked === true || msg.reactionOrigin === 'system';
       trigger.classList.toggle('dialog__reaction-trigger--filled', hasReaction);
       trigger.classList.toggle('dialog__reaction-trigger--locked', locked);

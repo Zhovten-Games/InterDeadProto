@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+PIPELINE_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 log_step() {
   printf '\n[%s] %s\n' "$(date '+%H:%M:%S')" "$*"
 }
@@ -19,14 +21,14 @@ resolve_repo_root() {
   current="$script_dir"
 
   while [[ "$current" != "/" ]]; do
-    if [[ -d "$current/.git" || -f "$current/package.json" ]]; then
+    if [[ -f "$current/package.json" ]]; then
       echo "$current"
       return 0
     fi
     current="$(dirname "$current")"
   done
 
-  die "Unable to resolve repository root from ${script_dir}"
+  die "Unable to resolve project root from ${script_dir}"
 }
 
 load_env_file() {
@@ -44,10 +46,9 @@ prepare_clean_dir() {
   mkdir -p "$dir"
 }
 
-
 verify_repo_localization_adapter() {
-  local repo_root="$1"
-  local adapter_path="$repo_root/proto-dev/src/adapters/ui/LocalizationAdapter.js"
+  local project_root="$1"
+  local adapter_path="$project_root/src/adapters/ui/LocalizationAdapter.js"
 
   [[ -f "$adapter_path" ]] || die "Localization adapter not found: ${adapter_path}"
 
@@ -57,21 +58,19 @@ verify_repo_localization_adapter() {
 }
 
 sync_workspace() {
-  local repo_root="$1"
+  local project_root="$1"
   local workspace_dir="$2"
 
-  ensure_command rsync
   prepare_clean_dir "$workspace_dir"
 
-  log_step "Syncing repository to isolated workspace: ${workspace_dir}"
+  log_step "Syncing project to isolated workspace: ${workspace_dir}"
   rsync -a --delete \
-    --exclude '.git' \
     --exclude 'node_modules' \
     --exclude 'dist' \
     --exclude '.local-dist' \
     --exclude '.local-lab-workspace' \
-    --exclude 'proto-dev/tests/local-build-lab/.tmp' \
-    "$repo_root/" "$workspace_dir/"
+    --exclude 'tests/local-build-lab/.tmp' \
+    "$project_root/" "$workspace_dir/"
 }
 
 install_dependencies() {
@@ -88,15 +87,72 @@ install_dependencies() {
   popd >/dev/null
 }
 
+resolve_canonical_ci_override_script() {
+  local lab_dir proto_dev_root monorepo_root canonical_script
+
+  lab_dir="$PIPELINE_LIB_DIR"
+  proto_dev_root="$(cd "$lab_dir/../.." && pwd)"
+  monorepo_root="$(cd "$proto_dev_root/.." && pwd)"
+  canonical_script="$monorepo_root/.github/scripts/apply-ci-overrides.sh"
+
+  if [[ -f "$canonical_script" ]]; then
+    echo "$canonical_script"
+  fi
+}
+
+run_canonical_ci_overrides_for_workspace() {
+  local workspace_dir="$1"
+  local canonical_script="$2"
+  local temp_root
+
+  temp_root="$(mktemp -d)"
+  ln -s "$workspace_dir" "$temp_root/proto-dev"
+
+  pushd "$temp_root" >/dev/null
+  bash "$canonical_script"
+  popd >/dev/null
+
+  rm -rf "$temp_root"
+}
+
+assert_assetsbaseurl_hotfix() {
+  local assets_path="$1/src/config/assetsBaseUrl.js"
+
+  [[ -f "$assets_path" ]] || die "AssetsBaseUrlResolver file not found in isolated workspace: ${assets_path}"
+
+  grep -Fq 'this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1))' "$assets_path" \
+    || die "Missing module runtime root normalization marker in ${assets_path}"
+
+  grep -Fq 'const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);' "$assets_path" \
+    || die "Missing location runtime root normalization marker in ${assets_path}"
+
+  if grep -q 'if (!fromModule) return normalized;' "$assets_path"; then
+    die "Legacy early-return branch is still present in ${assets_path}"
+  fi
+}
+
 apply_ci_overrides() {
   local workspace_dir="$1"
+  local workspace_ci_script="$workspace_dir/.github/scripts/apply-ci-overrides.sh"
+  local canonical_ci_script
 
   [[ "$workspace_dir" == *".local-lab-workspace"* ]] || die "Refusing to apply overrides outside isolated workspace: ${workspace_dir}"
 
-  pushd "$workspace_dir" >/dev/null
-  log_step "Applying CI compatibility overrides inside isolated workspace"
-  ./.github/scripts/apply-ci-overrides.sh
-  popd >/dev/null
+  if [[ -f "$workspace_ci_script" ]]; then
+    pushd "$workspace_dir" >/dev/null
+    log_step "Applying CI compatibility overrides from workspace script"
+    ./.github/scripts/apply-ci-overrides.sh
+    popd >/dev/null
+  else
+    canonical_ci_script="$(resolve_canonical_ci_override_script)"
+    [[ -n "$canonical_ci_script" ]] || die "Canonical CI override script was not found in monorepo: .github/scripts/apply-ci-overrides.sh"
+
+    log_step "Applying canonical CI compatibility overrides from monorepo root"
+    run_canonical_ci_overrides_for_workspace "$workspace_dir" "$canonical_ci_script"
+  fi
+
+  log_step "Verifying AssetsBaseUrl normalization markers"
+  assert_assetsbaseurl_hotfix "$workspace_dir"
 }
 
 run_build() {
@@ -115,7 +171,7 @@ mirror_static_assets() {
 
   log_step "Mirroring static assets into isolated output"
   mkdir -p "$output_dir/assets"
-  cp -R "$workspace_dir/proto-dev/assets/." "$output_dir/assets/"
+  cp -R "$workspace_dir/assets/." "$output_dir/assets/"
 
   test -f "$output_dir/assets/images/logo.png"
   test -f "$output_dir/assets/audio/ghost_effect.mp3"
@@ -129,9 +185,7 @@ ensure_runtime_libs() {
   mkdir -p "$output_dir/assets/libs/db"
 
   if [[ ! -f "$output_dir/assets/libs/db/sql-wasm.wasm" ]]; then
-    if [[ -f "$workspace_dir/proto-dev/assets/libs/db/sql-wasm.wasm" ]]; then
-      cp "$workspace_dir/proto-dev/assets/libs/db/sql-wasm.wasm" "$output_dir/assets/libs/db/sql-wasm.wasm"
-    elif [[ -f "$workspace_dir/assets/libs/db/sql-wasm.wasm" ]]; then
+    if [[ -f "$workspace_dir/assets/libs/db/sql-wasm.wasm" ]]; then
       cp "$workspace_dir/assets/libs/db/sql-wasm.wasm" "$output_dir/assets/libs/db/sql-wasm.wasm"
     elif [[ -f "$workspace_dir/node_modules/sql.js/dist/sql-wasm.wasm" ]]; then
       cp "$workspace_dir/node_modules/sql.js/dist/sql-wasm.wasm" "$output_dir/assets/libs/db/sql-wasm.wasm"
@@ -142,9 +196,7 @@ ensure_runtime_libs() {
 
   for lib in tf.min.js coco-ssd.min.js; do
     if [[ ! -f "$output_dir/assets/libs/${lib}" ]]; then
-      if [[ -f "$workspace_dir/proto-dev/assets/libs/${lib}" ]]; then
-        cp "$workspace_dir/proto-dev/assets/libs/${lib}" "$output_dir/assets/libs/${lib}"
-      elif [[ -f "$workspace_dir/assets/libs/${lib}" ]]; then
+      if [[ -f "$workspace_dir/assets/libs/${lib}" ]]; then
         cp "$workspace_dir/assets/libs/${lib}" "$output_dir/assets/libs/${lib}"
       else
         die "${lib} not found"
@@ -156,62 +208,41 @@ ensure_runtime_libs() {
 ensure_coco_model() {
   local workspace_dir="$1"
   local output_dir="$2"
-  local src=""
 
   log_step "Ensuring COCO-SSD model files"
-  if [[ -d "$workspace_dir/proto-dev/assets/models/coco-ssd" ]]; then
-    src="$workspace_dir/proto-dev/assets/models/coco-ssd"
-  elif [[ -d "$workspace_dir/assets/models/coco-ssd" ]]; then
-    src="$workspace_dir/assets/models/coco-ssd"
-  else
-    die "COCO-SSD model folder not found"
-  fi
+  [[ -d "$workspace_dir/assets/models/coco-ssd" ]] || die "COCO-SSD model folder not found"
 
   mkdir -p "$output_dir/assets/models/coco-ssd"
-  cp -R "$src/." "$output_dir/assets/models/coco-ssd/"
+  cp -R "$workspace_dir/assets/models/coco-ssd/." "$output_dir/assets/models/coco-ssd/"
   test -f "$output_dir/assets/models/coco-ssd/model.json"
 }
 
 ensure_templates() {
   local workspace_dir="$1"
   local output_dir="$2"
-  local src=""
 
   log_step "Ensuring HTML templates"
-  if [[ -d "$workspace_dir/proto-dev/src/presentation/templates" ]]; then
-    src="$workspace_dir/proto-dev/src/presentation/templates"
-  elif [[ -d "$workspace_dir/src/presentation/templates" ]]; then
-    src="$workspace_dir/src/presentation/templates"
-  else
-    die "templates source folder not found"
-  fi
+  [[ -d "$workspace_dir/src/presentation/templates" ]] || die "templates source folder not found"
 
   rm -rf "$output_dir/src/presentation/templates"
   mkdir -p "$output_dir/src/presentation/templates"
-  cp -R "$src/." "$output_dir/src/presentation/templates/"
+  cp -R "$workspace_dir/src/presentation/templates/." "$output_dir/src/presentation/templates/"
   test -f "$output_dir/src/presentation/templates/welcome.html"
 }
 
 ensure_i18n() {
   local workspace_dir="$1"
   local output_dir="$2"
-  local src=""
 
   log_step "Mirroring i18n locales into isolated output"
-  if [[ -d "$workspace_dir/proto-dev/src/i18n/locales" ]]; then
-    src="$workspace_dir/proto-dev/src/i18n/locales"
-  elif [[ -d "$workspace_dir/src/i18n/locales" ]]; then
-    src="$workspace_dir/src/i18n/locales"
-  else
-    die "i18n locales source folder not found"
-  fi
+  [[ -d "$workspace_dir/src/i18n/locales" ]] || die "i18n locales source folder not found"
 
   rm -rf "$output_dir/i18n" "$output_dir/src/i18n" "$output_dir/assets/i18n"
   mkdir -p "$output_dir/i18n/locales" "$output_dir/src/i18n/locales" "$output_dir/assets/i18n/locales"
 
-  cp -R "$src/." "$output_dir/i18n/locales/"
-  cp -R "$src/." "$output_dir/src/i18n/locales/"
-  cp -R "$src/." "$output_dir/assets/i18n/locales/"
+  cp -R "$workspace_dir/src/i18n/locales/." "$output_dir/i18n/locales/"
+  cp -R "$workspace_dir/src/i18n/locales/." "$output_dir/src/i18n/locales/"
+  cp -R "$workspace_dir/src/i18n/locales/." "$output_dir/assets/i18n/locales/"
 
   test -f "$output_dir/src/i18n/locales/en/ui.json"
 }
@@ -222,11 +253,7 @@ ensure_service_worker() {
 
   log_step "Ensuring service worker"
   if [[ ! -f "$output_dir/sw.js" ]]; then
-    if [[ -f "$workspace_dir/proto-dev/sw.js" ]]; then
-      cp "$workspace_dir/proto-dev/sw.js" "$output_dir/sw.js"
-    elif [[ -f "$workspace_dir/sw.js" ]]; then
-      cp "$workspace_dir/sw.js" "$output_dir/sw.js"
-    fi
+    [[ -f "$workspace_dir/sw.js" ]] && cp "$workspace_dir/sw.js" "$output_dir/sw.js"
   fi
 
   test -f "$output_dir/sw.js"
@@ -238,10 +265,8 @@ ensure_favicon() {
 
   log_step "Ensuring favicon"
   if [[ ! -f "$output_dir/favicon.ico" ]]; then
-    if [[ -f "$workspace_dir/proto-dev/assets/favicons/favicon.ico" ]]; then
-      cp "$workspace_dir/proto-dev/assets/favicons/favicon.ico" "$output_dir/favicon.ico"
-    elif [[ -f "$workspace_dir/proto-dev/favicon.ico" ]]; then
-      cp "$workspace_dir/proto-dev/favicon.ico" "$output_dir/favicon.ico"
+    if [[ -f "$workspace_dir/assets/favicons/favicon.ico" ]]; then
+      cp "$workspace_dir/assets/favicons/favicon.ico" "$output_dir/favicon.ico"
     elif [[ -f "$workspace_dir/favicon.ico" ]]; then
       cp "$workspace_dir/favicon.ico" "$output_dir/favicon.ico"
     fi
@@ -263,7 +288,6 @@ patch_output_paths() {
   perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' "$output_dir"/**/*.js || true
   rm -f "$output_dir"/**/*.map || true
 }
-
 
 verify_smoke_files() {
   local output_dir="$1"

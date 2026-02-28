@@ -3,8 +3,16 @@ name: InterDeadProto Pipeline
 on:
   push:
     branches: [ main, proto-dev ]
+    paths:
+      - "proto-dev/**"
+      - ".github/workflows/proto-pipeline.yml"
+      - ".github/scripts/apply-ci-overrides.sh"
   pull_request:
     branches: [ main, proto-dev ]
+    paths:
+      - "proto-dev/**"
+      - ".github/workflows/proto-pipeline.yml"
+      - ".github/scripts/apply-ci-overrides.sh"
   workflow_dispatch:
 
 permissions:
@@ -24,9 +32,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: package-lock.json
+          cache-dependency-path: proto-dev/package-lock.json
 
       - name: Install
+        working-directory: proto-dev
         run: npm ci
 
       - name: Apply CI-only compatibility overrides
@@ -34,6 +43,7 @@ jobs:
         run: ./.github/scripts/apply-ci-overrides.sh
 
       - name: Build
+        working-directory: proto-dev
         env:
           VITE_CACHE_BUILD_ID: ${{ github.sha }}
         run: npm run build:deploy
@@ -44,28 +54,28 @@ jobs:
         run: |
           set -euo pipefail
 
-          mkdir -p "dist/assets"
-          cp -R "proto-dev/assets/." "dist/assets/"
+          mkdir -p "proto-dev/dist/assets"
+          cp -R "proto-dev/assets/." "proto-dev/dist/assets/"
 
-          test -f "dist/assets/images/logo.png"
-          test -f "dist/assets/audio/ghost_effect.mp3"
+          test -f "proto-dev/dist/assets/images/logo.png"
+          test -f "proto-dev/dist/assets/audio/ghost_effect.mp3"
 
       - name: Ensure runtime libs
         shell: bash
         run: |
           set -euo pipefail
 
-          mkdir -p "dist/assets/libs"
-          mkdir -p "dist/assets/libs/db"
+          mkdir -p "proto-dev/dist/assets/libs"
+          mkdir -p "proto-dev/dist/assets/libs/db"
 
           # SQL.js WASM
-          if [ ! -f "dist/assets/libs/db/sql-wasm.wasm" ]; then
+          if [ ! -f "proto-dev/dist/assets/libs/db/sql-wasm.wasm" ]; then
             if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
-              cp "proto-dev/assets/libs/db/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
+              cp "proto-dev/assets/libs/db/sql-wasm.wasm" "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
             elif [ -f "assets/libs/db/sql-wasm.wasm" ]; then
-              cp "assets/libs/db/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
-            elif [ -f "node_modules/sql.js/dist/sql-wasm.wasm" ]; then
-              cp "node_modules/sql.js/dist/sql-wasm.wasm" "dist/assets/libs/db/sql-wasm.wasm"
+              cp "assets/libs/db/sql-wasm.wasm" "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
+            elif [ -f "proto-dev/node_modules/sql.js/dist/sql-wasm.wasm" ]; then
+              cp "proto-dev/node_modules/sql.js/dist/sql-wasm.wasm" "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
             else
               echo "sql-wasm.wasm not found"
               exit 1
@@ -74,11 +84,11 @@ jobs:
 
           # tf.min.js + coco-ssd.min.js
           for f in "tf.min.js" "coco-ssd.min.js"; do
-            if [ ! -f "dist/assets/libs/${f}" ]; then
+            if [ ! -f "proto-dev/dist/assets/libs/${f}" ]; then
               if [ -f "proto-dev/assets/libs/${f}" ]; then
-                cp "proto-dev/assets/libs/${f}" "dist/assets/libs/${f}"
+                cp "proto-dev/assets/libs/${f}" "proto-dev/dist/assets/libs/${f}"
               elif [ -f "assets/libs/${f}" ]; then
-                cp "assets/libs/${f}" "dist/assets/libs/${f}"
+                cp "assets/libs/${f}" "proto-dev/dist/assets/libs/${f}"
               else
                 echo "${f} not found"
                 exit 1
@@ -101,9 +111,9 @@ jobs:
             exit 1
           fi
 
-          mkdir -p "dist/assets/models/coco-ssd"
-          cp -R "${SRC}/." "dist/assets/models/coco-ssd/"
-          test -f "dist/assets/models/coco-ssd/model.json"
+          mkdir -p "proto-dev/dist/assets/models/coco-ssd"
+          cp -R "${SRC}/." "proto-dev/dist/assets/models/coco-ssd/"
+          test -f "proto-dev/dist/assets/models/coco-ssd/model.json"
 
       - name: Ensure templates in dist (mirror proto-dev/src)
         shell: bash
@@ -120,23 +130,23 @@ jobs:
             exit 1
           fi
 
-          mkdir -p "dist/src/presentation/templates"
-          rm -rf "dist/src/presentation/templates" || true
-          mkdir -p "dist/src/presentation/templates"
-          cp -R "${SRC}/." "dist/src/presentation/templates/"
+          mkdir -p "proto-dev/dist/src/presentation/templates"
+          rm -rf "proto-dev/dist/src/presentation/templates" || true
+          mkdir -p "proto-dev/dist/src/presentation/templates"
+          cp -R "${SRC}/." "proto-dev/dist/src/presentation/templates/"
 
-          test -f "dist/src/presentation/templates/welcome.html"
+          test -f "proto-dev/dist/src/presentation/templates/welcome.html"
 
       - name: Ensure sw.js
         shell: bash
         run: |
           set -euo pipefail
 
-          if [ ! -f "dist/sw.js" ]; then
+          if [ ! -f "proto-dev/dist/sw.js" ]; then
             if [ -f "proto-dev/sw.js" ]; then
-              cp "proto-dev/sw.js" "dist/sw.js"
+              cp "proto-dev/sw.js" "proto-dev/dist/sw.js"
             elif [ -f "sw.js" ]; then
-              cp "sw.js" "dist/sw.js"
+              cp "sw.js" "proto-dev/dist/sw.js"
             else
               echo "sw.js not found (will skip)"
               exit 0
@@ -148,17 +158,17 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [ ! -f "dist/favicon.ico" ]; then
+          if [ ! -f "proto-dev/dist/favicon.ico" ]; then
             if [ -f "proto-dev/assets/favicons/favicon.ico" ]; then
-              cp "proto-dev/assets/favicons/favicon.ico" "dist/favicon.ico"
+              cp "proto-dev/assets/favicons/favicon.ico" "proto-dev/dist/favicon.ico"
             elif [ -f "proto-dev/favicon.ico" ]; then
-              cp "proto-dev/favicon.ico" "dist/favicon.ico"
+              cp "proto-dev/favicon.ico" "proto-dev/dist/favicon.ico"
             elif [ -f "favicon.ico" ]; then
-              cp "favicon.ico" "dist/favicon.ico"
+              cp "favicon.ico" "proto-dev/dist/favicon.ico"
             fi
           fi
 
-          test -f "dist/favicon.ico"
+          test -f "proto-dev/dist/favicon.ico"
 
       - name: Patch dist (safe path fixes; strip sourcemaps)
         shell: bash
@@ -167,7 +177,7 @@ jobs:
           shopt -s globstar nullglob
 
           # Apply to all JS (incl. minified bundles), and index.html
-          TARGETS=(dist/**/*.js dist/index.html)
+          TARGETS=(proto-dev/dist/**/*.js proto-dev/dist/index.html)
 
           # 1) /src/... -> src/... (avoid domain root on GitHub Pages)
           perl -pi -e 's|"/src/|"src/|g; s|'\''/src/|'\''src/|g' "${TARGETS[@]}" || true
@@ -176,23 +186,23 @@ jobs:
           perl -pi -e 's|\.\./i18n/|i18n/|g; s|\.\.i18n/|i18n/|g' "${TARGETS[@]}" || true
 
           # 3) favicon absolute -> relative inside project
-          perl -pi -e 's|href="/favicon\.ico"|href="favicon.ico"|g; s|href='\''/favicon\.ico'\''|href='\''favicon.ico'\''|g' dist/index.html || true
+          perl -pi -e 's|href="/favicon\.ico"|href="favicon.ico"|g; s|href='\''/favicon\.ico'\''|href='\''favicon.ico'\''|g' proto-dev/dist/index.html || true
 
           # 4) Strip sourcemap markers and delete map files
-          perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' dist/**/*.js || true
-          rm -f dist/**/*.map || true
+          perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' proto-dev/dist/**/*.js || true
+          rm -f proto-dev/dist/**/*.map || true
 
       - name: Verify key files
         shell: bash
         run: |
           set -euo pipefail
-          test -f "dist/assets/libs/db/sql-wasm.wasm"
-          test -f "dist/assets/libs/tf.min.js"
-          test -f "dist/assets/libs/coco-ssd.min.js"
-          test -f "dist/assets/models/coco-ssd/model.json"
-          test -f "dist/src/presentation/templates/welcome.html"
-          test -f "dist/assets/images/logo.png"
-          test -f "dist/favicon.ico"
+          test -f "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
+          test -f "proto-dev/dist/assets/libs/tf.min.js"
+          test -f "proto-dev/dist/assets/libs/coco-ssd.min.js"
+          test -f "proto-dev/dist/assets/models/coco-ssd/model.json"
+          test -f "proto-dev/dist/src/presentation/templates/welcome.html"
+          test -f "proto-dev/dist/assets/images/logo.png"
+          test -f "proto-dev/dist/favicon.ico"
 
       - name: Create zip
         shell: bash
@@ -200,13 +210,13 @@ jobs:
           set -euo pipefail
           TAG="${GITHUB_SHA:0:8}"
           ZIP="InterDeadProto_${TAG}.zip"
-          (cd dist && zip -r "../${ZIP}" .)
+          (cd proto-dev/dist && zip -r "../../${ZIP}" .)
 
       - name: Upload dist
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist
+          path: proto-dev/dist
 
       - name: Upload zip
         uses: actions/upload-artifact@v4

@@ -152,5 +152,6 @@
   "emoji_protocol.range_label": "範囲",
   "emoji_protocol.policy_label": "ポリシー",
   "emoji_protocol.output_label": "出力",
-  "reset_modal_reboot": "現在のゴーストをリブート"
+  "reset_modal_reboot": "現在のゴーストをリブート",
+  "chat_new_messages": "新しいメッセージがあります"
 }

@@ -152,5 +152,6 @@
   "emoji_protocol.range_label": "ДИАПАЗОН",
   "emoji_protocol.policy_label": "ПОЛИТИКА",
   "emoji_protocol.output_label": "ВЫХОД",
-  "reset_modal_reboot": "Ребут текущего духа"
+  "reset_modal_reboot": "Ребут текущего духа",
+  "chat_new_messages": "Есть новые сообщения"
 }

@@ -1,6 +1,6 @@
 # InterDeadProto Local Build Lab
 
-Local Build Lab is an isolated, non-production validation harness that reproduces the CI pipeline logic on your machine without polluting `proto-dev/` sources.
+Local Build Lab is an isolated, non-production validation harness that reproduces the CI pipeline logic on your machine without polluting source files.
 
 ## Purpose
 
@@ -10,9 +10,10 @@ Local Build Lab is an isolated, non-production validation harness that reproduce
 
 ## Boundaries
 
-- `proto-dev/` remains the source of truth and is never rewritten by Local Build Lab scripts.
+- Project root remains the source of truth and is never rewritten by Local Build Lab scripts.
 - All compatibility rewrites (including deploy-only locale bundling substitutions) are applied only inside `.local-lab-workspace/`.
-- Deploy workspace applies an additional `AssetsBaseUrlResolver` hotfix to prevent malformed `sassets` joins while keeping repository ES sources untouched.
+- Local Build Lab executes the canonical CI override script from monorepo root (`.github/scripts/apply-ci-overrides.sh`) against the isolated workspace, even when that script is outside the synced `proto-dev` subtree.
+- This guarantees behavioral parity with CI for `AssetsBaseUrlResolver` runtime root normalization and prevents malformed `sassets/libs/...` requests while keeping repository ES sources untouched.
 - Local build output is disposable and isolated in `.local-dist/` by default.
 - No deployment side effects: no branch push, no artifact upload, no release tagging.
 
@@ -20,38 +21,38 @@ Local Build Lab is an isolated, non-production validation harness that reproduce
 
 - Node.js + npm available in `PATH`.
 - `rsync`, `perl`, and `python3` available in `PATH`.
-- Run commands from `InterDeadProto` root.
+- Run commands from `InterDeadProto/proto-dev` root.
 
 ## One-command usage
 
 ### Full local pipeline
 
 ```bash
-./proto-dev/tests/local-build-lab/run-local-pipeline.sh
+./tests/local-build-lab/run-local-pipeline.sh
 ```
 
 ### Full pipeline + local browser preview
 
 ```bash
-./proto-dev/tests/local-build-lab/run-local-pipeline.sh --serve
+./tests/local-build-lab/run-local-pipeline.sh --serve
 ```
 
 ### Fast smoke pipeline (build + key file verification)
 
 ```bash
-./proto-dev/tests/local-build-lab/run-local-pipeline.sh --smoke
+./tests/local-build-lab/run-local-pipeline.sh --smoke
 ```
 
 ### Custom preview port
 
 ```bash
-./proto-dev/tests/local-build-lab/run-local-pipeline.sh --serve --port 4273
+./tests/local-build-lab/run-local-pipeline.sh --serve --port 4273
 ```
 
 ## Optional local overrides
 
 ```bash
-cp proto-dev/tests/local-build-lab/config.env.example proto-dev/tests/local-build-lab/config.env
+cp tests/local-build-lab/config.env.example tests/local-build-lab/config.env
 ```
 
 Then edit `config.env` to customize output/workspace/port/build id.
@@ -63,7 +64,7 @@ Then edit `config.env` to customize output/workspace/port/build id.
 - Run with a different port:
 
 ```bash
-./proto-dev/tests/local-build-lab/run-local-pipeline.sh --serve --port 4273
+./tests/local-build-lab/run-local-pipeline.sh --serve --port 4273
 ```
 
 ### Stale service worker/cache behavior
@@ -79,7 +80,7 @@ Then edit `config.env` to customize output/workspace/port/build id.
 - Retry dependency installation inside the isolated workspace by rerunning the pipeline with forced mode:
 
 ```bash
-./proto-dev/tests/local-build-lab/run-local-pipeline.sh --install-mode ci
+./tests/local-build-lab/run-local-pipeline.sh --install-mode ci
 ```
 
 If your npm cache is corrupted:
@@ -99,3 +100,13 @@ Use this checklist for the issue you observed around first-load runtime behavior
 5. Confirm `sw.js` is reachable and service worker registration does not break boot.
 6. Watch console logs for fallback paths and verify no unexpected runtime import errors.
 7. Clear service worker/cache and repeat once to ensure reproducibility.
+
+## FAQ
+
+### `sassets` appears in runtime requests again
+
+1. Re-run the pipeline and inspect override logs for these steps: `Applying canonical CI compatibility overrides from monorepo root` and `Verifying AssetsBaseUrl normalization markers`.
+2. Open `.local-lab-workspace/src/config/assetsBaseUrl.js` and confirm normalization markers are present:
+   - `this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1))`
+   - `const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);`
+3. If markers are missing, verify `.github/scripts/apply-ci-overrides.sh` exists at monorepo root and that local lab can resolve it.

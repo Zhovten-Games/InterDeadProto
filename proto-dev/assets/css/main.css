@@ -327,6 +327,59 @@ body::before {
   overflow: hidden;
 }
 
+.messenger-screen__dialog {
+  position: relative;
+}
+
+.dialog__new-messages {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 8;
+  min-height: 36px;
+  min-width: min(80vw, 260px);
+  border: 1px solid var(--accent-color);
+  border-radius: 0;
+  background:
+    linear-gradient(180deg, rgba(7, 23, 8, 0.95) 0%, rgba(3, 13, 4, 0.98) 100%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(102, 255, 102, 0.08) 0,
+      rgba(102, 255, 102, 0.08) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  color: var(--text-color);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.75) inset,
+    0 0 12px rgba(102, 255, 102, 0.25);
+  padding: 0.45rem 0.95rem;
+  cursor: pointer;
+  font-family: var(--btn-font-family);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition:
+    transform 0.15s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dialog__new-messages:hover,
+.dialog__new-messages:focus-visible {
+  transform: translateX(-50%) translateY(-1px);
+  filter: brightness(1.1);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.75) inset,
+    0 0 14px rgba(102, 255, 102, 0.35);
+}
+
+.dialog__new-messages--hidden {
+  display: none;
+}
+
 .messenger-screen__posts {
   flex: 0 0 auto;
 }

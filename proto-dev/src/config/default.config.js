@@ -1,9 +1,10 @@
-import { chatDisplay, chatScrollStep } from './chat.config.js';
+import { chatDisplay, chatScroll, chatScrollStep } from './chat.config.js';
 
 export default {
   LOG_LEVEL: 'debug',
   chatDisplay: { ...chatDisplay },
   chatMessageBatchSize: chatDisplay.batchSize,
+  chatScroll: { ...chatScroll },
   chatScrollStep: chatScrollStep,
   // Name of the ghost that should be active when no selection is persisted
   defaultGhost: 'guide',
