@@ -9,10 +9,12 @@ emits:
 implements: []
 imports:
   - src/config/index.js
+  - src/config/chat.config.js
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/presentation/components/dialog/animations/TextAnimationManager.js
   - src/presentation/widgets/Dialog/MessageDeduplicator.js
+  - src/presentation/widgets/Dialog/NewMessagesIndicator.js
   - src/utils/youtube.js
 listens:
   - CHAT_LOAD_OLDER
@@ -39,9 +41,15 @@ Narrative notes now render alongside dialog text. `_buildNoteBlock` chooses stac
 `renderLatest` and `renderOlder` hydrate messages incrementally, attaching media click handlers that emit `MEDIA_OPEN` and reaction listeners that wire overlay events. YouTube messages resolve ids with `resolveYoutubeId` and open a modal overlay when the thumbnail is selected.[^4] Scroll listeners emit `CHAT_LOAD_OLDER` when the user reaches the top of the container so history services can prepend older messages.[^4] `renderOlder` increases `renderCount` by the configured batch size but exits early when `renderCount` already matches `messages.length`, meaning the UI arrow legitimately “does nothing” whenever only one batch is persisted for the current ghost.[^5]
 
 [^1]: Construction, deduplication, batching, and logging [src/presentation/widgets/Dialog/index.js#L9-L213](../../../src/presentation/widgets/Dialog/index.js#L9-L213)
+
 [^2]: `NullEventBus` fallback [src/presentation/widgets/Dialog/index.js#L1-L40](../../../src/presentation/widgets/Dialog/index.js#L1-L40); [docs/core/events/NullEventBus.md](../../core/events/NullEventBus.md)
+
 [^3]: Reaction reminder/selection handling and overlay emission [src/presentation/widgets/Dialog/index.js#L66-L118](../../../src/presentation/widgets/Dialog/index.js#L66-L118); finale state handling [src/presentation/widgets/Dialog/index.js#L540-L640](../../../src/presentation/widgets/Dialog/index.js#L540-L640)
+
 [^4]: Note layout, toggle rendering, selection persistence, and YouTube handling [src/presentation/widgets/Dialog/index.js#L345-L457](../../../src/presentation/widgets/Dialog/index.js#L345-L457); [src/presentation/widgets/Dialog/index.js#L702-L812](../../../src/presentation/widgets/Dialog/index.js#L702-L812); [docs/utils/youtube.md](../../../utils/youtube.md)
+
 [^5]: Render helpers, media listeners, and scroll integration [src/presentation/widgets/Dialog/index.js#L130-L214](../../../src/presentation/widgets/Dialog/index.js#L130-L214)
+
 [^6]: Early exit in `renderOlder` when no hidden messages remain [src/presentation/widgets/Dialog/index.js#L232-L275](../../../src/presentation/widgets/Dialog/index.js#L232-L275)
+
 [^7]: Display mode resolution and panel scroll toggle [src/presentation/widgets/Dialog/index.js#L32-L205](../../../src/presentation/widgets/Dialog/index.js#L32-L205); [src/config/chat.config.js#L1-L10](../../../src/config/chat.config.js#L1-L10); [src/config/controls.config.js#L1-L52](../../../src/config/controls.config.js#L1-L52)

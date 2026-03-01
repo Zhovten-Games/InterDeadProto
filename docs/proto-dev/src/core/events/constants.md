@@ -6,7 +6,7 @@ imports: []
 listens: []
 owns: []
 schemaVersion: 1
-source: proto-dev/src/core/events/constants.js
+source: src/core/events/constants.js
 used_by:
   - proto-dev/src/application/services/DialogOrchestratorService.js
   - proto-dev/src/application/services/ResetService.js

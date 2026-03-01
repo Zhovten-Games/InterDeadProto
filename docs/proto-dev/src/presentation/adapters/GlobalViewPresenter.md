@@ -19,7 +19,7 @@ listens:
   - APP_RESET_COMPLETED
 owns: []
 schemaVersion: 1
-source: proto-dev/src/presentation/adapters/GlobalViewPresenter.js
+source: src/presentation/adapters/GlobalViewPresenter.js
 used_by:
   - proto-dev/src/infrastructure/bootstrap/modules/PresentationModule.js
 ---
@@ -31,4 +31,5 @@ Bridges application events to DOM updates: renders templates, initializes dialog
 Current implementation also manages registration label typing animation (`TextFieldAnimator`), emits `DIALOG_WIDGET_READY` after dialog widget boot, and performs robust cleanup for reset/screen transitions (camera handles, listeners, preview URLs, and active widgets).[^2]
 
 [^1]: Event subscriptions and screen rendering paths [proto-dev/src/presentation/adapters/GlobalViewPresenter.js#L1-L260](../../../../proto-dev/src/presentation/adapters/GlobalViewPresenter.js#L1-L260)
+
 [^2]: Dialog/camera lifecycle, profile transfer modal handling, and cleanup [proto-dev/src/presentation/adapters/GlobalViewPresenter.js#L261-L430](../../../../proto-dev/src/presentation/adapters/GlobalViewPresenter.js#L261-L430)

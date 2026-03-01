@@ -155,6 +155,35 @@ export default class ChatLauncherWidget {
         width: 100%;
         height: 100%;
       }
+      .interdead-launcher-choice {
+        width: min(520px, 92vw);
+        background: rgba(8, 14, 9, 0.96);
+        border: 1px solid rgba(138, 229, 144, 0.5);
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 0 24px rgba(0, 0, 0, 0.55);
+        color: #d5f0d7;
+      }
+      .interdead-launcher-choice__title {
+        margin: 0 0 16px;
+        font-size: 1.1rem;
+      }
+      .interdead-launcher-choice__actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .interdead-launcher-choice__button {
+        border: 1px solid rgba(138, 229, 144, 0.5);
+        border-radius: 10px;
+        background: rgba(24, 42, 27, 0.88);
+        color: #d5f0d7;
+        padding: 12px;
+        cursor: pointer;
+      }
+      .interdead-launcher-choice__button:hover {
+        background: rgba(39, 68, 44, 0.9);
+      }
     `;
     this.documentRef.head?.appendChild(style);
   }

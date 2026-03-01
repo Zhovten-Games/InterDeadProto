@@ -12,7 +12,7 @@ export default {
     showEmojiDrum: false,
   },
   launcher: {
-    visibility: 'auth-gated',
+    visibility: 'always',
   },
   reset: {
     initialScreen: 'welcome',

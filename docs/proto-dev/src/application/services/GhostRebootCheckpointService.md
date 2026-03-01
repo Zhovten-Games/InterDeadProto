@@ -6,7 +6,7 @@ imports: []
 listens: []
 owns: []
 schemaVersion: 1
-source: proto-dev/src/application/services/GhostRebootCheckpointService.js
+source: src/application/services/GhostRebootCheckpointService.js
 used_by:
   - proto-dev/src/application/services/DialogOrchestratorService.js
   - proto-dev/src/infrastructure/bootstrap/modules/ApplicationModule.js

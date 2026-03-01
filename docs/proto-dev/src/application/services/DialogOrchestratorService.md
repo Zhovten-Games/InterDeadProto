@@ -31,7 +31,7 @@ listens:
   - post
 owns: []
 schemaVersion: 1
-source: proto-dev/src/application/services/DialogOrchestratorService.js
+source: src/application/services/DialogOrchestratorService.js
 used_by:
   - proto-dev/src/infrastructure/bootstrap/modules/ApplicationModule.js
 ---
@@ -45,5 +45,7 @@ Recent behavior includes ghost-scoped reset/reboot handling (`GHOST_RESET_REQUES
 The service enriches messages with fingerprints and avatars, buffers pre-widget posts/history, protects against duplicate user post handling (`postLocked`), and routes engine effects (`DIALOG_PROGRESS`, `HISTORY_SAVE`) through dedicated handlers.[^3]
 
 [^1]: Constructor state, widget readiness gate, and lifecycle orchestration [proto-dev/src/application/services/DialogOrchestratorService.js#L1-L260](../../../../proto-dev/src/application/services/DialogOrchestratorService.js#L1-L260)
+
 [^2]: Reset/reboot event handling and checkpoint flow [proto-dev/src/application/services/DialogOrchestratorService.js#L261-L620](../../../../proto-dev/src/application/services/DialogOrchestratorService.js#L261-L620)
+
 [^3]: Stage enrichment, history normalization/replay, and effect handling [proto-dev/src/application/services/DialogOrchestratorService.js#L90-L360](../../../../proto-dev/src/application/services/DialogOrchestratorService.js#L90-L360)

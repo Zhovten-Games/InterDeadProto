@@ -27,6 +27,46 @@ InterDeadProto `proto-dev` is a narrative-driven interface prototype (ES6 module
   - [Emoji Protocol article](../InterDeadReferenceLibrary/wiki/en/Technologies_and_protocols/Emoji_Protocol.md)
   - [NIRO article](../InterDeadReferenceLibrary/wiki/en/Technologies_and_protocols/Niro.md)
 
+## Chat embedding and host integration
+
+### 1) Generic integration (third-party sites, no InterDead window API)
+
+Use this mode when you only want to embed the prototype and do not depend on host-side InterDead APIs.
+
+- Option A (recommended): embed via iframe and point it to your deployed `proto-dev` URL.
+- Option B: open `proto-dev` in a standalone tab/window from your host UI.
+
+Minimal iframe example:
+
+```html
+<iframe
+  src="https://<your-proto-host>/"
+  title="InterDeadProto Chat"
+  loading="lazy"
+  allow="camera; microphone; geolocation; fullscreen; clipboard-read; clipboard-write"
+  referrerpolicy="strict-origin-when-cross-origin"
+></iframe>
+```
+
+Compatibility notes:
+
+- The prototype is not limited to iframe-only launch and can run as a standalone page.
+- Camera-dependent stages still require HTTPS (or `localhost`) and browser permission consent.
+- In generic mode, host pages should not assume custom window-to-window contracts.
+
+### 2) InterDeadIT host integration (our production path)
+
+Our site uses `InterDeadIT/themes/InterDead/static/js/interdead-proto-loader.js` with data markers in host HTML.
+
+- Host markers define launcher mode (`inline` iframe or `external` tab).
+- In inline mode, loader configures iframe permissions and referrer policy.
+- In external mode, loader opens a controlled popup/tab and keeps host UI state aligned.
+
+For implementation details see:
+
+- InterDeadIT loader script docs and source map.
+- Camera/iframe requirements: `InterDeadIT/docs/ui/interdead-embed-camera.md`.
+
 ## Local development
 
 Before every push, run the Local Build Lab pipeline directly from [`./tests/local-build-lab`](./tests/local-build-lab/README.md) and do not rely only on automated CI checks.

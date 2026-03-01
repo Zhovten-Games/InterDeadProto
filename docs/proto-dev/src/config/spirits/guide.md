@@ -7,7 +7,7 @@ imports:
 listens: []
 owns: []
 schemaVersion: 1
-source: proto-dev/src/config/spirits/guide.js
+source: src/config/spirits/guide.js
 used_by:
   - proto-dev/src/application/services/DialogOrchestratorService.js
 ---
