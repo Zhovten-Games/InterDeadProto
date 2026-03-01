@@ -6,7 +6,7 @@
 ║   Public reference library: documents and notes that are safe       ║
 ║   to share outside the private workspace.                           ║
 ║                                                                     ║
-║ ○ InterDeadProto (NOIR)                                             ║
+║ > InterDeadProto (NOIR)                                             ║
 ║   InterDeadProto is a narrative-driven interface prototype.         ║
 ║   NOIR: Nectosphere-Oriented Interface Relay.                       ║
 ║                                                                     ║
