@@ -8,9 +8,9 @@ emits:
   - STATUS_SHOW
 implements: []
 imports:
-  - proto-dev/src/core/events/NullEventBus.js
-  - proto-dev/src/core/events/constants.js
-  - proto-dev/src/presentation/components/forms/TextFieldAnimator.js
+  - src/core/events/NullEventBus.js
+  - src/core/events/constants.js
+  - src/presentation/components/forms/TextFieldAnimator.js
 listens:
   - VIEW_RENDER_REQUESTED
   - VIEW_CAMERA_RENDER_REQUESTED
@@ -21,7 +21,7 @@ owns: []
 schemaVersion: 1
 source: src/presentation/adapters/GlobalViewPresenter.js
 used_by:
-  - proto-dev/src/infrastructure/bootstrap/modules/PresentationModule.js
+  - src/infrastructure/bootstrap/modules/PresentationModule.js
 ---
 
 # GlobalViewPresenter

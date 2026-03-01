@@ -7,17 +7,17 @@ emits:
   - GHOST_REBOOT_COMPLETED
 implements: []
 imports:
-  - proto-dev/src/application/services/DialogHistoryBuffer.js
-  - proto-dev/src/application/services/GhostRebootCheckpointService.js
-  - proto-dev/src/config/flags.js
-  - proto-dev/src/core/dialog/AutoReplyBuilder.js
-  - proto-dev/src/core/engine/actions.js
-  - proto-dev/src/core/engine/effects.js
-  - proto-dev/src/core/engine/store.js
-  - proto-dev/src/core/events/NullEventBus.js
-  - proto-dev/src/core/events/constants.js
-  - proto-dev/src/core/logging/NullLogger.js
-  - proto-dev/src/utils/messageFingerprint.js
+  - src/application/services/DialogHistoryBuffer.js
+  - src/application/services/GhostRebootCheckpointService.js
+  - src/config/flags.js
+  - src/core/dialog/AutoReplyBuilder.js
+  - src/core/engine/actions.js
+  - src/core/engine/effects.js
+  - src/core/engine/store.js
+  - src/core/events/NullEventBus.js
+  - src/core/events/constants.js
+  - src/core/logging/NullLogger.js
+  - src/utils/messageFingerprint.js
 listens:
   - APP_RESET_COMPLETED
   - DIALOG_WIDGET_READY
@@ -33,7 +33,7 @@ owns: []
 schemaVersion: 1
 source: src/application/services/DialogOrchestratorService.js
 used_by:
-  - proto-dev/src/infrastructure/bootstrap/modules/ApplicationModule.js
+  - src/infrastructure/bootstrap/modules/ApplicationModule.js
 ---
 
 # DialogOrchestratorService

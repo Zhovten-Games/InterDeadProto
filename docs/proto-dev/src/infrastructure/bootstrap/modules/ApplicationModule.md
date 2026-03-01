@@ -3,10 +3,10 @@ domains: []
 emits: []
 implements: []
 imports:
-  - proto-dev/src/application/services/GhostRebootCheckpointService.js
-  - proto-dev/src/application/services/DialogOrchestratorService.js
-  - proto-dev/src/application/services/ChatLauncherService.js
-  - proto-dev/src/application/services/AiWarmupService.js
+  - src/application/services/GhostRebootCheckpointService.js
+  - src/application/services/DialogOrchestratorService.js
+  - src/application/services/ChatLauncherService.js
+  - src/application/services/AiWarmupService.js
 listens: []
 owns:
   - GhostRebootCheckpointService
@@ -14,7 +14,7 @@ owns:
 schemaVersion: 1
 source: src/infrastructure/bootstrap/modules/ApplicationModule.js
 used_by:
-  - proto-dev/src/infrastructure/bootstrap/Bootstrap.js
+  - src/infrastructure/bootstrap/Bootstrap.js
 ---
 
 # ApplicationModule

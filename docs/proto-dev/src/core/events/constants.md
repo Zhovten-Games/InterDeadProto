@@ -8,9 +8,9 @@ owns: []
 schemaVersion: 1
 source: src/core/events/constants.js
 used_by:
-  - proto-dev/src/application/services/DialogOrchestratorService.js
-  - proto-dev/src/application/services/ResetService.js
-  - proto-dev/src/presentation/adapters/GlobalViewPresenter.js
+  - src/application/services/DialogOrchestratorService.js
+  - src/application/services/ResetService.js
+  - src/presentation/adapters/GlobalViewPresenter.js
 ---
 
 # Event constants

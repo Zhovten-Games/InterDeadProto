@@ -8,8 +8,8 @@ owns: []
 schemaVersion: 1
 source: src/application/services/GhostRebootCheckpointService.js
 used_by:
-  - proto-dev/src/application/services/DialogOrchestratorService.js
-  - proto-dev/src/infrastructure/bootstrap/modules/ApplicationModule.js
+  - src/application/services/DialogOrchestratorService.js
+  - src/infrastructure/bootstrap/modules/ApplicationModule.js
 ---
 
 # GhostRebootCheckpointService

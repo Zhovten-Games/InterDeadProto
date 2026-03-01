@@ -3,13 +3,13 @@ domains: []
 emits: []
 implements: []
 imports:
-  - proto-dev/src/config/assetsBaseUrl.js
+  - src/config/assetsBaseUrl.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/config/spirits/guide.js
 used_by:
-  - proto-dev/src/application/services/DialogOrchestratorService.js
+  - src/application/services/DialogOrchestratorService.js
 ---
 
 # Guide Spirit Configuration
