@@ -128,4 +128,32 @@ describe('Loader.js', () => {
     assert.strictEqual(store.load('appLoading'), undefined);
     clearInterval(loader.heartbeat);
   });
+
+  it('reuses tab id from window.name when sessionStorage is unavailable', () => {
+    const logger = new DummyLogger();
+    const store = new DummyStore();
+    const bus = new Observer();
+
+    const originalSessionStorage = global.sessionStorage;
+    Object.defineProperty(global, 'sessionStorage', {
+      configurable: true,
+      get() {
+        throw new Error('sessionStorage blocked');
+      },
+    });
+
+    try {
+      const first = new Loader(logger, store, bus);
+      const second = new Loader(logger, store, bus);
+
+      assert.ok(first.tabId);
+      assert.strictEqual(first.tabId, second.tabId);
+      assert.match(global.window.name, /interdead_tab_id=/);
+    } finally {
+      Object.defineProperty(global, 'sessionStorage', {
+        configurable: true,
+        value: originalSessionStorage,
+      });
+    }
+  });
 });

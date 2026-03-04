@@ -450,9 +450,41 @@ export default class Loader {
         return created;
       }
     } catch {
-      // Ignore sessionStorage restrictions and fallback to volatile id.
+      // Ignore sessionStorage restrictions and fallback to window.name persistence.
     }
-    return this._createTabId();
+
+    const fromWindowName = this._readTabIdFromWindowName(key);
+    if (fromWindowName) return fromWindowName;
+
+    const created = this._createTabId();
+    this._writeTabIdToWindowName(key, created);
+    return created;
+  }
+
+  _readTabIdFromWindowName(key) {
+    try {
+      if (typeof window === 'undefined' || typeof window.name !== 'string') return null;
+      const safeKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const match = window.name.match(new RegExp(`(?:^|;)${safeKey}=([^;]+)`));
+      return match?.[1] || null;
+    } catch {
+      return null;
+    }
+  }
+
+  _writeTabIdToWindowName(key, value) {
+    try {
+      if (typeof window === 'undefined') return;
+      const current = typeof window.name === 'string' ? window.name : '';
+      const safeKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const cleaned = current
+        .replace(new RegExp(`(?:^|;)${safeKey}=[^;]*`, 'g'), '')
+        .replace(/^;+|;+$|;;+/g, ';');
+      const prefix = cleaned ? `${cleaned};` : '';
+      window.name = `${prefix}${key}=${value}`;
+    } catch {
+      // Ignore window.name write restrictions.
+    }
   }
 
   _createTabId() {
