@@ -7,11 +7,17 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/ports/IEventBus.js
-used_by:
+used_by: 
   - src/adapters/logging/EventBusAdapter.js
   - src/application/services/ButtonService.js
   - src/application/services/CameraOrchestratorService.js
   - src/core/events/NullEventBus.js
+source_exists: true
+runtime_role: i_event_bus_port
+contour_primary: SAL-SWITCH
+contour_secondary: none
+role_group: salience_threat
+narrative_role: "salience routing switch"
 ---
 
 # IEventBus Port

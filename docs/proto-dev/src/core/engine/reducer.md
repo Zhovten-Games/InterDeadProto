@@ -2,7 +2,7 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/config/flags.js
   - src/core/engine/actions.js
   - src/core/engine/effects.js
@@ -10,8 +10,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/core/engine/reducer.js
-used_by:
+used_by: 
   - src/core/engine/store.js
+source_exists: true
+runtime_role: reducer_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # reducer.js

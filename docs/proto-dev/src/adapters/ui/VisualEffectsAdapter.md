@@ -2,13 +2,19 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/ports/IVisualEffects.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/adapters/ui/VisualEffectsAdapter.js
 used_by: []
+source_exists: true
+runtime_role: visual_effects_adapter
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # VisualEffectsAdapter

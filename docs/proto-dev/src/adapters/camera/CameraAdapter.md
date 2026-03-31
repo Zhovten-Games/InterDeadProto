@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/ports/ICamera.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/adapters/camera/CameraAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: camera_adapter
+contour_primary: THAL-GATE
+contour_secondary: none
+role_group: sensory_ingress
+narrative_role: "sensory ingress gateway"
 ---
 
 # CameraAdapter

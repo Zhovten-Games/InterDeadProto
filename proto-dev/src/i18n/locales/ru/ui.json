@@ -18,6 +18,8 @@
   "finish": "Завершить",
   "loading": "Загрузка...",
   "app_already_open": "Приложение уже открыто в другой вкладке",
+  "app_already_open_warning": "Наша система защиты заблокировала запуск во второй вкладке. Если это ложное срабатывание, вы можете отключить защиту. При одновременной работе в двух вкладках возможны проблемы.",
+  "app_already_open_disable_guard": "Отключить защиту и продолжить",
   "searching": "Поиск...",
   "open_camera": "Камера",
   "open_messenger": "Открыть мессенджер",
@@ -153,5 +155,8 @@
   "emoji_protocol.policy_label": "ПОЛИТИКА",
   "emoji_protocol.output_label": "ВЫХОД",
   "reset_modal_reboot": "Ребут текущего духа",
-  "chat_new_messages": "Есть новые сообщения"
+  "chat_new_messages": "Есть новые сообщения",
+  "overlay_contact_loading": "Контакт",
+  "overlay_contact_ai": "Контакт с НИРО",
+  "overlay_contact_blocked": "Контакт приостановлен"
 }

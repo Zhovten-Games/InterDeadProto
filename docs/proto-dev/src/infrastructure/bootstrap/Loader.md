@@ -1,22 +1,28 @@
 ---
 domains: []
-emits:
+emits: 
   - OVERLAY_HIDE
   - OVERLAY_SHOW
   - OVERLAY_STEP
 implements: []
-imports:
+imports: 
   - src/config/loaderModules.config.js
   - src/infrastructure/bootstrap/Logger.js
-listens:
+listens: 
   - BOOT_COMPLETE
   - BOOT_STEP
   - handler
 owns: []
 schemaVersion: 1
 source: src/infrastructure/bootstrap/Loader.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
+source_exists: true
+runtime_role: loader_bootstrap
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # Loader

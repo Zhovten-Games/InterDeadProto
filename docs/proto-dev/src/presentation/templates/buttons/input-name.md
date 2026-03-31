@@ -8,6 +8,12 @@ owns: []
 schemaVersion: 1
 source: src/presentation/templates/buttons/input-name.html
 used_by: []
+source_exists: true
+runtime_role: input_name_template
+contour_primary: DMN-NARRATIVE
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "narrative context builder"
 ---
 
 # Input Name Template

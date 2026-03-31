@@ -1,18 +1,24 @@
 ---
 domains: []
-emits:
+emits: 
   - QUEST_COMPLETED
   - QUEST_STARTED
 implements: []
-imports:
+imports: 
   - src/core/events/constants.js
   - src/core/logging/NullLogger.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/core/quests/Quest.js
-used_by:
+used_by: 
   - src/core/sequence/Stage.js
+source_exists: true
+runtime_role: quest_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # Quest

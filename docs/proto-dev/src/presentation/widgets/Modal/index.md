@@ -1,19 +1,25 @@
 ---
 domains: []
-emits:
+emits: 
   - MODAL_HIDE
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
-listens:
+listens: 
   - MODAL_HIDE
   - MODAL_SHOW
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/Modal/index.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
+source_exists: true
+runtime_role: index_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # ModalWidget

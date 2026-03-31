@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/ports/IPersistence.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/adapters/persistence/LocalStorageAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: local_storage_adapter
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # LocalStorageAdapter

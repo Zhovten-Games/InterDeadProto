@@ -1,19 +1,25 @@
 ---
 domains: []
-emits:
+emits: 
   - AI_LOADER_VISIBILITY_CHANGED
 implements: []
-imports:
+imports: 
   - src/core/events/constants.js
-listens:
+listens: 
   - AI_LOADER_HIDE_REQUESTED
   - AI_RETRY_REQUESTED
 owns: []
 schemaVersion: 1
 source: src/application/services/AiWarmupService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
   - src/infrastructure/bootstrap/LauncherBootstrapper.js
+source_exists: true
+runtime_role: ai_warmup_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # AiWarmupService

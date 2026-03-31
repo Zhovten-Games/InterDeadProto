@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/core/requirements/CameraRequirement.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/core/requirements/QuestActivationRequirement.js
-used_by:
+used_by: 
   - src/application/services/CameraDetectionStrategy.js
+source_exists: true
+runtime_role: quest_activation_requirement_core
+contour_primary: BG-SELECT
+contour_secondary: none
+role_group: executive_control
+narrative_role: "branch selection gate"
 ---
 
 # QuestActivationRequirement

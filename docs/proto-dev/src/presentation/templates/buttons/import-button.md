@@ -8,6 +8,12 @@ owns: []
 schemaVersion: 1
 source: src/presentation/templates/buttons/import-button.html
 used_by: []
+source_exists: true
+runtime_role: import_button_template
+contour_primary: DMN-NARRATIVE
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "narrative context builder"
 ---
 
 # Import Button Template

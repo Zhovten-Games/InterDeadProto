@@ -1,11 +1,11 @@
 ---
 domains: []
-emits:
+emits: 
   - DUALITY_COMPLETED
   - DUALITY_STAGE_STARTED
   - DUALITY_STARTED
 implements: []
-imports:
+imports: 
   - src/core/events/constants.js
   - src/core/logging/NullLogger.js
   - src/core/sequence/Stage.js
@@ -13,8 +13,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/core/sequence/DualityManager.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/DomainModule.js
+source_exists: true
+runtime_role: duality_manager_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # DualityManager

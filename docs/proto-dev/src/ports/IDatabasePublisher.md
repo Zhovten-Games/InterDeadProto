@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/ports/IDatabasePublisher.js
-used_by:
+used_by: 
   - src/adapters/database/DBPublisher.js
+source_exists: true
+runtime_role: i_database_publisher_port
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # IDatabasePublisher Port

@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/controls.config.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
   - src/presentation/widgets/ControlPanel/index.js
+source_exists: true
+runtime_role: controls_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Controls Configuration

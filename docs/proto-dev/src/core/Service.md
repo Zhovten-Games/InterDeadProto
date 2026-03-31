@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/core/Service.js
-used_by:
+used_by: 
   - src/application/services/AvatarService.js
   - src/core/dialog/DialogManager.js
+source_exists: true
+runtime_role: service_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # Service

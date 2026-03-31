@@ -1,5 +1,8 @@
 import Loader from '../Loader.js';
 import AiLoaderView from '../../../presentation/widgets/AiLoaderView.js';
+import BootOverlayView from '../../../presentation/widgets/BootOverlayView.js';
+import OverlayOrchestratorService from '../../../application/services/OverlayOrchestratorService.js';
+import UnifiedOverlayView from '../../../presentation/widgets/UnifiedOverlayView.js';
 import StatusWidget from '../../../presentation/widgets/StatusWidget.js';
 import ButtonAdapter from '../../../adapters/ui/ButtonAdapter.js';
 import PanelAdapter from '../../../adapters/ui/PanelAdapter.js';
@@ -45,8 +48,41 @@ export default class PresentationModule {
     );
 
     container.register(
+      'OverlayOrchestratorService',
+      () => new OverlayOrchestratorService({ mode: 'single' }),
+      { priority: 22 },
+    );
+
+    container.register(
+      'UnifiedOverlayView',
+      () =>
+        new UnifiedOverlayView(
+          container.resolve('OverlayOrchestratorService'),
+          container.resolve('IEventBus'),
+          container.resolve('LanguageService'),
+          typeof window !== 'undefined' ? window : null,
+          typeof document !== 'undefined' ? document : null,
+        ),
+      { priority: 23 },
+    );
+
+    container.register(
+      'BootOverlayView',
+      () =>
+        new BootOverlayView(
+          container.resolve('IEventBus'),
+          container.resolve('OverlayOrchestratorService'),
+        ),
+      { priority: 25 },
+    );
+
+    container.register(
       'AiLoaderView',
-      () => new AiLoaderView(container.resolve('IEventBus'), container.resolve('LanguageService')),
+      () =>
+        new AiLoaderView(
+          container.resolve('IEventBus'),
+          container.resolve('OverlayOrchestratorService'),
+        ),
       { priority: 26 },
     );
 

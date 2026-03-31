@@ -1,15 +1,15 @@
 ---
 domains: []
-emits:
+emits: 
   - REACTION_FINALE_STATE_UPDATED
   - status
 implements: []
-imports:
+imports: 
   - src/config/reactionFinale.config.js
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/core/logging/NullLogger.js
-listens:
+listens: 
   - DIALOG_CLEAR
   - DUALITY_COMPLETED
   - EVENT_MESSAGE_READY
@@ -18,8 +18,14 @@ listens:
 owns: []
 schemaVersion: 1
 source: src/application/services/ReactionFinaleService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: reaction_finale_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # ReactionFinaleService

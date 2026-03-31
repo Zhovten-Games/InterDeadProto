@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/config/assetsBaseUrl.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/config/spirits/guide.js
-used_by:
+used_by: 
   - src/application/services/DialogOrchestratorService.js
+source_exists: true
+runtime_role: guide_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Guide Spirit Configuration

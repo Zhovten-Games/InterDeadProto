@@ -2,13 +2,13 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/ports/IEventBus.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/core/events/NullEventBus.js
-used_by:
+used_by: 
   - src/adapters/ai/DetectionAdapter.js
   - src/adapters/notification/NotificationAdapter.js
   - src/adapters/ui/LanguageAdapter.js
@@ -38,6 +38,12 @@ used_by:
   - src/presentation/widgets/PanelEffectsWidget.js
   - src/presentation/widgets/ReactionOverlayWidget.js
   - src/presentation/widgets/StatusWidget.js
+source_exists: true
+runtime_role: null_event_bus_core
+contour_primary: SAL-SWITCH
+contour_secondary: none
+role_group: salience_threat
+narrative_role: "salience routing switch"
 ---
 
 # NullEventBus

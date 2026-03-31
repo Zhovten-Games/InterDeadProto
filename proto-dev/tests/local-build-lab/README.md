@@ -7,6 +7,7 @@ Local Build Lab is an isolated, non-production validation harness that reproduce
 - Reproduce the workflow stages from `.github/workflows/proto-pipeline.yml` locally.
 - Validate first-load runtime behavior before GitHub Pages deployment.
 - Keep local build artifacts disposable and isolated from source directories.
+- Attach local InterDeadCore packages selectively or in bulk for integration checks inside the isolated workspace.
 
 ## Boundaries
 
@@ -110,3 +111,55 @@ Use this checklist for the issue you observed around first-load runtime behavior
    - `this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1))`
    - `const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);`
 3. If markers are missing, verify `.github/scripts/apply-ci-overrides.sh` exists at monorepo root and that local lab can resolve it.
+
+## Local package workspace (analog of local-auth-overlay flow)
+
+Local Build Lab now supports a local package workflow similar to `InterDeadIT/tests/local-auth-overlay`:
+
+1. Resolve packages from `--local-packages-root` (default `../../InterDeadCore`) and `--local-package-map` overrides.
+2. Prepare package copies/symlinks in `tests/local-build-lab/packages-workspace` (or custom workspace).
+3. Optionally install/build each selected package when `dist/` is missing (or force with explicit flag).
+4. Temporarily link prepared packages into isolated workspace `node_modules`.
+5. Automatically restore original workspace dependencies on exit (success or failure).
+
+Priority rule: CLI flags override values from `tests/local-build-lab/config.env`.
+
+### Local package options
+
+- `--local-packages all`
+- `--local-packages @interdead/framework,@interdead/identity-core`
+- `--local-packages-root <path>`
+- `--local-packages-workspace <path>`
+- `--local-packages-prepare-mode <copy|link>` (default: `copy`)
+- `--local-package-map <name>=<path>` (can be repeated)
+- `--skip-local-package-build` (never builds; fails if `dist/` is missing)
+- `--force-local-package-build`
+- `--cleanup-local-packages-workspace` (cleanup runs during restore, after links are removed)
+
+### Example: run pipeline with all local packages
+
+```bash
+./tests/local-build-lab/run-local-pipeline.sh \
+  --local-packages all \
+  --local-packages-root ../../InterDeadCore
+```
+
+### Example: attach a single local package from a custom path
+
+```bash
+./tests/local-build-lab/run-local-pipeline.sh \
+  --local-packages @interdead/framework \
+  --local-package-map @interdead/framework=../../../InterDeadCore/framework
+```
+
+
+### Optional env shortcuts
+
+`config.env` can also include:
+
+- `LOCAL_PACKAGES`
+- `LOCAL_PACKAGES_ROOT`
+- `LOCAL_PACKAGES_WORKSPACE_DIR` (or `LOCAL_PACKAGES_WORKSPACE`)
+- `LOCAL_PACKAGE_MAP` as comma-separated values (for example: `name=path,name2=path2`)
+
+If no package names/maps are provided, local package flow is intentionally skipped even when a root path is set.

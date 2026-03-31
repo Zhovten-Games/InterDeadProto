@@ -2,7 +2,7 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/core/dsl/schema.js
   - src/core/logging/NullLogger.js
 listens: []
@@ -10,6 +10,12 @@ owns: []
 schemaVersion: 1
 source: src/core/dsl/compiler.js
 used_by: []
+source_exists: true
+runtime_role: compiler_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # compiler.js

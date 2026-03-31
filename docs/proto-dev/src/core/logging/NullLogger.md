@@ -2,13 +2,13 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/ports/ILogging.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/core/logging/NullLogger.js
-used_by:
+used_by: 
   - src/adapters/ui/LanguageAdapter.js
   - src/application/services/ButtonStateService.js
   - src/application/services/ButtonVisibilityService.js
@@ -23,6 +23,12 @@ used_by:
   - src/infrastructure/bootstrap/BootManager.js
   - src/presentation/widgets/PanelEffectsWidget.js
   - src/utils/Observer.js
+source_exists: true
+runtime_role: null_logger_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # NullLogger

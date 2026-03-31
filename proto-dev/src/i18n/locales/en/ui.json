@@ -18,6 +18,8 @@
   "finish": "Finish",
   "loading": "Loading...",
   "app_already_open": "Application already open in another tab",
+  "app_already_open_warning": "The protection system blocked startup in a second tab. If this is a false positive, you can disable this protection. Running the app in two tabs at once may cause issues.",
+  "app_already_open_disable_guard": "Disable protection and continue",
   "searching": "Searching...",
   "open_camera": "Camera",
   "open_messenger": "Open Messenger",
@@ -153,5 +155,8 @@
   "emoji_protocol.policy_label": "POLICY",
   "emoji_protocol.output_label": "OUTPUT",
   "reset_modal_reboot": "Reboot current ghost",
-  "chat_new_messages": "New messages"
+  "chat_new_messages": "New messages",
+  "overlay_contact_loading": "Contact",
+  "overlay_contact_ai": "Contact with NIRO",
+  "overlay_contact_blocked": "Contact suspended"
 }

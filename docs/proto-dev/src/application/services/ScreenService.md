@@ -3,13 +3,19 @@ domains: []
 emits: []
 implements: []
 imports: []
-listens:
+listens: 
   - SCREEN_CHANGE
 owns: []
 schemaVersion: 1
 source: src/application/services/ScreenService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: screen_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # ScreenService

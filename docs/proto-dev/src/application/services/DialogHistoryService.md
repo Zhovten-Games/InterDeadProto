@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/utils/messageFingerprint.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/application/services/DialogHistoryService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: dialog_history_service
+contour_primary: DMN-NARRATIVE
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "narrative context builder"
 ---
 
 # DialogHistoryService

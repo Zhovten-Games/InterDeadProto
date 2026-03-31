@@ -1,18 +1,24 @@
 ---
 domains: []
-emits:
+emits: 
   - BUTTON_STATE_UPDATED
 implements: []
-imports:
+imports: 
   - src/config/button-state.config.js
   - src/utils/deepMerge.js
-listens:
+listens: 
   - GHOST_CHANGE
 owns: []
 schemaVersion: 1
 source: src/application/services/StateService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: state_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # StateService

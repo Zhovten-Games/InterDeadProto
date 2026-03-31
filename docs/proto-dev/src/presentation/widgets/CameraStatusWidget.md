@@ -1,22 +1,28 @@
 ---
 domains: []
-emits:
+emits: 
   - BUTTON_STATE_UPDATED
   - RETRY_DETECTION
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/presentation/widgets/CameraWidget.js
-listens:
+listens: 
   - CAMERA_STATUS
   - DETECTION_DONE
   - DETECTION_SEARCH
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/CameraStatusWidget.js
-used_by:
+used_by: 
   - src/presentation/adapters/GlobalViewPresenter.js
+source_exists: true
+runtime_role: camera_status_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # CameraStatusWidget

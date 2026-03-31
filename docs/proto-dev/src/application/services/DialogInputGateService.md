@@ -1,9 +1,9 @@
 ---
 domains: []
-emits:
+emits: 
   - DIALOG_AWAITING_INPUT_CHANGED
 implements: []
-imports:
+imports: 
   - src/core/engine/actions.js
   - src/core/engine/store.js
   - src/core/events/constants.js
@@ -11,8 +11,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/application/services/DialogInputGateService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: dialog_input_gate_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # DialogInputGateService

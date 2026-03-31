@@ -1,13 +1,13 @@
 ---
 domains: []
-emits:
+emits: 
   - GHOST_CHANGE
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/ports/IPanel.js
-listens:
+listens: 
   - AI_LOADER_VISIBILITY_CHANGED
   - AI_STATE_CHANGED
   - BUTTON_STATE_UPDATED
@@ -20,8 +20,14 @@ listens:
 owns: []
 schemaVersion: 1
 source: src/adapters/ui/PanelAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
+source_exists: true
+runtime_role: panel_adapter
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # PanelAdapter

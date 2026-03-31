@@ -7,11 +7,17 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/flags.js
-used_by:
+used_by: 
   - src/application/services/CameraOrchestratorService.js
   - src/application/services/DialogOrchestratorService.js
   - src/core/dsl/driver.js
   - src/core/engine/reducer.js
+source_exists: true
+runtime_role: flags_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Feature Flags

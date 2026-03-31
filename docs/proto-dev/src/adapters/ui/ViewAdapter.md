@@ -1,23 +1,29 @@
 ---
 domains: []
-emits:
+emits: 
   - BUTTON_STATE_UPDATED
   - CAMERA_STATUS
 implements: []
-imports:
+imports: 
   - src/core/engine/selectors.js
   - src/core/engine/store.js
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/ports/IView.js
-listens:
+listens: 
   - NEXT_BUTTON_ENABLE
   - SCREEN_CHANGE
 owns: []
 schemaVersion: 1
 source: src/adapters/ui/ViewAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
+source_exists: true
+runtime_role: view_adapter
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # ViewAdapter

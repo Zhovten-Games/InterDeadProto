@@ -8,6 +8,12 @@ owns: []
 schemaVersion: 1
 source: src/core/events/EventObserver.js
 used_by: []
+source_exists: true
+runtime_role: event_observer_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # EventObserver

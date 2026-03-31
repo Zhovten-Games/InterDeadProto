@@ -18,6 +18,8 @@
   "finish": "完了",
   "loading": "読み込み中...",
   "app_already_open": "アプリは別のタブで既に開かれています",
+  "app_already_open_warning": "保護システムが2つ目のタブでの起動をブロックしました。誤検知の可能性がある場合は、この保護を無効化できます。同時に2つのタブで使用すると問題が発生する可能性があります。",
+  "app_already_open_disable_guard": "保護を無効化して続行",
   "searching": "検索中...",
   "open_camera": "カメラ",
   "open_messenger": "メッセンジャーを開く",
@@ -153,5 +155,8 @@
   "emoji_protocol.policy_label": "ポリシー",
   "emoji_protocol.output_label": "出力",
   "reset_modal_reboot": "現在のゴーストをリブート",
-  "chat_new_messages": "新しいメッセージがあります"
+  "chat_new_messages": "新しいメッセージがあります",
+  "overlay_contact_loading": "コンタクト",
+  "overlay_contact_ai": "NIROとのコンタクト",
+  "overlay_contact_blocked": "コンタクト一時停止"
 }

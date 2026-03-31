@@ -2,7 +2,7 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/core/dialog/Dialog.js
   - src/core/dialog/DialogManager.js
   - src/core/sequence/DualityManager.js
@@ -10,8 +10,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/infrastructure/bootstrap/modules/DomainModule.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/composeApplication.js
+source_exists: true
+runtime_role: domain_module_bootstrap
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # DomainModule

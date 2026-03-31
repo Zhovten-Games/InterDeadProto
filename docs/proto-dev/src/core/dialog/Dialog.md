@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/core/dialog/Dialog.js
-used_by:
+used_by: 
   - src/core/sequence/Stage.js
   - src/infrastructure/bootstrap/modules/DomainModule.js
+source_exists: true
+runtime_role: dialog_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # Dialog

@@ -1,13 +1,13 @@
 ---
 domains: []
-emits:
+emits: 
   - CHAT_LOAD_OLDER
   - MEDIA_OPEN
   - REACTION_FINALE_RECALCULATE_REQUESTED
   - REACTION_OVERLAY_REQUESTED
   - log
 implements: []
-imports:
+imports: 
   - src/config/index.js
   - src/config/chat.config.js
   - src/core/events/NullEventBus.js
@@ -16,7 +16,7 @@ imports:
   - src/presentation/widgets/Dialog/MessageDeduplicator.js
   - src/presentation/widgets/Dialog/NewMessagesIndicator.js
   - src/utils/youtube.js
-listens:
+listens: 
   - CHAT_LOAD_OLDER
   - DIALOG_CLEAR
   - EVENT_MESSAGE_READY
@@ -26,8 +26,14 @@ listens:
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/Dialog/index.js
-used_by:
+used_by: 
   - src/presentation/adapters/GlobalViewPresenter.js
+source_exists: true
+runtime_role: index_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # DialogWidget

@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/ports/ICamera.js
-used_by:
+used_by: 
   - src/adapters/camera/CameraAdapter.js
+source_exists: true
+runtime_role: i_camera_port
+contour_primary: THAL-GATE
+contour_secondary: none
+role_group: sensory_ingress
+narrative_role: "sensory ingress gateway"
 ---
 
 # ICamera Port

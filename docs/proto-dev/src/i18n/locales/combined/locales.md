@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/i18n/locales/combined/locales.js
-used_by:
+used_by: 
   - src/adapters/ui/LanguageAdapter.js
+source_exists: true
+runtime_role: locales_locale_bundle
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # combined/locales.js

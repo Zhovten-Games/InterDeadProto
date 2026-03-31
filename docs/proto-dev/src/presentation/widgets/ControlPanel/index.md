@@ -1,15 +1,15 @@
 ---
 domains: []
-emits:
+emits: 
   - CHAT_SCROLL_DOWN
   - CHAT_SCROLL_UP
 implements: []
-imports:
+imports: 
   - src/config/controls.config.js
   - src/config/templateBaseUrl.js
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
-listens:
+listens: 
   - CAMERA_TOGGLE
   - DIALOG_AWAITING_INPUT_CHANGED
   - SCREEN_CHANGE
@@ -17,6 +17,12 @@ owns: []
 schemaVersion: 1
 source: src/presentation/widgets/ControlPanel/index.js
 used_by: []
+source_exists: true
+runtime_role: index_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # ControlPanel

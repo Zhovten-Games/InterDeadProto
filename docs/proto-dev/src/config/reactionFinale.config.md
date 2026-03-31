@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/config/assetsBaseUrl.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/config/reactionFinale.config.js
-used_by:
+used_by: 
   - src/application/services/ReactionFinaleService.js
+source_exists: true
+runtime_role: reaction_finale_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # reactionFinale.config

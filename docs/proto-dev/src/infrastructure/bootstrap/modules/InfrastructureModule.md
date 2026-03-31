@@ -2,7 +2,7 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/adapters/ai/DetectionAdapter.js
   - src/adapters/ai/ItemDetectionAdapter.js
   - src/adapters/auth/AuthVisibilityAdapter.js
@@ -32,8 +32,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/infrastructure/bootstrap/modules/InfrastructureModule.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/composeApplication.js
+source_exists: true
+runtime_role: infrastructure_module_bootstrap
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # InfrastructureModule

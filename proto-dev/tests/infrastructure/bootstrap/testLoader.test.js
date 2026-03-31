@@ -156,4 +156,73 @@ describe('Loader.js', () => {
       });
     }
   });
+
+  it('does not block when only stale foreign loading marker exists without active tab', async () => {
+    const logger = new DummyLogger();
+    const store = new DummyStore();
+    const bus = new Observer();
+    const events = [];
+    bus.subscribe((evt) => events.push(evt));
+
+    store.save('appLoading', { value: 'boot:foreign-tab', timestamp: Date.now() });
+
+    const loader = new Loader(logger, store, bus);
+    await loader.load(async () => {
+      bus.emit({ type: 'BOOT_COMPLETE' });
+    });
+
+    assert.strictEqual(
+      events.some((evt) => evt.type === 'OVERLAY_SHOW' && evt.i18nKey === 'app_already_open'),
+      false,
+    );
+    assert.strictEqual(store.load('appLoading'), undefined);
+    clearInterval(loader.heartbeat);
+  });
+
+  it('bypasses multi-tab protection when bypass flag is enabled', async () => {
+    const logger = new DummyLogger();
+    const store = new DummyStore();
+    const bus = new Observer();
+    const events = [];
+    bus.subscribe((evt) => events.push(evt));
+
+    window.localStorage.setItem('interdead_disable_multi_tab_guard', '1');
+    store.save('activeTab', { value: 'foreign-tab', timestamp: Date.now() });
+
+    const loader = new Loader(logger, store, bus);
+    await loader.load(async () => {
+      bus.emit({ type: 'BOOT_COMPLETE' });
+    });
+
+    assert.strictEqual(
+      events.some((evt) => evt.type === 'OVERLAY_SHOW' && evt.i18nKey === 'app_already_open'),
+      false,
+    );
+    assert.strictEqual(
+      logger.warnings.some((entry) => entry.includes('Multi-tab guard bypass is active')),
+      true,
+    );
+    window.localStorage.removeItem('interdead_disable_multi_tab_guard');
+  });
+
+  it('emits loading overlay before hide in a deterministic sequence', async () => {
+    const logger = new DummyLogger();
+    const store = new DummyStore();
+    const bus = new Observer();
+    const events = [];
+    bus.subscribe((evt) => events.push(evt));
+
+    const loader = new Loader(logger, store, bus);
+    await loader.load(async () => {
+      bus.emit({ type: 'BOOT_COMPLETE' });
+    });
+
+    const loadingIndex = events.findIndex(
+      (evt) => evt.type === 'OVERLAY_SHOW' && evt.i18nKey === 'loading',
+    );
+    const hideIndex = events.findIndex((evt) => evt.type === 'OVERLAY_HIDE');
+    assert.ok(loadingIndex >= 0);
+    assert.ok(hideIndex > loadingIndex);
+    clearInterval(loader.heartbeat);
+  });
 });

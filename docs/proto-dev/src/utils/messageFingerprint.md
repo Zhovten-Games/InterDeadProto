@@ -2,18 +2,24 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/utils/youtube.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/utils/messageFingerprint.js
-used_by:
+used_by: 
   - src/application/services/DialogHistoryBuffer.js
   - src/application/services/DialogHistoryService.js
   - src/application/services/DialogOrchestratorService.js
   - src/application/services/ReactionPersistenceService.js
   - src/presentation/widgets/Dialog/MessageDeduplicator.js
+source_exists: true
+runtime_role: message_fingerprint_utility
+contour_primary: DMN-NARRATIVE
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "narrative context builder"
 ---
 
 # messageFingerprint

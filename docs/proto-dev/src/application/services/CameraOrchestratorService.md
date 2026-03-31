@@ -1,6 +1,6 @@
 ---
 domains: []
-emits:
+emits: 
   - BUTTON_STATE_UPDATED
   - CAMERA_STATUS
   - CAMERA_TOGGLE
@@ -10,7 +10,7 @@ emits:
   - QUEST_ITEM_OVERLAY_READY
   - REACTION_REMINDER_READY
 implements: []
-imports:
+imports: 
   - src/application/services/CameraDetectionStrategy.js
   - src/config/flags.js
   - src/core/engine/actions.js
@@ -19,7 +19,7 @@ imports:
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/ports/IEventBus.js
-listens:
+listens: 
   - CAMERA_VIEW_CLOSED
   - CAMERA_VIEW_OPENED
   - QUEST_COMPLETED
@@ -28,8 +28,14 @@ listens:
 owns: []
 schemaVersion: 1
 source: src/application/services/CameraOrchestratorService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: camera_orchestrator_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # CameraOrchestratorService

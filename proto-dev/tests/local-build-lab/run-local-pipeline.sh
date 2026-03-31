@@ -14,6 +14,14 @@ PORT="4173"
 SERVE="0"
 SMOKE="0"
 INSTALL_MODE="auto"
+LOCAL_PACKAGES=""
+LOCAL_PACKAGES_ROOT=""
+LOCAL_PACKAGES_WORKSPACE=""
+LOCAL_PACKAGES_PREPARE_MODE="copy"
+SKIP_LOCAL_PACKAGE_BUILD="0"
+FORCE_LOCAL_PACKAGE_BUILD="0"
+CLEANUP_LOCAL_PACKAGES_WORKSPACE="0"
+LOCAL_PACKAGE_MAPS=()
 
 usage() {
   cat <<USAGE
@@ -27,6 +35,14 @@ Options:
   --workspace <dir>       Isolated workspace directory (default: .local-lab-workspace)
   --env-file <file>       Optional env override file (default: tests/local-build-lab/config.env)
   --install-mode <mode>   auto|ci|install (default: auto)
+  --local-packages <list> all or comma-separated package names
+  --local-packages-root <path> Root folder with local packages (default: ../../InterDeadCore)
+  --local-packages-workspace <path> Prepared local package workspace
+  --local-packages-prepare-mode <mode> copy|link (default: copy)
+  --local-package-map <name>=<path> Override package source path, can be repeated
+  --skip-local-package-build Skip build, fail if dist/ does not exist
+  --force-local-package-build Always install and rebuild selected local packages
+  --cleanup-local-packages-workspace Remove prepared package workspace after restore
   --help                  Show this help message
 USAGE
 }
@@ -61,6 +77,38 @@ while [[ $# -gt 0 ]]; do
       INSTALL_MODE="$2"
       shift 2
       ;;
+    --local-packages)
+      LOCAL_PACKAGES="$2"
+      shift 2
+      ;;
+    --local-packages-root)
+      LOCAL_PACKAGES_ROOT="$2"
+      shift 2
+      ;;
+    --local-packages-workspace)
+      LOCAL_PACKAGES_WORKSPACE="$2"
+      shift 2
+      ;;
+    --local-packages-prepare-mode)
+      LOCAL_PACKAGES_PREPARE_MODE="$2"
+      shift 2
+      ;;
+    --local-package-map)
+      LOCAL_PACKAGE_MAPS+=("$2")
+      shift 2
+      ;;
+    --skip-local-package-build)
+      SKIP_LOCAL_PACKAGE_BUILD="1"
+      shift
+      ;;
+    --force-local-package-build)
+      FORCE_LOCAL_PACKAGE_BUILD="1"
+      shift
+      ;;
+    --cleanup-local-packages-workspace)
+      CLEANUP_LOCAL_PACKAGES_WORKSPACE="1"
+      shift
+      ;;
     --help)
       usage
       exit 0
@@ -72,10 +120,22 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ "$INSTALL_MODE" =~ ^(auto|ci|install)$ ]] || die "Invalid install mode: $INSTALL_MODE"
+[[ "$LOCAL_PACKAGES_PREPARE_MODE" =~ ^(copy|link)$ ]] || die "Invalid local package prepare mode: $LOCAL_PACKAGES_PREPARE_MODE"
 
 ensure_command npm
 ensure_command perl
 ensure_command rsync
+ensure_command node
+
+# Preserve CLI values so CLI keeps top priority over config.env values.
+CLI_LOCAL_PACKAGES="$LOCAL_PACKAGES"
+CLI_LOCAL_PACKAGES_ROOT="$LOCAL_PACKAGES_ROOT"
+CLI_LOCAL_PACKAGES_WORKSPACE="$LOCAL_PACKAGES_WORKSPACE"
+CLI_LOCAL_PACKAGES_PREPARE_MODE="$LOCAL_PACKAGES_PREPARE_MODE"
+CLI_SKIP_LOCAL_PACKAGE_BUILD="$SKIP_LOCAL_PACKAGE_BUILD"
+CLI_FORCE_LOCAL_PACKAGE_BUILD="$FORCE_LOCAL_PACKAGE_BUILD"
+CLI_CLEANUP_LOCAL_PACKAGES_WORKSPACE="$CLEANUP_LOCAL_PACKAGES_WORKSPACE"
+CLI_LOCAL_PACKAGE_MAPS=("${LOCAL_PACKAGE_MAPS[@]}")
 
 load_env_file "$ENV_FILE"
 
@@ -84,10 +144,33 @@ PORT="${LOCAL_BUILD_PORT:-$PORT}"
 OUTPUT_DIR="${LOCAL_BUILD_OUTPUT_DIR:-$OUTPUT_DIR}"
 WORKSPACE_DIR="${LOCAL_BUILD_WORKSPACE_DIR:-$WORKSPACE_DIR}"
 
+LOCAL_PACKAGES="${CLI_LOCAL_PACKAGES:-${LOCAL_PACKAGES:-}}"
+LOCAL_PACKAGES_ROOT="${CLI_LOCAL_PACKAGES_ROOT:-${LOCAL_PACKAGES_ROOT:-}}"
+LOCAL_PACKAGES_WORKSPACE="${CLI_LOCAL_PACKAGES_WORKSPACE:-${LOCAL_PACKAGES_WORKSPACE_DIR:-${LOCAL_PACKAGES_WORKSPACE:-}}}"
+LOCAL_PACKAGES_PREPARE_MODE="${CLI_LOCAL_PACKAGES_PREPARE_MODE:-${LOCAL_PACKAGES_PREPARE_MODE:-copy}}"
+SKIP_LOCAL_PACKAGE_BUILD="${CLI_SKIP_LOCAL_PACKAGE_BUILD:-${SKIP_LOCAL_PACKAGE_BUILD:-0}}"
+FORCE_LOCAL_PACKAGE_BUILD="${CLI_FORCE_LOCAL_PACKAGE_BUILD:-${FORCE_LOCAL_PACKAGE_BUILD:-0}}"
+CLEANUP_LOCAL_PACKAGES_WORKSPACE="${CLI_CLEANUP_LOCAL_PACKAGES_WORKSPACE:-${CLEANUP_LOCAL_PACKAGES_WORKSPACE:-0}}"
+
+if [[ ${#CLI_LOCAL_PACKAGE_MAPS[@]} -gt 0 ]]; then
+  LOCAL_PACKAGE_MAPS=("${CLI_LOCAL_PACKAGE_MAPS[@]}")
+elif [[ -n "${LOCAL_PACKAGE_MAP:-}" ]]; then
+  IFS=',' read -r -a LOCAL_PACKAGE_MAPS <<<"${LOCAL_PACKAGE_MAP}"
+else
+  LOCAL_PACKAGE_MAPS=()
+fi
+
 log_step "Local pipeline started"
 log_step "Project root: $PROJECT_ROOT"
 log_step "Workspace dir: $WORKSPACE_DIR"
 log_step "Output dir: $OUTPUT_DIR"
+
+restore_local_packages() {
+  node "$LAB_ROOT/scripts/local-package-workspace.js" restore \
+    --workspace-dir "$WORKSPACE_DIR" \
+    --project-root "$PROJECT_ROOT" || true
+}
+trap restore_local_packages EXIT
 
 [[ "$WORKSPACE_DIR" == *".local-lab-workspace"* ]] || die "Workspace must be an isolated .local-lab-workspace path"
 verify_repo_localization_adapter "$PROJECT_ROOT"
@@ -102,6 +185,46 @@ elif [[ "$INSTALL_MODE" == "install" ]]; then
   (cd "$WORKSPACE_DIR" && npm install --no-fund --no-audit)
 else
   install_dependencies "$WORKSPACE_DIR"
+fi
+
+local_package_args=(
+  prepare
+  --workspace-dir "$WORKSPACE_DIR"
+  --project-root "$PROJECT_ROOT"
+  --local-packages "$LOCAL_PACKAGES"
+  --local-packages-prepare-mode "$LOCAL_PACKAGES_PREPARE_MODE"
+)
+
+if [[ -n "$LOCAL_PACKAGES_ROOT" ]]; then
+  local_package_args+=(--local-packages-root "$LOCAL_PACKAGES_ROOT")
+fi
+
+if [[ -n "$LOCAL_PACKAGES_WORKSPACE" ]]; then
+  local_package_args+=(--local-packages-workspace "$LOCAL_PACKAGES_WORKSPACE")
+fi
+
+if [[ "$SKIP_LOCAL_PACKAGE_BUILD" == "1" ]]; then
+  local_package_args+=(--skip-local-package-build)
+fi
+
+if [[ "$FORCE_LOCAL_PACKAGE_BUILD" == "1" ]]; then
+  local_package_args+=(--force-local-package-build)
+fi
+
+if [[ "$CLEANUP_LOCAL_PACKAGES_WORKSPACE" == "1" ]]; then
+  local_package_args+=(--cleanup-local-packages-workspace)
+fi
+
+for package_map in "${LOCAL_PACKAGE_MAPS[@]}"; do
+  [[ -n "$package_map" ]] || continue
+  local_package_args+=(--local-package-map "$package_map")
+done
+
+if [[ -n "$LOCAL_PACKAGES" || ${#LOCAL_PACKAGE_MAPS[@]} -gt 0 ]]; then
+  log_step "Preparing local package links for isolated workspace"
+  node "$LAB_ROOT/scripts/local-package-workspace.js" "${local_package_args[@]}"
+else
+  log_step "No local packages selected; local package flow is skipped"
 fi
 
 apply_ci_overrides "$WORKSPACE_DIR"

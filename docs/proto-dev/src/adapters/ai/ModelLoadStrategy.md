@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/adapters/ai/ModelLoadStrategy.js
-used_by:
+used_by: 
   - src/adapters/ai/DetectionAdapter.js
+source_exists: true
+runtime_role: model_load_strategy_adapter
+contour_primary: PREDICT-LOOP
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "model fallback predictor"
 ---
 
 # ModelLoadStrategy

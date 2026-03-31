@@ -77,3 +77,36 @@ npm run dev
 npm run build
 npm run format:check
 ```
+
+## Overlay architecture migration note
+
+The project now uses a **single overlay host** (`UnifiedOverlayView`) backed by `OverlayOrchestratorService`.
+Boot and AI loaders are state publishers only, and they must never render their own `.app__loader` roots.
+This prevents duplicate overlays, keeps priority rules deterministic, and centralizes overlay actions (including multi-tab guard bypass).
+
+
+## Overlay event-driven transition policy and resilience guards
+
+`OverlayOrchestratorService` now manages an explicit stage lifecycle (`pre_boot`, `boot_done`, `ai_warmup`, `ready`, `blocked`) and applies transition policy from events.
+
+- `OVERLAY_SHOW('loading')` activates `loading`.
+- `OVERLAY_HIDE` moves stage beyond boot and hides transient boot card.
+- `AI_STATE_CHANGED` keeps `ai_loading` visible until AI reaches `READY`.
+- `app_already_open` is a blocker and always preempts other overlay cards until explicitly dismissed.
+
+Reliability guards:
+
+- Idempotent updates with duplicate-event dedup prevent visual oscillation.
+- Per-entry diagnostics include `lastUpdatedAt` and global transition timestamps.
+- Optional TTL for transient entries (e.g. `loading`) protects against stale visible cards.
+- Illegal backward stage transitions are rejected unless a forced transition or explicit `reset()` is used.
+
+Invariant: the app has a single overlay host and deterministic final card state under event storms.
+
+
+## Overlay contact-line contract
+
+- All overlay contact headers must come from i18n keys.
+- Contact headers must use technical style and start with the locale-equivalent of "Contact".
+- The no-JavaScript blocker is delivered via the `<noscript>` fallback in `index.html`.
+

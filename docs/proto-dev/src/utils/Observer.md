@@ -2,15 +2,21 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/core/logging/NullLogger.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/utils/Observer.js
-used_by:
+used_by: 
   - src/adapters/logging/EventBusAdapter.js
   - src/infrastructure/factories/EventBusFactory.js
+source_exists: true
+runtime_role: observer_utility
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # Observer

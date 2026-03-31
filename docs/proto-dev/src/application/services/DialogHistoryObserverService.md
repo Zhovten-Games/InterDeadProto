@@ -2,16 +2,22 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
-listens:
+listens: 
   - EVENT_MESSAGE_READY
 owns: []
 schemaVersion: 1
 source: src/application/services/DialogHistoryObserverService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: dialog_history_observer_service
+contour_primary: DMN-NARRATIVE
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "narrative context builder"
 ---
 
 # DialogHistoryObserverService

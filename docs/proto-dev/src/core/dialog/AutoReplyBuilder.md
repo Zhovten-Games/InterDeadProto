@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/core/dialog/AutoReplyBuilder.js
-used_by:
+used_by: 
   - src/application/services/DialogOrchestratorService.js
+source_exists: true
+runtime_role: auto_reply_builder_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # AutoReplyBuilder

@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/ports/IGeolocation.js
-used_by:
+used_by: 
   - src/adapters/geo/GeolocationAdapter.js
+source_exists: true
+runtime_role: i_geolocation_port
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # IGeolocation Port

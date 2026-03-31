@@ -68,4 +68,10 @@ Safety is currently achieved by **authoring discipline** in first‑party config
 - The user can only input what the gate allows: text posts, reaction selection, or camera capture during a quest.
 - There is **no free input channel** outside the current gated step.
 
+## 0.10 Contour assignment quality rule for `src` docs
+
+- Assign a contour only when the component supports a **natural canonical log line** for that contour.
+- If a plausible line sounds forced, use a less specialized contour or keep `contour_secondary: none`.
+- This rule prevents decorative contour mapping and keeps `component -> contour -> log style` operational for runtime tooling.
+
 **Next:** [1. Boot sequence and runtime mode](01-boot-sequence.md)

@@ -2,16 +2,22 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/config/default.config.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/config/index.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/composeApplication.js
   - src/presentation/widgets/ChatScrollWidget.js
   - src/presentation/widgets/Dialog/index.js
+source_exists: true
+runtime_role: index_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Configuration Entry Point

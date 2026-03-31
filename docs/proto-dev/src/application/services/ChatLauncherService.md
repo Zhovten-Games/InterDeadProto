@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/application/services/ChatLauncherService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
   - src/infrastructure/bootstrap/LauncherBootstrapper.js
+source_exists: true
+runtime_role: chat_launcher_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # ChatLauncherService

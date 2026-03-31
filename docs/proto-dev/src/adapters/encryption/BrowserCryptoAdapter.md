@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/ports/IEncryption.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/adapters/encryption/BrowserCryptoAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: browser_crypto_adapter
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # BrowserCryptoAdapter

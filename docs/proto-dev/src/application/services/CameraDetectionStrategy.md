@@ -1,16 +1,22 @@
 ---
 domains: []
-emits:
+emits: 
   - DETECTION_SEARCH
 implements: []
-imports:
+imports: 
   - src/core/requirements/QuestActivationRequirement.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/application/services/CameraDetectionStrategy.js
-used_by:
+used_by: 
   - src/application/services/CameraOrchestratorService.js
+source_exists: true
+runtime_role: camera_detection_strategy_service
+contour_primary: THAL-GATE
+contour_secondary: SAL-SWITCH
+role_group: sensory_ingress
+narrative_role: "sensory ingress gateway"
 ---
 
 # CameraDetectionStrategy

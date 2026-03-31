@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/effects.config.js
-used_by:
+used_by: 
   - src/application/services/EffectsManager.js
   - src/presentation/widgets/PanelEffectsWidget.js
+source_exists: true
+runtime_role: effects_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # effects.config.js

@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/ports/IConfigLoader.js
-used_by:
+used_by: 
   - src/adapters/config/FetchConfigAdapter.js
+source_exists: true
+runtime_role: i_config_loader_port
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # IConfigLoader Port

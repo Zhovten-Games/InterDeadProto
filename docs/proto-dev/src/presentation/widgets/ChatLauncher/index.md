@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/ChatLauncher/index.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
   - src/application/services/ChatLauncherService.js
+source_exists: true
+runtime_role: index_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # ChatLauncherWidget

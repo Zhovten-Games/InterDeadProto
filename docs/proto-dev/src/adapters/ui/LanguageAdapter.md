@@ -1,22 +1,28 @@
 ---
 domains: []
-emits:
+emits: 
   - LANGUAGE_CHANGED
 implements: []
-imports:
+imports: 
   - src/adapters/ui/LocalizationAdapter.js
   - src/core/events/NullEventBus.js
   - src/core/logging/NullLogger.js
   - src/i18n/locales/combined/locales.js
   - src/ports/ILanguage.js
   - src/utils/emojiProtocol.js
-listens:
+listens: 
   - LANGUAGE_CHANGED
 owns: []
 schemaVersion: 1
 source: src/adapters/ui/LanguageAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: language_adapter
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # LanguageAdapter

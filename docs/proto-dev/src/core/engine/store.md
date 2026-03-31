@@ -2,17 +2,23 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/core/engine/reducer.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/core/engine/store.js
-used_by:
+used_by: 
   - src/adapters/ui/ViewAdapter.js
   - src/application/services/CameraOrchestratorService.js
   - src/application/services/DialogInputGateService.js
   - src/application/services/DialogOrchestratorService.js
+source_exists: true
+runtime_role: store_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # store.js

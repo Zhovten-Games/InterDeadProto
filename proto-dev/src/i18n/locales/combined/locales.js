@@ -22,6 +22,9 @@ export default {
     create_selfie: 'Create a selfie',
     finish: 'Finish',
     loading: 'Loading...',
+    overlay_contact_loading: 'Contact',
+    overlay_contact_ai: 'Contact with NIRO',
+    overlay_contact_blocked: 'Contact suspended',
     ai_contact_line: 'CONTACT ...',
     ai_loading_status: 'AI is loading ☕. The camera will be available after loading.',
     ai_failed_status: 'AI failed to load. Retry?',
@@ -32,9 +35,12 @@ export default {
     ai_loading_badge: 'AI',
     launcher_auth_required: 'Sign in to open the chat',
     app_already_open: 'Application already open in another tab',
+    app_already_open_warning:
+      'The protection system blocked startup in a second tab. If this is a false positive, you can disable this protection. Running the app in two tabs at once may cause issues.',
+    app_already_open_disable_guard: 'Disable protection and continue',
     searching: 'Searching...',
     checking: 'Checking...',
-    object_not_found: 'Object not found, please try again.'
+    object_not_found: 'Object not found, please try again.',
   },
   ru: {
     welcome: 'Добро пожаловать!',
@@ -59,6 +65,9 @@ export default {
     create_selfie: 'Сделать селфи',
     finish: 'Завершить',
     loading: 'Загрузка...',
+    overlay_contact_loading: 'Контакт',
+    overlay_contact_ai: 'Контакт с НИРО',
+    overlay_contact_blocked: 'Контакт приостановлен',
     ai_contact_line: 'CONTACT ...',
     ai_loading_status: 'ИИ загружается ☕. Камера будет доступна после загрузки.',
     ai_failed_status: 'ИИ не загрузился. Повторить?',
@@ -69,9 +78,12 @@ export default {
     ai_loading_badge: 'ИИ',
     launcher_auth_required: 'Войдите, чтобы открыть чат',
     app_already_open: 'Приложение уже открыто в другой вкладке',
+    app_already_open_warning:
+      'Наша система защиты заблокировала запуск во второй вкладке. Если это ложное срабатывание, вы можете отключить защиту. При одновременной работе в двух вкладках возможны проблемы.',
+    app_already_open_disable_guard: 'Отключить защиту и продолжить',
     searching: 'Поиск...',
     checking: 'Проверка...',
-    object_not_found: 'Объект не найден, повторите попытку.'
+    object_not_found: 'Объект не найден, повторите попытку.',
   },
   uk: {
     welcome: 'Ласкаво просимо!',
@@ -96,6 +108,9 @@ export default {
     create_selfie: 'Зробити селфі',
     finish: 'Завершити',
     loading: 'Завантаження...',
+    overlay_contact_loading: 'Контакт',
+    overlay_contact_ai: 'Контакт із НІРО',
+    overlay_contact_blocked: 'Контакт призупинено',
     ai_contact_line: 'CONTACT ...',
     ai_loading_status: 'ШІ завантажується ☕. Камера буде доступна після завантаження.',
     ai_failed_status: 'ШІ не завантажився. Повторити?',
@@ -106,9 +121,12 @@ export default {
     ai_loading_badge: 'ШІ',
     launcher_auth_required: 'Увійдіть, щоб відкрити чат',
     app_already_open: 'Застосунок вже відкритий в іншій вкладці',
+    app_already_open_warning:
+      'Наша система захисту заблокувала запуск у другій вкладці. Якщо це хибне спрацювання, ви можете вимкнути захист. Одночасна робота у двох вкладках може спричинити проблеми.',
+    app_already_open_disable_guard: 'Вимкнути захист і продовжити',
     searching: 'Пошук...',
     checking: 'Перевірка...',
-    object_not_found: "Об'єкт не знайдено, повторіть спробу."
+    object_not_found: "Об'єкт не знайдено, повторіть спробу.",
   },
   ja: {
     welcome: 'ようこそ',
@@ -133,6 +151,9 @@ export default {
     create_selfie: 'セルフィーを作成',
     finish: '完了',
     loading: '読み込み中...',
+    overlay_contact_loading: 'コンタクト',
+    overlay_contact_ai: 'NIROとのコンタクト',
+    overlay_contact_blocked: 'コンタクト一時停止',
     ai_contact_line: 'CONTACT ...',
     ai_loading_status: 'AIを読み込み中です ☕。読み込み後にカメラが利用できます。',
     ai_failed_status: 'AIの読み込みに失敗しました。再試行しますか？',
@@ -143,8 +164,11 @@ export default {
     ai_loading_badge: 'AI',
     launcher_auth_required: 'チャットを開くにはサインインしてください',
     app_already_open: 'アプリは別のタブで既に開かれています',
+    app_already_open_warning:
+      '保護システムが2つ目のタブでの起動をブロックしました。誤検知の可能性がある場合は、この保護を無効化できます。同時に2つのタブで使用すると問題が発生する可能性があります。',
+    app_already_open_disable_guard: '保護を無効化して続行',
     searching: '検索中...',
     checking: '確認中...',
-    object_not_found: '対象が見つかりませんでした。もう一度お試しください。'
-  }
+    object_not_found: '対象が見つかりませんでした。もう一度お試しください。',
+  },
 };

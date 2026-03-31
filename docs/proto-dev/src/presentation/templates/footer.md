@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/presentation/templates/footer.html
-used_by:
+used_by: 
   - src/presentation/adapters/GlobalViewPresenter.js
+source_exists: true
+runtime_role: footer_template
+contour_primary: DMN-NARRATIVE
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "narrative context builder"
 ---
 
 # footer.html

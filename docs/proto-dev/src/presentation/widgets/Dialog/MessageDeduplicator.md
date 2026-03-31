@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/utils/messageFingerprint.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/Dialog/MessageDeduplicator.js
-used_by:
+used_by: 
   - src/presentation/widgets/Dialog/index.js
+source_exists: true
+runtime_role: message_deduplicator_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # MessageDeduplicator

@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/button-state.config.js
-used_by:
+used_by: 
   - src/application/services/StateService.js
+source_exists: true
+runtime_role: button_state_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Button State Configuration

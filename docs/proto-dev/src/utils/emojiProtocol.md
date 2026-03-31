@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/utils/emojiProtocol.js
-used_by:
+used_by: 
   - src/adapters/ui/LanguageAdapter.js
   - src/presentation/components/dialog/animations/TextAnimationManager.js
+source_exists: true
+runtime_role: emoji_protocol_utility
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # emojiProtocol utilities

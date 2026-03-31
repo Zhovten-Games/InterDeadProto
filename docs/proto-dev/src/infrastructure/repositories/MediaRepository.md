@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/infrastructure/repositories/MediaRepository.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: media_repository
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # MediaRepository

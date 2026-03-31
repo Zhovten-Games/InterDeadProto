@@ -7,12 +7,18 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/core/engine/actions.js
-used_by:
+used_by: 
   - src/application/services/CameraOrchestratorService.js
   - src/application/services/DialogInputGateService.js
   - src/application/services/DialogOrchestratorService.js
   - src/core/dsl/driver.js
   - src/core/engine/reducer.js
+source_exists: true
+runtime_role: actions_core
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # actions.js

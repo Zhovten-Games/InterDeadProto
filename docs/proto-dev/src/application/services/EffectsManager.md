@@ -1,15 +1,15 @@
 ---
 domains: []
-emits:
+emits: 
   - EFFECT_DEFAULTS_SAVED
   - EFFECT_STYLE_UPDATED
 implements: []
-imports:
+imports: 
   - src/config/effects.config.js
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/core/logging/NullLogger.js
-listens:
+listens: 
   - APP_RESET_COMPLETED
   - DUALITY_STAGE_STARTED
   - DUALITY_STARTED
@@ -19,8 +19,14 @@ listens:
 owns: []
 schemaVersion: 1
 source: src/application/services/EffectsManager.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: effects_manager_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # EffectsManager

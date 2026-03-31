@@ -1,17 +1,23 @@
 ---
 domains: []
-emits:
+emits: 
   - log
 implements: []
-imports:
+imports: 
   - src/ports/ILogging.js
-listens:
+listens: 
   - log
 owns: []
 schemaVersion: 1
 source: src/adapters/logging/LoggingAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: logging_adapter
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # LoggingAdapter

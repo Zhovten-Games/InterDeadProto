@@ -1,18 +1,24 @@
 ---
 domains: []
-emits:
+emits: 
   - log
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
-listens:
+listens: 
   - STATUS_SHOW
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/StatusWidget.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
+source_exists: true
+runtime_role: status_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # StatusWidget

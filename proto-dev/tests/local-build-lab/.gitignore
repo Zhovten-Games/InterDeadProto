@@ -8,3 +8,6 @@ logs/
 # Optional local outputs if redirected into this folder
 public/
 out/
+
+# Local package workspace artifacts
+packages-workspace/

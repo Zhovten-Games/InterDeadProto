@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/core/requirements/CameraRequirement.js
-used_by:
+used_by: 
   - src/core/requirements/QuestActivationRequirement.js
+source_exists: true
+runtime_role: camera_requirement_core
+contour_primary: THAL-GATE
+contour_secondary: none
+role_group: sensory_ingress
+narrative_role: "sensory ingress gateway"
 ---
 
 # CameraRequirement

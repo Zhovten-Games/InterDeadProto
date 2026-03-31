@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/drum.config.js
-used_by:
+used_by: 
   - src/application/services/DrumLayoutService.js
+source_exists: true
+runtime_role: drum_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Drum Configuration

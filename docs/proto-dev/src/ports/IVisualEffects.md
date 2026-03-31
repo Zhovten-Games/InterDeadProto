@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/ports/IVisualEffects.js
-used_by:
+used_by: 
   - src/adapters/ui/VisualEffectsAdapter.js
+source_exists: true
+runtime_role: i_visual_effects_port
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # IVisualEffects Port

@@ -2,19 +2,25 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/application/services/GhostRebootCheckpointService.js
   - src/application/services/DialogOrchestratorService.js
   - src/application/services/ChatLauncherService.js
   - src/application/services/AiWarmupService.js
 listens: []
-owns:
+owns: 
   - GhostRebootCheckpointService
   - DialogOrchestratorService
 schemaVersion: 1
 source: src/infrastructure/bootstrap/modules/ApplicationModule.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/Bootstrap.js
+source_exists: true
+runtime_role: application_module_bootstrap
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # ApplicationModule

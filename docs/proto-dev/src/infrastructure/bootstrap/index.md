@@ -1,15 +1,21 @@
 ---
 domains: []
-emits:
+emits: 
   - SCREEN_CHANGE
 implements: []
-imports:
+imports: 
   - src/infrastructure/bootstrap/composeApplication.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/infrastructure/bootstrap/index.js
 used_by: []
+source_exists: true
+runtime_role: index_bootstrap
+contour_primary: THAL-GATE
+contour_secondary: none
+role_group: sensory_ingress
+narrative_role: "sensory ingress gateway"
 ---
 
 # Bootstrap Index

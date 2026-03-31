@@ -1,17 +1,17 @@
 ---
 domains: []
-emits:
+emits: 
   - CAMERA_VIEW_OPENED
   - DIALOG_WIDGET_READY
   - PROFILE_IMPORT_SELECTED
   - PROFILE_EXPORT_CONFIRMED
   - STATUS_SHOW
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/presentation/components/forms/TextFieldAnimator.js
-listens:
+listens: 
   - VIEW_RENDER_REQUESTED
   - VIEW_CAMERA_RENDER_REQUESTED
   - PROFILE_IMPORT_REQUESTED
@@ -20,8 +20,14 @@ listens:
 owns: []
 schemaVersion: 1
 source: src/presentation/adapters/GlobalViewPresenter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
+source_exists: true
+runtime_role: global_view_presenter_adapter
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # GlobalViewPresenter

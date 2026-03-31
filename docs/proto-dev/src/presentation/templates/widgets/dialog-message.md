@@ -8,6 +8,12 @@ owns: []
 schemaVersion: 1
 source: src/presentation/templates/widgets/dialog-message.html
 used_by: []
+source_exists: true
+runtime_role: dialog_message_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # Dialog Message Template

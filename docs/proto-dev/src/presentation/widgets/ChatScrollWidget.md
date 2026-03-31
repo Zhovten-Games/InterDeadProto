@@ -1,21 +1,27 @@
 ---
 domains: []
-emits:
+emits: 
   - CHAT_LOAD_OLDER
 implements: []
-imports:
+imports: 
   - src/config/index.js
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
-listens:
+listens: 
   - CHAT_SCROLL_DOWN
   - CHAT_SCROLL_UP
   - SCREEN_CHANGE
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/ChatScrollWidget.js
-used_by:
+used_by: 
   - src/application/services/ChatScrollService.js
+source_exists: true
+runtime_role: chat_scroll_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # ChatScrollWidget

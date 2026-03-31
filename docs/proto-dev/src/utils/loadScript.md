@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/utils/loadScript.js
-used_by:
+used_by: 
   - src/adapters/ai/DetectionAdapter.js
+source_exists: true
+runtime_role: load_script_utility
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # loadScript

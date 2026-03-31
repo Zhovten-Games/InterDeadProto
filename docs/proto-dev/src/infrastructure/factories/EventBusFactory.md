@@ -2,15 +2,21 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/adapters/logging/EventBusAdapter.js
   - src/utils/Observer.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/infrastructure/factories/EventBusFactory.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: event_bus_factory
+contour_primary: SAL-SWITCH
+contour_secondary: none
+role_group: salience_threat
+narrative_role: "salience routing switch"
 ---
 
 # EventBusFactory

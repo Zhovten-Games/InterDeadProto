@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/MessengerPostsWidget.js
-used_by:
+used_by: 
   - src/presentation/adapters/GlobalViewPresenter.js
+source_exists: true
+runtime_role: messenger_posts_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # MessengerPostsWidget

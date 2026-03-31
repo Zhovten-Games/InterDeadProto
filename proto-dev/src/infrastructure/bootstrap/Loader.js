@@ -12,6 +12,8 @@ const NULL_CHANNEL = {
   removeEventListener: () => {},
 };
 
+const MULTI_TAB_GUARD_BYPASS_KEY = 'interdead_disable_multi_tab_guard';
+
 /**
  * Loader emits overlay events during application boot.
  * It no longer touches the DOM directly; instead, a view
@@ -53,6 +55,7 @@ export default class Loader {
 
     // Probe whether persistence actually works (embed/privacy modes may silently break it).
     this.storageOk = this._probePersistence();
+    this.multiTabGuardBypassed = this._isMultiTabGuardBypassed();
 
     // BroadcastChannel message handler: accept both legacy string messages and structured messages.
     this._onChannelMessage((e) => {
@@ -62,12 +65,14 @@ export default class Loader {
       if (msg === 'start') {
         // Never write to storage here (it creates false positives when storage is blocked).
         // Only show "already open" if we are NOT the active tab.
+        if (this.multiTabGuardBypassed) return;
         if (this.storageOk && !this._isMyTabActive()) {
           this.bus.emit({ type: 'OVERLAY_SHOW', i18nKey: 'app_already_open' });
         }
         return;
       }
       if (msg === 'done') {
+        if (this.multiTabGuardBypassed) return;
         if (this.storageOk && !this._isMyTabActive()) {
           this.bus.emit({ type: 'OVERLAY_HIDE' });
         }
@@ -92,6 +97,7 @@ export default class Loader {
 
       if (msg.type === 'BOOT_START') {
         // Optional UX: another tab started booting.
+        if (this.multiTabGuardBypassed) return;
         if (!this._isMyTabActive()) {
           this.bus.emit({ type: 'OVERLAY_SHOW', i18nKey: 'app_already_open' });
         }
@@ -100,6 +106,7 @@ export default class Loader {
 
       if (msg.type === 'BOOT_DONE') {
         // Optional UX: another tab finished booting.
+        if (this.multiTabGuardBypassed) return;
         if (!this._isMyTabActive()) {
           this.bus.emit({ type: 'OVERLAY_HIDE' });
         }
@@ -108,7 +115,7 @@ export default class Loader {
 
     // Storage events only make sense when persistence is actually working.
     window.addEventListener('storage', (e) => {
-      if (!this.storageOk) return;
+      if (!this.storageOk || this.multiTabGuardBypassed) return;
 
       if (e.key === 'activeTab') {
         this._handleStorageOverlayUpdate(e.newValue);
@@ -143,7 +150,9 @@ export default class Loader {
 
     try {
       // 1) Decide whether we should boot or show "already open".
-      if (!this.storageOk) {
+      if (this.multiTabGuardBypassed) {
+        this.logger?.warn?.('[Loader] Multi-tab guard bypass is active for this browser');
+      } else if (!this.storageOk) {
         const foreignLeader = await this._detectForeignLeader();
         if (foreignLeader) {
           this.bus.emit({ type: 'OVERLAY_SHOW', i18nKey: 'app_already_open' });
@@ -157,11 +166,26 @@ export default class Loader {
         const active = this._getActiveTabState(); // removes stale on read
         const loading = this._getLoadingState(); // removes stale on read
 
-        // Another active tab OR another loading tab => block.
-        if ((active && active.value !== this.tabId) || loading) {
+        const loadingOwner = typeof loading?.value === 'string' ? loading.value : '';
+        const loadingIsMine = loadingOwner === `boot:${this.tabId}`;
+
+        if (active && active.value !== this.tabId) {
           this.bus.emit({ type: 'OVERLAY_SHOW', i18nKey: 'app_already_open' });
           this.bootState = 'idle';
           return;
+        }
+
+        if (loading) {
+          if (loadingIsMine) {
+            // Own marker after quick reload/recovery.
+          } else if (!active) {
+            // Stale loading marker from a crashed/frozen tab.
+            this._clearLoadingState();
+          } else {
+            this.bus.emit({ type: 'OVERLAY_SHOW', i18nKey: 'app_already_open' });
+            this.bootState = 'idle';
+            return;
+          }
         }
 
         // Claim leadership via localStorage heartbeat.
@@ -329,15 +353,26 @@ export default class Loader {
   }
 
   _markLoadingInProgress() {
+    if (this.multiTabGuardBypassed) return;
     this._writeState('appLoading', `boot:${this.tabId}`);
   }
 
   _clearLoadingState() {
+    if (this.multiTabGuardBypassed) return;
     this.storage?.remove('appLoading');
   }
 
   _clearActiveTab() {
+    if (this.multiTabGuardBypassed) return;
     this.storage?.remove('activeTab');
+  }
+
+  _isMultiTabGuardBypassed() {
+    try {
+      return window?.localStorage?.getItem(MULTI_TAB_GUARD_BYPASS_KEY) === '1';
+    } catch {
+      return false;
+    }
   }
 
   _readFreshState(key) {

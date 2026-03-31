@@ -1,20 +1,26 @@
 ---
 domains: []
-emits:
+emits: 
   - AI_LOADER_HIDE_REQUESTED
   - AI_RETRY_REQUESTED
 implements: []
-imports:
+imports: 
   - src/core/events/constants.js
   - src/presentation/components/dialog/animations/TypewriterCascadeEffect.js
-listens:
+listens: 
   - AI_LOADER_VISIBILITY_CHANGED
   - AI_STATE_CHANGED
 owns: []
 schemaVersion: 1
 source: src/presentation/widgets/AiLoaderView.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/PresentationModule.js
+source_exists: true
+runtime_role: ai_loader_view_widget
+contour_primary: INS-BODY
+contour_secondary: none
+role_group: body_regulation
+narrative_role: "embodied feedback channel"
 ---
 
 # AiLoaderView

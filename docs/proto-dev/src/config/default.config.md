@@ -2,14 +2,20 @@
 domains: []
 emits: []
 implements: []
-imports:
+imports: 
   - src/config/chat.config.js
 listens: []
 owns: []
 schemaVersion: 1
 source: src/config/default.config.js
-used_by:
+used_by: 
   - src/config/index.js
+source_exists: true
+runtime_role: default_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Default Application Configuration

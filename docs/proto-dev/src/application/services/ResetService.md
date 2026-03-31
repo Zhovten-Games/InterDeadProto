@@ -1,19 +1,25 @@
 ---
 domains: []
-emits:
+emits: 
   - APP_RESET_COMPLETED
   - SCREEN_CHANGE
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
-listens:
+listens: 
   - APP_RESET_REQUESTED
 owns: []
 schemaVersion: 1
 source: src/application/services/ResetService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: reset_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # ResetService

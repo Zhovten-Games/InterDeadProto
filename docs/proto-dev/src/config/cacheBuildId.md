@@ -7,10 +7,16 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/cacheBuildId.js
-used_by:
+used_by: 
   - src/adapters/ai/DetectionAdapter.js
   - src/infrastructure/bootstrap/ServiceWorkerRegistrar.js
   - src/config/assetsBaseUrl.js
+source_exists: true
+runtime_role: cache_build_id_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Cache Build ID

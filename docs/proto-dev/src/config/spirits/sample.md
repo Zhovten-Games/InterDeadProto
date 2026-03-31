@@ -8,6 +8,12 @@ owns: []
 schemaVersion: 1
 source: src/config/spirits/sample.json
 used_by: []
+source_exists: true
+runtime_role: sample_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Sample Spirit JSON

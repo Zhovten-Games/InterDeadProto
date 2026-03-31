@@ -1,12 +1,12 @@
 ---
 domains: []
-emits:
+emits: 
   - DIALOG_CLEAR
   - EVENT_MESSAGE_READY
   - GHOST_RESET_COMPLETED
   - GHOST_REBOOT_COMPLETED
 implements: []
-imports:
+imports: 
   - src/application/services/DialogHistoryBuffer.js
   - src/application/services/GhostRebootCheckpointService.js
   - src/config/flags.js
@@ -18,7 +18,7 @@ imports:
   - src/core/events/constants.js
   - src/core/logging/NullLogger.js
   - src/utils/messageFingerprint.js
-listens:
+listens: 
   - APP_RESET_COMPLETED
   - DIALOG_WIDGET_READY
   - DUALITY_COMPLETED
@@ -32,8 +32,14 @@ listens:
 owns: []
 schemaVersion: 1
 source: src/application/services/DialogOrchestratorService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: dialog_orchestrator_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # DialogOrchestratorService

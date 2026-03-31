@@ -18,6 +18,8 @@
   "finish": "Завершити",
   "loading": "Завантаження...",
   "app_already_open": "Застосунок вже відкритий в іншій вкладці",
+  "app_already_open_warning": "Наша система захисту заблокувала запуск у другій вкладці. Якщо це хибне спрацювання, ви можете вимкнути захист. Одночасна робота у двох вкладках може спричинити проблеми.",
+  "app_already_open_disable_guard": "Вимкнути захист і продовжити",
   "searching": "Пошук...",
   "open_camera": "Камера",
   "open_messenger": "Відкрити месенджер",
@@ -153,5 +155,8 @@
   "emoji_protocol.policy_label": "ПОЛІТИКА",
   "emoji_protocol.output_label": "ВИХІД",
   "reset_modal_reboot": "Ребут поточного духа",
-  "chat_new_messages": "Є нові повідомлення"
+  "chat_new_messages": "Є нові повідомлення",
+  "overlay_contact_loading": "Контакт",
+  "overlay_contact_ai": "Контакт із НІРО",
+  "overlay_contact_blocked": "Контакт призупинено"
 }

@@ -7,8 +7,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/ports/IItemDetection.js
-used_by:
+used_by: 
   - src/adapters/ai/ItemDetectionAdapter.js
+source_exists: true
+runtime_role: i_item_detection_port
+contour_primary: THAL-GATE
+contour_secondary: SAL-SWITCH
+role_group: sensory_ingress
+narrative_role: "sensory ingress gateway"
 ---
 
 # IItemDetection Port

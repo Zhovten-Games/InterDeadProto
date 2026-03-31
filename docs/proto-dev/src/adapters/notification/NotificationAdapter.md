@@ -1,9 +1,9 @@
 ---
 domains: []
-emits:
+emits: 
   - STATUS_SHOW
 implements: []
-imports:
+imports: 
   - src/core/events/NullEventBus.js
   - src/core/events/constants.js
   - src/ports/INotification.js
@@ -11,8 +11,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/adapters/notification/NotificationAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: notification_adapter
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # NotificationAdapter

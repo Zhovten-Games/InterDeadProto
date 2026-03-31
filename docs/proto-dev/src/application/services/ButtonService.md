@@ -1,6 +1,6 @@
 ---
 domains: []
-emits:
+emits: 
   - APP_RESET_REQUESTED
   - BUTTONS_RENDER
   - NEXT_BUTTON_ENABLE
@@ -10,16 +10,22 @@ emits:
   - capture-btn
   - enter-name
 implements: []
-imports:
+imports: 
   - src/core/events/constants.js
   - src/ports/IEventBus.js
-listens:
+listens: 
   - BUTTON_ACTION
 owns: []
 schemaVersion: 1
 source: src/application/services/ButtonService.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/ApplicationModule.js
+source_exists: true
+runtime_role: button_service
+contour_primary: FPN-COMMAND
+contour_secondary: none
+role_group: executive_control
+narrative_role: "executive coordination hub"
 ---
 
 # ButtonService

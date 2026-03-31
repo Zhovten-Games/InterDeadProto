@@ -7,9 +7,15 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/templateBaseUrl.js
-used_by:
+used_by: 
   - src/adapters/ui/TemplateAdapter.js
   - src/presentation/widgets/ControlPanel/index.js
+source_exists: true
+runtime_role: template_base_url_config
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: "context memory index"
 ---
 
 # Template Base URL Resolver

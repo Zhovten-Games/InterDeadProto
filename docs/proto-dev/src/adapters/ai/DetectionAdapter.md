@@ -1,11 +1,11 @@
 ---
 domains: []
-emits:
+emits: 
   - AI_STATE_CHANGED
   - BUTTON_STATE_UPDATED
-implements:
+implements: 
   - src/ports/IDetection.js
-imports:
+imports: 
   - src/adapters/ai/ModelLoadStrategy.js
   - src/config/assetsBaseUrl.js
   - src/config/cacheBuildId.js
@@ -17,8 +17,14 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/adapters/ai/DetectionAdapter.js
-used_by:
+used_by: 
   - src/infrastructure/bootstrap/modules/InfrastructureModule.js
+source_exists: true
+runtime_role: detection_adapter
+contour_primary: THAL-GATE
+contour_secondary: none
+role_group: sensory_ingress
+narrative_role: "sensory ingress gateway"
 ---
 
 # DetectionAdapter

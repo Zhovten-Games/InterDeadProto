@@ -15,6 +15,8 @@ export default class FullAppBootstrapper {
     }
 
     this.container.resolve('Logging').boot();
+    this.container.resolve('UnifiedOverlayView').boot();
+    this.container.resolve('BootOverlayView').boot();
 
     await this.container.resolve('Loader').load(async () => {
       await this.bootManager.bootAll();
