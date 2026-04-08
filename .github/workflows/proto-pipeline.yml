@@ -250,3 +250,34 @@ jobs:
           clean: true
           single-commit: true
           token: ${{ secrets.INTERDEAD_PROTO_DEPLOY_TOKEN }}
+
+  deploy-itch:
+    name: Deploy dist to itch.io via Butler
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+      - name: Install Butler
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L "https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default" -o butler.zip
+          unzip -o butler.zip -d butler-bin
+          chmod +x butler-bin/butler
+          echo "$PWD/butler-bin" >> "$GITHUB_PATH"
+
+      - name: Push build to itch.io
+        shell: bash
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          set -euo pipefail
+          butler -V
+          butler push dist zhovten-games/interdead:web
