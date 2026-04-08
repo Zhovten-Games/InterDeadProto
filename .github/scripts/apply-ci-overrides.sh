@@ -200,9 +200,6 @@ if 'if (!fromModule) return normalized;' in assets_text:
 
     const fromLocation = this._resolveFromLocationUrl();
     if (fromLocation) {
-      if (normalized === 'assets/' && fromLocation.endsWith('/assets/')) {
-        return fromLocation;
-      }
       try {
         return new URL(normalized, fromLocation).toString();
       } catch (_error) {
@@ -217,12 +214,10 @@ if 'if (!fromModule) return normalized;' in assets_text:
     if (!baseUrl) return 'assets/';
     const normalized = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
     if (this._isAbsolute(normalized) || normalized.startsWith('/')) return normalized;
+    if (normalized === 'assets/') return normalized;
 
     const fromModule = this._resolveFromModuleUrl();
     if (fromModule) {
-      if (normalized === 'assets/' && fromModule.endsWith('/assets/')) {
-        return fromModule;
-      }
       try {
         return new URL(normalized, fromModule).toString();
       } catch (_error) {
@@ -232,9 +227,6 @@ if 'if (!fromModule) return normalized;' in assets_text:
 
     const fromLocation = this._resolveFromLocationUrl();
     if (fromLocation) {
-      if (normalized === 'assets/' && fromLocation.endsWith('/assets/')) {
-        return fromLocation;
-      }
       try {
         return new URL(normalized, fromLocation).toString();
       } catch (_error) {
@@ -250,6 +242,9 @@ if 'if (!fromModule) return normalized;' in assets_text:
 if 'if (!fromModule) return normalized;' in assets_text:
     raise RuntimeError('AssetsBaseUrlResolver hotfix was not applied in workspace override script.')
 
+if "if (normalized === 'assets/') return normalized;" not in assets_text:
+    raise RuntimeError("Explicit assets/ base preservation was not applied in workspace override script.")
+
 if 'const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);' not in assets_text:
     raise RuntimeError('Runtime root normalization hotfix for location URL was not applied.')
 
@@ -257,6 +252,20 @@ if 'this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1))' not in a
     raise RuntimeError('Runtime root normalization hotfix for module URL was not applied.')
 
 assets_path.write_text(assets_text)
+
+db_path = Path('proto-dev/src/adapters/database/DatabaseAdapter.js')
+db_text = db_path.read_text()
+db_text = ensure_once(
+    db_text,
+    "      const initOptions = {\n        locateFile: (file) => `${basePath}${file}`,\n      };\n",
+    "      const initOptions = {\n        locateFile: (file) => `${basePath}${file}`,\n      };\n      this.logger?.info?.(`[DatabaseService] SQL.js base path: ${basePath}`);\n",
+)
+db_text = ensure_once(
+    db_text,
+    "      if (!this._initSqlJs && this._isBrowserRuntime()) {\n        initOptions.wasmBinary = await this._fetchWasmBinary(`${basePath}sql-wasm.wasm`);\n      }\n",
+    "      if (!this._initSqlJs && this._isBrowserRuntime()) {\n        const wasmUrl = `${basePath}sql-wasm.wasm`;\n        this.logger?.info?.(`[DatabaseService] SQL.js wasm URL: ${wasmUrl}`);\n        initOptions.wasmBinary = await this._fetchWasmBinary(wasmUrl);\n      }\n",
+)
+db_path.write_text(db_text)
 
 PY
 

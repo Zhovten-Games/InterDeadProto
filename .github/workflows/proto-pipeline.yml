@@ -48,7 +48,6 @@ jobs:
           VITE_CACHE_BUILD_ID: ${{ github.sha }}
         run: npm run build:deploy
 
-
       - name: Mirror static assets to dist
         shell: bash
         run: |
@@ -192,6 +191,23 @@ jobs:
           perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' proto-dev/dist/**/*.js || true
           rm -f proto-dev/dist/**/*.map || true
 
+      - name: Final fail-fast check for broken asset prefixes in dist
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if rg -n "/s/assets/" "proto-dev/dist"; then
+            echo "Detected forbidden '/s/assets/' paths in final dist output."
+            exit 1
+          fi
+
+          if rg -n "/s/assets/.*sql-wasm\.wasm|sql-wasm\.wasm.*?/s/assets/" "proto-dev/dist"; then
+            echo "Detected SQL.js wasm reference with forbidden '/s/assets/' prefix."
+            exit 1
+          fi
+
+          echo "No forbidden '/s/assets/' prefixes detected in final dist."
+
       - name: Verify key files
         shell: bash
         run: |
@@ -268,7 +284,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl -L "https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default" -o butler.zip
+          # Butler pinned version — update manually when needed.
+          BUTLER_URL="https://broth.itch.zone/butler/linux-amd64/v15.22.0/archive/default"
+          curl -fL "$BUTLER_URL" -o butler.zip
+
           unzip -o butler.zip -d butler-bin
           chmod +x butler-bin/butler
           echo "$PWD/butler-bin" >> "$GITHUB_PATH"
