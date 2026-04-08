@@ -157,11 +157,10 @@ assets_text = ensure_method_exists(
     assets_text,
     '_normalizeRuntimeRoot(path)',
     """  _normalizeRuntimeRoot(path) {
-    const normalized = this._ensureTrailingSlash(path);
-    if (normalized === '/s/') return '/';
-    return normalized;
-  }
-""",
+        const normalized = this._ensureTrailingSlash(path);
+        return normalized.replace(/\\/s\\/$/, '/');
+    }
+    """
 )
 
 if "const appRoot = this._ensureTrailingSlash(url.pathname.slice(0, sourceIndex + 1));" in assets_text:
