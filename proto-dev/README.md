@@ -17,6 +17,7 @@ InterDeadProto `proto-dev` is a narrative-driven interface prototype (ES6 module
 - Source-level implementation docs (mirrors `proto-dev/src`): [`../docs/proto-dev/src`](../docs/proto-dev/src/)
 - Tests docs: [`../docs/proto-dev/tests`](../docs/proto-dev/tests/)
 - Assets docs: [`../docs/proto-dev/assets`](../docs/proto-dev/assets/)
+- Deployment policy and targets: [`../docs/proto-dev/deployment/README.md`](../docs/proto-dev/deployment/README.md)
 
 ## Scope notes
 
@@ -67,6 +68,13 @@ For implementation details see:
 - InterDeadIT loader script docs and source map.
 - Camera/iframe requirements: `InterDeadIT/docs/ui/interdead-embed-camera.md`.
 
+## Deployment compatibility policy
+
+Deployment compatibility rewrites are intentionally script-driven and are applied only in isolated workspaces/artifacts.
+Canonical ES module sources in `src/` must remain unchanged for host-specific path semantics.
+
+`proto-dev` deploys to both Cloudflare and itch.io, therefore path/root differences must be handled in pipeline scripts instead of source-level ad hoc edits.
+
 ## Local development
 
 Before every push, run the Local Build Lab pipeline directly from [`./tests/local-build-lab`](./tests/local-build-lab/README.md) and do not rely only on automated CI checks.
@@ -109,4 +117,3 @@ Invariant: the app has a single overlay host and deterministic final card state 
 - All overlay contact headers must come from i18n keys.
 - Contact headers must use technical style and start with the locale-equivalent of "Contact".
 - The no-JavaScript blocker is delivered via the `<noscript>` fallback in `index.html`.
-

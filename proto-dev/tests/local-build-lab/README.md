@@ -9,6 +9,13 @@ Local Build Lab is an isolated, non-production validation harness that reproduce
 - Keep local build artifacts disposable and isolated from source directories.
 - Attach local InterDeadCore packages selectively or in bulk for integration checks inside the isolated workspace.
 
+## Why path rewrites are script-driven (intentional policy)
+
+- Environment-specific path compatibility fixes are intentionally applied by shell scripts on build workspace/artifacts.
+- Canonical ES module sources in `proto-dev/src` are intentionally left unchanged for deployment-host differences.
+- This is not an accidental workaround; it is a stability policy to prevent source drift and make compatibility behavior auditable.
+- The same policy is used to guard against recurring malformed runtime paths (including historical `sassets/...` regressions).
+
 ## Boundaries
 
 - Project root remains the source of truth and is never rewritten by Local Build Lab scripts.
