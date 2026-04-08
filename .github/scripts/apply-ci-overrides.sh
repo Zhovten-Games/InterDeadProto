@@ -36,6 +36,7 @@ CONFIG_EOF
 
 python - <<'PY'
 from pathlib import Path
+import re
 
 def ensure_once(text: str, needle: str, replacement: str) -> str:
     if replacement in text:
@@ -139,78 +140,27 @@ if '_ensureTrailingSlash(path)' not in assets_text:
 
 if 'this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1))' not in assets_text:
     assets_text = assets_text.replace(
-        """    const sourceMarker = '/src/';
-    const sourceIndex = url.pathname.lastIndexOf(sourceMarker);
-    if (sourceIndex !== -1) {
-      const appRoot = this._ensureTrailingSlash(url.pathname.slice(0, sourceIndex + 1));
-      if (url.origin === 'null') return `${appRoot}assets/`;
-      return `${url.origin}${appRoot}assets/`;
-    }
-""",
-        """    const sourceMarker = '/src/';
-    const sourceIndex = url.pathname.lastIndexOf(sourceMarker);
-    if (sourceIndex !== -1) {
-      const appRoot = this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1));
-      if (url.origin === 'null') return `${appRoot}assets/`;
-      return `${url.origin}${appRoot}assets/`;
-    }
-""",
+        "const appRoot = this._ensureTrailingSlash(url.pathname.slice(0, sourceIndex + 1));",
+        "const appRoot = this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1));",
+    )
+    assets_text = assets_text.replace(
+        "const appRoot = url.pathname.slice(0, sourceIndex + 1);",
+        "const appRoot = this._normalizeRuntimeRoot(url.pathname.slice(0, sourceIndex + 1));",
     )
 
 if 'const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);' not in assets_text:
     assets_text = assets_text.replace(
-        """      const directoryPath = hasTrailingSlash
-        ? pathname
-        : looksLikeFile
-          ? pathname.slice(0, pathname.lastIndexOf('/') + 1)
-          : `${pathname}/`;
-      if (url.origin === 'null') return `${directoryPath}assets/`;
-      return `${url.origin}${directoryPath}assets/`;
-""",
-        """      const directoryPath = hasTrailingSlash
-        ? pathname
-        : looksLikeFile
-          ? pathname.slice(0, pathname.lastIndexOf('/') + 1)
-          : `${pathname}/`;
-      const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);
-      if (url.origin === 'null') return `${normalizedDirectory}assets/`;
-      return `${url.origin}${normalizedDirectory}assets/`;
-""",
+        "if (url.origin === 'null') return `${directoryPath}assets/`;\n      return `${url.origin}${directoryPath}assets/`;",
+        "const normalizedDirectory = this._normalizeRuntimeRoot(directoryPath);\n      if (url.origin === 'null') return `${normalizedDirectory}assets/`;\n      return `${url.origin}${normalizedDirectory}assets/`;",
     )
 
-if 'if (!fromModule) return normalized;' in assets_text:
-    assets_text = assets_text.replace(
-        """  _normalizeBaseUrl(baseUrl) {
-    if (!baseUrl) return 'assets/';
-    const normalized = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-    if (this._isAbsolute(normalized) || normalized.startsWith('/')) return normalized;
+assets_text, replacements_count = re.subn(
+    r"""  _normalizeBaseUrl\(baseUrl\) \{
+.*?
+  \}
 
-    const fromModule = this._resolveFromModuleUrl();
-    if (!fromModule) return normalized;
-
-    if (normalized === 'assets/' && fromModule.endsWith('/assets/')) {
-      return fromModule;
-    }
-
-    try {
-      return new URL(normalized, fromModule).toString();
-    } catch (_error) {
-      return normalized;
-    }
-
-    const fromLocation = this._resolveFromLocationUrl();
-    if (fromLocation) {
-      try {
-        return new URL(normalized, fromLocation).toString();
-      } catch (_error) {
-        // Keep original relative path as the final fallback.
-      }
-    }
-
-    return normalized;
-  }
-""",
-        """  _normalizeBaseUrl(baseUrl) {
+  _stripAssetsPrefix\(assetPath\) \{""",
+    """  _normalizeBaseUrl(baseUrl) {
     if (!baseUrl) return 'assets/';
     const normalized = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
     if (this._isAbsolute(normalized) || normalized.startsWith('/')) return normalized;
@@ -236,8 +186,14 @@ if 'if (!fromModule) return normalized;' in assets_text:
 
     return normalized;
   }
-""",
-    )
+
+  _stripAssetsPrefix(assetPath) {""",
+    assets_text,
+    count=1,
+    flags=re.S,
+)
+if replacements_count == 0:
+    raise RuntimeError('Failed to replace _normalizeBaseUrl method in workspace override script.')
 
 if 'if (!fromModule) return normalized;' in assets_text:
     raise RuntimeError('AssetsBaseUrlResolver hotfix was not applied in workspace override script.')
