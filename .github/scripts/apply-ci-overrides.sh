@@ -145,11 +145,10 @@ assets_text = assets_path.read_text()
 
 assets_text = ensure_method_exists(
     assets_text,
-    '_ensureTrailingSlash(path)',
     """  _ensureTrailingSlash(path) {
-    if (!path) return '/';
-    return path.endsWith('/') ? path : `${path}/`;
-""",
+        if (!path) return '/';
+        return path.endsWith('/') ? path : `${path}/`;
+    }"""
 )
 
 assets_text = ensure_method_exists(
