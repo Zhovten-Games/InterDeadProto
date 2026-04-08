@@ -285,7 +285,7 @@ jobs:
         run: |
           set -euo pipefail
           # Butler pinned version — update manually when needed.
-          BUTLER_URL="https://broth.itch.zone/butler/linux-amd64/v15.22.0/archive/default"
+          BUTLER_URL="https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default"
           curl -fL "$BUTLER_URL" -o butler.zip
 
           unzip -o butler.zip -d butler-bin
