@@ -22,13 +22,13 @@
 ║   Research and tooling repo referenced by the project; supporting   ║
 ║   framework work that may be mentioned from public docs.            ║
 ╠═════════════════════════════════════════════════════════════════════╣
-║                            INTERDEADIT                              ║
+║                          INTERDEADPROTO                             ║
 ║═════════════════════════════════════════════════════════════════════║
-║ InterDeadIT is the Hugo-powered entry point for the InterDead       ║
-║ universe and the game’s public-facing surface. It ships the         ║
-║ landing experience, localized content, UI controllers, and          ║
-║ mini-game shortcodes, while delegating identity, EFBD scoring,      ║
-║ and persistence to shared core packages and platform services.      ║
+║ InterDeadProto is the prototype-first foundation of InterDead:      ║
+║ a playable concept space where narrative loops, systems, and        ║
+║ UX ideas are validated early before entering full production.       ║
+║ It bundles rapid gameplay experiments, content scaffolding, and     ║
+║ integration hooks so shared platform services can evolve safely.    ║
 ║═════════════════════════════════╦═══════════════════════════════════║
 ║    ECHO OF AN UNFADING MEMORY   ║   INTERDEAD WIKI (ALL LANGUAGES)  ║
 ╠═════════════════════════════════╬═══════════════════════════════════╣
