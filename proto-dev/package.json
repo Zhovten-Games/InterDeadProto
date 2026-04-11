@@ -20,6 +20,6 @@
     "vite": "^5.4.11"
   },
   "dependencies": {
-    "@interdead/framework": "^0.1.0"
+    "@interdead/framework": "^0.1.1"
   }
 }

@@ -29,11 +29,12 @@ export default class LanguageService extends ILanguage {
   }
 
   async boot() {
-    this.localization.setLanguage(this.current);
-    this.locales = { ...combinedLocales };
     if (this.storage) {
       this.current = this.storage.load('language') || 'en';
     }
+    this.localization.setLanguage(this.current);
+    this.locales = { ...combinedLocales };
+    this._syncDocumentLanguage(this.current);
     this.bus.subscribe(this._handler);
   }
 
@@ -59,10 +60,18 @@ export default class LanguageService extends ILanguage {
   setLanguage(code) {
     this.current = code;
     this.localization.setLanguage(code);
+    this._syncDocumentLanguage(code);
     if (this.storage) {
       this.storage.save('language', code);
     }
     this.bus.emit({ type: 'LANGUAGE_CHANGED', payload: { code } });
+  }
+
+  _syncDocumentLanguage(code) {
+    if (typeof document === 'undefined') return;
+    const normalizedCode =
+      typeof code === 'string' && code.trim().length > 0 ? code.trim().toLowerCase() : 'en';
+    document.documentElement?.setAttribute('lang', normalizedCode);
   }
 
   async applyLanguage(container = document) {

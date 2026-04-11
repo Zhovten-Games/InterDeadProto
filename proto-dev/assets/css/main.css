@@ -1,5 +1,6 @@
 @import url('https://fonts.cdnfonts.com/css/calling-code'); /* font-family: 'Calling Code', sans-serif; */
 @import url('https://fonts.googleapis.com/css2?family=Pirata+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Triodion&display=swap');
 /* Consolidated styles from hugr.css and reset.css */
 
 :root {
@@ -82,16 +83,22 @@
   --selection-fg: #eaffec;
   --font-body: 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono', monospace;
   --font-heading: 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono', sans-serif;
-  --color-link: #cda24a;
-  --color-link-hover: #f0c96a;
-  --color-link-focus: #ffe6a3;
-  --color-link-visited: #8c6b2f;
-  --color-link-active: #b8842f;
+  --color-link: #e53935;
+  --color-link-hover: #ff5a4f;
+  --color-link-focus: #ff8a80;
+  --color-link-visited: #c62828;
+  --color-link-active: #d32f2f;
   --transition-fast: 0.2s ease;
 }
 
 html[lang='en'] {
   --font-heading: 'Pirata One', 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono',
+    sans-serif;
+}
+
+html[lang='ru'],
+html[lang='uk'] {
+  --font-heading: 'Triodion', 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono',
     sans-serif;
 }
 
