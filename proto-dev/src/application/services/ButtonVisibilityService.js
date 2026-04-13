@@ -57,8 +57,6 @@ export default class ButtonVisibilityService {
     }
   }
 
-  // Backward-compatibility wrapper for the unified reset contract.
-  // Keep legacy direct-call API until an explicit deprecation policy is introduced.
   clearUserRuntimeContext({ clearPersisted = false } = {}) {
     this.clearRuntimeVisibility({ clearPersisted });
   }
