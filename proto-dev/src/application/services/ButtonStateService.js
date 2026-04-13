@@ -1,6 +1,6 @@
 import {
   BUTTON_STATE_UPDATED,
-  DIALOG_AWAITING_INPUT_CHANGED
+  DIALOG_AWAITING_INPUT_CHANGED,
 } from '../../core/events/constants.js';
 import NullLogger from '../../core/logging/NullLogger.js';
 
@@ -20,13 +20,14 @@ export default class ButtonStateService {
     this.state = {};
     this.ready = false;
     this.awaiting = { awaits: false };
-    this._handler = evt => {
+    this._handler = (evt) => {
       if (evt.type === DIALOG_AWAITING_INPUT_CHANGED) {
         this.awaiting = evt;
         this._applyAwaiting();
       }
       if (evt.type === 'SCREEN_CHANGE') {
-        // Re-apply stored state for the new screen so active class is synced.
+        // Re-apply initial defaults and stored overrides for the new screen.
+        this._emitPolicyDefaultsForScreen(evt.screen);
         this._applyStored(evt.screen);
       }
     };
@@ -55,13 +56,29 @@ export default class ButtonStateService {
     }
 
     this.state = stored || {};
-    // Default messenger state: enable Post, disable Shoot on camera screen.
-    if (!('messenger:post' in this.state)) this.state['messenger:post'] = true;
-    if (!('camera:capture-btn' in this.state)) this.state['camera:capture-btn'] = false;
     this.ready = true;
     // Apply persisted state for the current screen on boot.
     const current = this.screenService?.getActive?.();
-    if (current) this._applyStored(current);
+    if (current) {
+      this._emitPolicyDefaultsForScreen(current);
+      this._applyStored(current);
+    }
+  }
+
+  // IMPORTANT:
+  // This clears runtime overrides only.
+  // Initial UI state must be re-emitted via SCREEN_CHANGE → policy defaults.
+  // This method does NOT trigger UI updates directly.
+  clearRuntimeState({ clearPersisted = false } = {}) {
+    this.state = {};
+    this.awaiting = { awaits: false };
+    if (clearPersisted) {
+      this.store?.remove?.('buttonState');
+    }
+  }
+
+  clearUserRuntimeContext({ clearPersisted = false } = {}) {
+    this.clearRuntimeState({ clearPersisted });
   }
 
   setState(name, active, screen) {
@@ -72,7 +89,7 @@ export default class ButtonStateService {
       type: BUTTON_STATE_UPDATED,
       button: name,
       active,
-      screen
+      screen,
     });
   }
 
@@ -105,6 +122,51 @@ export default class ButtonStateService {
     return result;
   }
 
+  // IMPORTANT:
+  // Policy defaults are used for minimal fallback and initial event-based synchronization.
+  // They do not replace normal orchestration rules.
+  // Do NOT move scenario progression or screen-flow logic into this table.
+  // See docs/runtime-reset-boundaries.md
+  _getDefaultState(screen, name) {
+    const key = screen ? `${screen}:${name}` : name;
+    switch (key) {
+      case 'messenger:post':
+        return true;
+      case 'camera:capture-btn':
+        return false;
+      default:
+        return null;
+    }
+  }
+
+  // IMPORTANT:
+  // Emits initial button state when no runtime override exists.
+  // Required because UI relies on event-driven initialization,
+  // not on lazy isActive() evaluation.
+  _emitPolicyDefaultsForScreen(screen) {
+    const candidates = [
+      ['messenger', 'post'],
+      ['camera', 'capture-btn'],
+    ];
+
+    candidates.forEach(([scr, name]) => {
+      if (scr !== screen) return;
+
+      const key = `${scr}:${name}`;
+      if (key in this.state) return;
+
+      const value = this._getDefaultState(scr, name);
+      if (typeof value !== 'boolean') return;
+
+      this.bus?.emit({
+        type: BUTTON_STATE_UPDATED,
+        button: name,
+        active: value,
+        screen: scr,
+      });
+    });
+  }
+
   isActive(name, screen) {
     // Guard against corrupted state shapes; treat all buttons as active if
     // state is not an object.
@@ -114,7 +176,10 @@ export default class ButtonStateService {
     }
     const key = screen ? `${screen}:${name}` : name;
     if (key in this.state) return !!this.state[key];
-    return name in this.state ? !!this.state[name] : true;
+    if (name in this.state) return !!this.state[name];
+    const policyDefault = this._getDefaultState(screen, name);
+    if (typeof policyDefault === 'boolean') return policyDefault;
+    return true;
   }
 
   isReady() {
@@ -124,8 +189,7 @@ export default class ButtonStateService {
   _applyAwaiting() {
     const current = this.screenService?.getActive?.();
     const { awaits, kind, targetScreen } = this.awaiting;
-    const postActive =
-      awaits && kind === 'user_text' && targetScreen === current;
+    const postActive = awaits && kind === 'user_text' && targetScreen === current;
     // Capture button is toggled by camera events after a successful detection.
     // When camera input is not awaited, ensure the button is disabled.
     if (!awaits || kind !== 'camera_capture' || targetScreen !== current) {
@@ -141,7 +205,7 @@ export default class ButtonStateService {
         type: BUTTON_STATE_UPDATED,
         button: name,
         active,
-        screen
+        screen,
       });
     }
   }

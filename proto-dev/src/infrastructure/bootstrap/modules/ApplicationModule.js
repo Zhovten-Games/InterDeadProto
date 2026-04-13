@@ -57,7 +57,7 @@ export default class ApplicationModule {
     container.register(
       'DualityConfigService',
       () => new DualityConfigService(container.resolve('IConfigLoader'), 'src/config/spirits'),
-      { priority: 36 }
+      { priority: 36 },
     );
 
     container.register(
@@ -67,9 +67,9 @@ export default class ApplicationModule {
           container.resolve('DatabaseService'),
           container.resolve('IEncryption'),
           container.resolve('Logger'),
-          container.resolve('IEventBus')
+          container.resolve('IEventBus'),
         ),
-      { priority: 80 }
+      { priority: 80 },
     );
 
     container.register(
@@ -77,9 +77,9 @@ export default class ApplicationModule {
       () =>
         new AuthLoginResolver(
           container.resolve('AuthVisibilityAdapter'),
-          container.resolve('Logger')
+          container.resolve('Logger'),
         ),
-      { priority: 79 }
+      { priority: 79 },
     );
 
     container.register(
@@ -90,9 +90,9 @@ export default class ApplicationModule {
           profileRegistrationService: container.resolve('ProfileRegistrationService'),
           persistence: container.resolve('IPersistence'),
           embeddingResolver: container.resolve('EmbeddingModeResolver'),
-          logger: container.resolve('Logger')
+          logger: container.resolve('Logger'),
         }),
-      { priority: 80, deps: ['AuthLoginResolver', 'ProfileRegistrationService'] }
+      { priority: 80, deps: ['AuthLoginResolver', 'ProfileRegistrationService'] },
     );
 
     container.register(
@@ -101,9 +101,9 @@ export default class ApplicationModule {
         new ChatLauncherVisibilityService(
           container.resolve('AuthVisibilityAdapter'),
           container.resolve('Logger'),
-          config
+          config,
         ),
-      { priority: 81 }
+      { priority: 81 },
     );
 
     container.register(
@@ -116,9 +116,9 @@ export default class ApplicationModule {
           embeddingResolver: container.resolve('EmbeddingModeResolver'),
           embedPermissionsResolver: container.resolve('EmbedPermissionsResolver'),
           documentRef: typeof document !== 'undefined' ? document : null,
-          logger: container.resolve('Logger')
+          logger: container.resolve('Logger'),
         }),
-      { priority: 82 }
+      { priority: 82 },
     );
 
     container.register(
@@ -130,21 +130,22 @@ export default class ApplicationModule {
           eventBus: container.resolve('IEventBus'),
           stateService: container.resolve('StateService'),
           logger: container.resolve('Logger'),
-          config
+          config,
         }),
-      { priority: 84 }
+      { priority: 84 },
     );
 
     container.register(
       'GhostService',
       () => new GhostService(container.resolve('IPersistence'), config),
-      { priority: 55 }
+      { priority: 55 },
     );
 
     container.register(
       'GhostSwitchService',
-      () => new GhostSwitchService(container.resolve('IPersistence'), container.resolve('IEventBus')),
-      { priority: 55, deps: ['GhostService'] }
+      () =>
+        new GhostSwitchService(container.resolve('IPersistence'), container.resolve('IEventBus')),
+      { priority: 55, deps: ['GhostService'] },
     );
 
     container.register(
@@ -154,20 +155,18 @@ export default class ApplicationModule {
         repo.ensureSchema();
         return repo;
       },
-      { priority: 55 }
+      { priority: 55 },
     );
 
     container.register(
       'DialogHistoryService',
       () => new DialogHistoryService(container.resolve('DialogRepository')),
-      { priority: 56 }
+      { priority: 56 },
     );
 
-    container.register(
-      'ScreenService',
-      () => new ScreenService(container.resolve('IEventBus')),
-      { priority: 56 }
-    );
+    container.register('ScreenService', () => new ScreenService(container.resolve('IEventBus')), {
+      priority: 56,
+    });
 
     container.register(
       'ButtonStateService',
@@ -176,9 +175,9 @@ export default class ApplicationModule {
           container.resolve('IEventBus'),
           container.resolve('IPersistence'),
           container.resolve('ScreenService'),
-          container.resolve('Logging')
+          container.resolve('Logging'),
         ),
-      { priority: 57 }
+      { priority: 57 },
     );
 
     container.register(
@@ -187,9 +186,10 @@ export default class ApplicationModule {
         new ButtonVisibilityService(
           container.resolve('IEventBus'),
           container.resolve('IPersistence'),
-          container.resolve('Logging')
+          container.resolve('Logging'),
+          container.resolve('ScreenService'),
         ),
-      { priority: 58 }
+      { priority: 58 },
     );
 
     container.register('ModalService', () => new ModalService(container.resolve('IEventBus')), {
@@ -198,14 +198,15 @@ export default class ApplicationModule {
 
     container.register(
       'PostsService',
-      () => new PostsService(container.resolve('DatabaseService'), container.resolve('GhostService')),
-      { priority: 56 }
+      () =>
+        new PostsService(container.resolve('DatabaseService'), container.resolve('GhostService')),
+      { priority: 56 },
     );
 
     container.register(
       'AvatarService',
       () => new AvatarService(container.resolve('DatabaseService'), container.resolve('Logger')),
-      { priority: 56 }
+      { priority: 56 },
     );
 
     container.register(
@@ -216,9 +217,9 @@ export default class ApplicationModule {
           container.resolve('LanguageService'),
           container.resolve('ProfileRegistrationService'),
           container.resolve('IEventBus'),
-          container.resolve('IPersistence')
+          container.resolve('IPersistence'),
         ),
-      { priority: 60 }
+      { priority: 60 },
     );
 
     container.register(
@@ -230,22 +231,26 @@ export default class ApplicationModule {
           container.resolve('GhostService'),
           container.resolve('IEventBus'),
           container.resolve('Logger'),
-          container.resolve('ScreenService')
+          container.resolve('ScreenService'),
         );
         container.resolve('ProfileRegistrationService').stateService = svc;
         return svc;
       },
-      { priority: 50 }
+      { priority: 50 },
     );
 
-    container.register('ItemOverlayService', () => new ItemOverlayService(container.resolve('ICanvasFactory')), {
-      priority: 111,
-    });
+    container.register(
+      'ItemOverlayService',
+      () => new ItemOverlayService(container.resolve('ICanvasFactory')),
+      {
+        priority: 111,
+      },
+    );
 
     container.register(
       'ImageComposerService',
       () => new ImageComposerService(container.resolve('ICanvasFactory')),
-      { priority: 111 }
+      { priority: 111 },
     );
 
     container.register('MediaRepository', () => new MediaRepository(), { priority: 111 });
@@ -268,15 +273,16 @@ export default class ApplicationModule {
           container.resolve('DialogInputGateService'),
           container.resolve('ImageComposerService'),
           container.resolve('MediaRepository'),
-          container.resolve('ICanvasFactory')
+          container.resolve('ICanvasFactory'),
         ),
-      { priority: 112 }
+      { priority: 112 },
     );
 
     container.register(
       'DrumLayoutService',
-      () => new DrumLayoutService(container.resolve('IPersistence'), container.resolve('IEventBus')),
-      { priority: 119 }
+      () =>
+        new DrumLayoutService(container.resolve('IPersistence'), container.resolve('IEventBus')),
+      { priority: 119 },
     );
 
     container.register(
@@ -286,9 +292,9 @@ export default class ApplicationModule {
           container.resolve('GhostService'),
           container.resolve('DualityManager'),
           spiritConfigs,
-          container.resolve('Logger')
+          container.resolve('Logger'),
         ),
-      { priority: 145, deps: ['DualityManager', 'GhostService'] }
+      { priority: 145, deps: ['DualityManager', 'GhostService'] },
     );
 
     container.register('DialogHistoryBuffer', () => new DialogHistoryBuffer(), { priority: 141 });
@@ -296,7 +302,7 @@ export default class ApplicationModule {
     container.register(
       'GhostRebootCheckpointService',
       () => new GhostRebootCheckpointService(container.resolve('IPersistence')),
-      { priority: 142 }
+      { priority: 142 },
     );
 
     container.register(
@@ -308,12 +314,13 @@ export default class ApplicationModule {
           container.resolve('DialogHistoryBuffer'),
           container.resolve('GhostService'),
           container.resolve('IEventBus'),
-          container.resolve('Logger')
+          container.resolve('Logger'),
+          container.resolve('IPersistence'),
         ),
       {
         priority: 146,
         deps: ['DialogManager', 'DialogHistoryService', 'DialogHistoryBuffer', 'GhostService'],
-      }
+      },
     );
 
     container.register(
@@ -325,9 +332,9 @@ export default class ApplicationModule {
           container.resolve('GhostService'),
           spiritConfigs,
           undefined,
-          container.resolve('Logger')
+          container.resolve('Logger'),
         ),
-      { priority: 147, deps: ['DualityManager', 'GhostService'] }
+      { priority: 147, deps: ['DualityManager', 'GhostService'] },
     );
 
     container.register(
@@ -349,15 +356,16 @@ export default class ApplicationModule {
           container.resolve('DialogHistoryBuffer'),
           undefined,
           undefined,
-          container.resolve('GhostRebootCheckpointService')
+          container.resolve('GhostRebootCheckpointService'),
         ),
-      { priority: 129, deps: ['DialogManager', 'DualityManager', 'GhostService'] }
+      { priority: 129, deps: ['DialogManager', 'DualityManager', 'GhostService'] },
     );
 
     container.register(
       'ChatScrollService',
-      () => new ChatScrollService('[data-js="messenger-container"]', container.resolve('IEventBus')),
-      { priority: 143 }
+      () =>
+        new ChatScrollService('[data-js="messenger-container"]', container.resolve('IEventBus')),
+      { priority: 143 },
     );
 
     container.register(
@@ -367,9 +375,9 @@ export default class ApplicationModule {
           container.resolve('DialogManager'),
           container.resolve('DialogHistoryService'),
           container.resolve('GhostService'),
-          container.resolve('IEventBus')
+          container.resolve('IEventBus'),
         ),
-      { priority: 145, deps: ['DialogManager', 'DialogHistoryService', 'GhostService'] }
+      { priority: 145, deps: ['DialogManager', 'DialogHistoryService', 'GhostService'] },
     );
 
     container.register(
@@ -380,9 +388,15 @@ export default class ApplicationModule {
           container.resolve('DatabaseService'),
           container.resolve('IPersistence'),
           container.resolve('IEventBus'),
-          container.resolve('Logger')
+          container.resolve('Logger'),
+          [
+            container.resolve('ButtonStateService'),
+            container.resolve('ButtonVisibilityService'),
+            container.resolve('ProfileRegistrationService'),
+            container.resolve('DialogHistoryService'),
+          ],
         ),
-      { priority: 128 }
+      { priority: 128 },
     );
 
     container.register(
@@ -394,9 +408,10 @@ export default class ApplicationModule {
           container.resolve('DialogHistoryService'),
           container.resolve('GhostService'),
           container.resolve('IEventBus'),
-          container.resolve('Logger')
+          container.resolve('Logger'),
+          container.resolve('IPersistence'),
         ),
-      { priority: 127 }
+      { priority: 127 },
     );
 
     container.register(
@@ -406,9 +421,9 @@ export default class ApplicationModule {
           container.resolve('IEventBus'),
           container.resolve('GhostService'),
           spiritConfigs,
-          container.resolve('Logger')
+          container.resolve('Logger'),
         ),
-      { priority: 128, deps: ['GhostService'] }
+      { priority: 128, deps: ['GhostService'] },
     );
 
     container.register(
@@ -421,9 +436,9 @@ export default class ApplicationModule {
           container.resolve('DualityManager'),
           undefined,
           container.resolve('Logger'),
-          spiritConfigs
+          spiritConfigs,
         ),
-      { priority: 150, deps: ['DualityManager'] }
+      { priority: 150, deps: ['DualityManager'] },
     );
 
     container.register(
@@ -432,9 +447,9 @@ export default class ApplicationModule {
         new DialogInputGateService(
           container.resolve('DialogManager'),
           container.resolve('DualityManager'),
-          container.resolve('IEventBus')
+          container.resolve('IEventBus'),
         ),
-      { priority: 142 }
+      { priority: 142 },
     );
 
     container.register(
@@ -461,9 +476,9 @@ export default class ApplicationModule {
           container.resolve('DialogHistoryService'),
           container.resolve('DialogHistoryBuffer'),
           container.resolve('MediaRepository'),
-          container.resolve('LoginPrefillService')
+          container.resolve('LoginPrefillService'),
         ),
-      { priority: 130 }
+      { priority: 130 },
     );
   }
 }

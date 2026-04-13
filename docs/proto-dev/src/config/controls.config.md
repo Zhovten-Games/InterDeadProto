@@ -7,7 +7,7 @@ listens: []
 owns: []
 schemaVersion: 1
 source: src/config/controls.config.js
-used_by: 
+used_by:
   - src/infrastructure/bootstrap/modules/PresentationModule.js
   - src/presentation/widgets/ControlPanel/index.js
 source_exists: true
@@ -15,7 +15,7 @@ runtime_role: controls_config
 contour_primary: HIPPO-INDEX
 contour_secondary: none
 role_group: memory_narrative
-narrative_role: "context memory index"
+narrative_role: 'context memory index'
 ---
 
 # Controls Configuration
@@ -29,6 +29,13 @@ During bootstrap the sections and screen map are registered for dependency injec
 `ControlPanel` hydrate the proper templates and emit scroll requests.[^4]
 
 [^1]: Section definitions and scroll slots [src/config/controls.config.js#L1-L63](../../src/config/controls.config.js#L1-L63)
+
 [^2]: Emoji drum visibility toggle [src/config/controls.config.js#L5-L7](../../src/config/controls.config.js#L5-L7)
+
 [^3]: Default config hides the drum [src/config/default.config.js#L13-L19](../../src/config/default.config.js#L13-L19)
+
 [^4]: Registration in the bootstrap container [src/infrastructure/bootstrap/index.js#L200-L232](../../src/infrastructure/bootstrap/index.js#L200-L232); panel hydration [src/presentation/widgets/ControlPanel/index.js#L9-L98](../../src/presentation/widgets/ControlPanel/index.js#L9-L98)
+
+The messenger section now includes a dedicated profile settings control (`open-profile-settings`) placed between reset and ghost selection so users can open profile export/effect preferences directly from chat.[^5]
+
+[^5]: Messenger controls list [src/config/controls.config.js#L76-L95](../../src/config/controls.config.js#L76-L95)

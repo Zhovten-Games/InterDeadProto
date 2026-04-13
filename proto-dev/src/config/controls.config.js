@@ -38,7 +38,7 @@ export const sections = {
     {
       template: 'button',
       type: 'warning',
-      action: 'reset-account',
+      action: 'reset-data',
       i18n: 'resetAccount',
       icon: '♻️',
     },
@@ -76,7 +76,16 @@ export const sections = {
   'messenger-buttons': [
     { template: 'button', type: 'is-primary', action: 'post', i18n: 'post', icon: '✉️' },
     { template: 'button', action: 'toggle-camera', i18n: 'open_camera', icon: '📷' },
-    { template: 'button', type: 'is-danger', action: 'reset-data', i18n: 'reset', icon: '♻️' },
+    // Opens reset options modal; actual reset is confirmed from modal flow.
+    { template: 'button', type: 'is-danger', action: 'reset-account', i18n: 'reset', icon: '♻️' },
+    {
+      template: 'profile-settings-button',
+      action: 'open-profile-settings',
+      i18n: 'profile_settings_open',
+      icon: '👤',
+      labelI18n: 'profile_settings_me',
+      label: '',
+    },
   ],
   'camera-buttons': [
     { template: 'button', action: 'capture-btn', i18n: 'start_analysis', icon: '🔍' },

@@ -3,9 +3,10 @@ import {
   AI_STATE_CHANGED,
   BUTTON_VISIBILITY_UPDATED,
   DRUM_LAYOUT_UPDATED,
-  GHOST_UNLOCKED
+  GHOST_UNLOCKED,
 } from '../../core/events/constants.js';
 import IPanel from '../../ports/IPanel.js';
+import ButtonLabelTruncator from '../../presentation/widgets/ControlPanel/ButtonLabelTruncator.js';
 
 export default class PanelService extends IPanel {
   static HIDDEN_CLASS = 'panel--hidden';
@@ -27,7 +28,7 @@ export default class PanelService extends IPanel {
     eventBus = new NullEventBus(),
     containerSelector = '[data-js="bottom-panel"]',
     drumLayoutService = null,
-    showEmojiDrum = true
+    showEmojiDrum = true,
   ) {
     super();
     this.templateService = templateService;
@@ -50,22 +51,20 @@ export default class PanelService extends IPanel {
     this.panelContainer = null;
     this.currentScreen = null;
     this.showEmojiDrum = showEmojiDrum;
+    this.labelTruncator = new ButtonLabelTruncator({
+      documentRef: typeof document !== 'undefined' ? document : null,
+      getLanguage: () => this.languageManager?.current || '',
+    });
   }
 
   boot() {
-    this.eventBus.subscribe(async evt => {
+    this.eventBus.subscribe(async (evt) => {
       if (!evt || !this.panelContainer) return;
-      if (
-        evt.type === 'BUTTON_STATE_UPDATED' &&
-        evt.screen === this.currentScreen
-      ) {
+      if (evt.type === 'BUTTON_STATE_UPDATED' && evt.screen === this.currentScreen) {
         await this.update(this.panelContainer, { screen: evt.screen });
         return;
       }
-      if (
-        evt.type === BUTTON_VISIBILITY_UPDATED &&
-        evt.screen === this.currentScreen
-      ) {
+      if (evt.type === BUTTON_VISIBILITY_UPDATED && evt.screen === this.currentScreen) {
         await this.update(this.panelContainer, { screen: evt.screen });
         return;
       }
@@ -141,7 +140,7 @@ export default class PanelService extends IPanel {
     const root = typeof document !== 'undefined' ? document.documentElement : null;
     root?.style.setProperty(
       '--chat-panel-height',
-      showDrum ? 'var(--panel-height)' : 'var(--panel-height-collapsed)'
+      showDrum ? 'var(--panel-height)' : 'var(--panel-height-collapsed)',
     );
     this._applyDrumLayout(panelContainer);
 
@@ -177,10 +176,7 @@ export default class PanelService extends IPanel {
       const select = container?.querySelector('[data-js="ghost-select"]');
       if (select) {
         select.innerHTML = '';
-        selectableGhosts = this.ghostSwitchService.getAvailable(
-          this.spiritConfigs,
-          currentGhost
-        );
+        selectableGhosts = this.ghostSwitchService.getAvailable(this.spiritConfigs, currentGhost);
         unlocked = this.ghostSwitchService.getUnlocked(this.spiritConfigs);
         for (const name of selectableGhosts) {
           const ghostConfig = this.spiritConfigs?.[name] || {};
@@ -193,7 +189,7 @@ export default class PanelService extends IPanel {
         this.languageManager.applyLanguage(select);
         select.value = currentGhost;
         select.disabled = selectableGhosts.length <= 1;
-        select.onchange = evt => {
+        select.onchange = (evt) => {
           const newGhost = evt.target.value;
           this._handleGhostSelection(newGhost, select);
         };
@@ -209,7 +205,7 @@ export default class PanelService extends IPanel {
       const el = panelContainer.querySelector(`[data-js="${jsName}"]`);
       el?.classList.toggle(PanelService.HIDDEN_CLASS, !visible);
     }
-    panelContainer.querySelectorAll('[data-action]').forEach(btn => {
+    panelContainer.querySelectorAll('[data-action]').forEach((btn) => {
       const action = btn.getAttribute('data-action');
       const enabled =
         this.stateService.isButtonEnabled(this.currentScreen, action) &&
@@ -223,7 +219,7 @@ export default class PanelService extends IPanel {
     });
 
     this._applyAiCameraState(panelContainer);
-
+    this.labelTruncator.apply(panelContainer);
   }
 
   _handleGhostSelection(newGhost, select) {

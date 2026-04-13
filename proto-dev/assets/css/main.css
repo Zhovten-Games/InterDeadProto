@@ -92,14 +92,14 @@
 }
 
 html[lang='en'] {
-  --font-heading: 'Pirata One', 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono',
-    sans-serif;
+  --font-heading:
+    'Pirata One', 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono', sans-serif;
 }
 
 html[lang='ru'],
 html[lang='uk'] {
-  --font-heading: 'Triodion', 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono',
-    sans-serif;
+  --font-heading:
+    'Triodion', 'Calling Code', 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono', sans-serif;
 }
 
 ::selection {
@@ -1605,11 +1605,39 @@ body.inverted .dialog__message--user {
 }
 
 .app__messenger-buttons:not(.panel--hidden) {
-  flex: 3 1 0;
+  flex: 4 1 0;
 }
 
 .app__ghost-switcher-buttons:not(.panel--hidden) {
   flex: 1 1 0;
+}
+
+.profile-transfer__field--toggle {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-transfer__field--toggle input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+}
+
+.profile-transfer__field--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.profile-transfer__login {
+  font-family: var(--btn-font-family);
+  letter-spacing: 0.03em;
+  word-break: break-word;
+}
+
+.proto-membrane-disabled .proto-membrane-canvas {
+  display: none !important;
 }
 
 .app__camera-buttons:not(.panel--hidden) {

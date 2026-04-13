@@ -1,8 +1,10 @@
 import IEventBus from '../../ports/IEventBus.js';
 import {
   APP_RESET_REQUESTED,
+  RESET_OPTIONS_REQUESTED,
   PROFILE_IMPORT_REQUESTED,
   PROFILE_EXPORT_REQUESTED,
+  PROFILE_SETTINGS_REQUESTED,
 } from '../../core/events/constants.js';
 
 export default class ButtonService {
@@ -67,8 +69,17 @@ export default class ButtonService {
       this.bus.emit({ type: PROFILE_EXPORT_REQUESTED });
       return;
     }
+    if (action === 'open-profile-settings') {
+      this.bus.emit({ type: PROFILE_SETTINGS_REQUESTED });
+      return;
+    }
     if (action === 'reset-account') {
-      const payload = { source: 'button' };
+      // Reset button opens options modal; reset execution is confirmed separately.
+      this.bus.emit({ type: RESET_OPTIONS_REQUESTED, payload: { source: 'button' } });
+      return;
+    }
+    if (action === 'confirm-reset-data') {
+      const payload = { source: 'reset-modal' };
       if (value && typeof value === 'object') {
         payload.options = value;
       }

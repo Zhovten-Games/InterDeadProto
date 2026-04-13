@@ -134,7 +134,7 @@ export default {
     post: [{ type: 'always' }],
     'switch-ghost': [{ type: 'always' }],
     'toggle-camera': [{ type: 'localAuthReady' }, { type: 'aiReady' }],
-    'reset-data': [{ type: 'always' }],
+    'reset-account': [{ type: 'always' }],
     'scroll-up': [{ type: 'always' }],
     'scroll-down': [{ type: 'always' }],
   },

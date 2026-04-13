@@ -186,6 +186,7 @@ export default class PresentationModule {
           container.resolve('MediaRepository'),
           container.resolve('Logger'),
           container.resolve('DetectionService'),
+          container.resolve('IPersistence'),
         ),
       { priority: 131 },
     );

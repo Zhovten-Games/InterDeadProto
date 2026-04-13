@@ -4,8 +4,13 @@ import {
   PROFILE_IMPORT_COMPLETED,
   PROFILE_EXPORT_CONFIRMED,
   PROFILE_EXPORT_READY,
-  PROFILE_TRANSFER_FAILED
+  PROFILE_TRANSFER_FAILED,
 } from '../../core/events/constants.js';
+
+import {
+  PROFILE_UI_PREFERENCES_KEY,
+  normalizeProfileUiPreferences,
+} from '../../config/profileUiPreferences.config.js';
 
 export default class ProfileTransferService {
   constructor(
@@ -14,7 +19,8 @@ export default class ProfileTransferService {
     historyService,
     ghostService,
     bus = new NullEventBus(),
-    logger = console
+    logger = console,
+    persistence = null,
   ) {
     this.profileService = profileService;
     this.postsService = postsService;
@@ -22,6 +28,7 @@ export default class ProfileTransferService {
     this.ghostService = ghostService;
     this.bus = bus;
     this.logger = logger;
+    this.persistence = persistence;
     this._handler = this._handleEvent.bind(this);
     this._booted = false;
   }
@@ -60,7 +67,7 @@ export default class ProfileTransferService {
           ...(typeof combined[ghost] === 'object' && !Array.isArray(combined[ghost])
             ? combined[ghost]
             : { posts: combined[ghost] || [] }),
-          dialog: messages
+          dialog: messages,
         };
       });
       const ghostEntries = {};
@@ -70,15 +77,16 @@ export default class ProfileTransferService {
         ghostEntries[ghost] = { posts, dialog };
       });
       const meta = {
-        currentGhost: this.ghostService?.getCurrentGhost?.()?.name || null
+        currentGhost: this.ghostService?.getCurrentGhost?.()?.name || null,
+        uiPreferences: this._loadUiPreferences(),
       };
       const encrypted = await this.profileService.exportProfile(password, {
         ghosts: ghostEntries,
-        meta
+        meta,
       });
       this.bus.emit({
         type: PROFILE_EXPORT_READY,
-        payload: { blob: encrypted, meta }
+        payload: { blob: encrypted, meta },
       });
     } catch (err) {
       this._reportFailure('export', err);
@@ -92,11 +100,12 @@ export default class ProfileTransferService {
         throw new Error('Invalid profile payload');
       }
       const fileLike = {
-        arrayBuffer: async () => buffer
+        arrayBuffer: async () => buffer,
       };
       const data = await this.profileService.importProfile(fileLike, password);
       const ghosts = data?.ghosts || {};
       const meta = data?.meta || {};
+      const preferences = normalizeProfileUiPreferences(meta.uiPreferences);
       const postsByGhost = {};
       const dialogByGhost = {};
       Object.entries(ghosts).forEach(([ghost, section]) => {
@@ -112,19 +121,31 @@ export default class ProfileTransferService {
         Object.entries(dialogByGhost).reduce((acc, [ghost, messages]) => {
           acc[ghost] = messages;
           return acc;
-        }, {})
+        }, {}),
       );
+      this._persistUiPreferences(preferences);
       const nextGhost = meta.currentGhost || this.ghostService?.defaultGhost;
       if (nextGhost && this.ghostService?.setCurrentGhost) {
         this.ghostService.setCurrentGhost(nextGhost);
       }
       this.bus.emit({
         type: PROFILE_IMPORT_COMPLETED,
-        payload: { ghosts: Object.keys(ghosts) }
+        payload: { ghosts: Object.keys(ghosts), preferences },
       });
     } catch (err) {
       this._reportFailure('import', err);
     }
+  }
+
+  _persistUiPreferences(preferences) {
+    if (!this.persistence) return;
+    this.persistence.save?.(PROFILE_UI_PREFERENCES_KEY, normalizeProfileUiPreferences(preferences));
+  }
+
+  _loadUiPreferences() {
+    if (!this.persistence) return normalizeProfileUiPreferences();
+    const stored = this.persistence.load?.(PROFILE_UI_PREFERENCES_KEY);
+    return normalizeProfileUiPreferences(stored);
   }
 
   _reportFailure(operation, err) {
@@ -132,7 +153,7 @@ export default class ProfileTransferService {
     this.logger?.error?.(`ProfileTransferService: ${operation} failed - ${message}`);
     this.bus.emit({
       type: PROFILE_TRANSFER_FAILED,
-      payload: { operation, message }
+      payload: { operation, message },
     });
   }
 }

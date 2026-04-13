@@ -1,5 +1,5 @@
 import NullEventBus from '../../core/events/NullEventBus.js';
-import { APP_RESET_COMPLETED, USER_PROFILE_SAVED } from '../../core/events/constants.js';
+import { USER_PROFILE_SAVED } from '../../core/events/constants.js';
 
 export default class ProfileRegistrationService {
   constructor(dbService, encryption, logger, bus = new NullEventBus(), stateService = null) {
@@ -12,12 +12,6 @@ export default class ProfileRegistrationService {
     this.avatar = null;
     this._imported = false;
     this._exported = false;
-    this._resetHandler = evt => {
-      if (evt?.type === APP_RESET_COMPLETED) {
-        this._handleReset();
-      }
-    };
-    this.bus?.subscribe?.(this._resetHandler);
   }
 
   setName(name) {
@@ -27,9 +21,7 @@ export default class ProfileRegistrationService {
   setAvatar(data) {
     this.avatar = data;
     const len = data ? data.length : 0;
-    this.logger?.info?.(
-      `ProfileRegistrationService: avatar set (${len} bytes)`
-    );
+    this.logger?.info?.(`ProfileRegistrationService: avatar set (${len} bytes)`);
   }
 
   async importProfile(file, password) {
@@ -40,7 +32,7 @@ export default class ProfileRegistrationService {
       await this.db.saveUser({
         name: profile.name,
         created_at: profile.created_at,
-        avatar: profile.avatar || null
+        avatar: profile.avatar || null,
       });
       this.name = profile.name;
       this.avatar = profile.avatar || null;
@@ -59,13 +51,13 @@ export default class ProfileRegistrationService {
       const profile = {
         name: this.name,
         created_at: new Date().toISOString(),
-        avatar: this.avatar
+        avatar: this.avatar,
       };
       await this.db.saveUser(profile);
       const payload = {
         profile,
         ghosts: extras.ghosts || {},
-        meta: extras.meta || {}
+        meta: extras.meta || {},
       };
       const encrypted = await this.enc.encrypt(payload, password);
       await this.db.recordExport(encrypted);
@@ -89,12 +81,12 @@ export default class ProfileRegistrationService {
       throw new Error('Avatar is required');
     }
     this.logger?.info?.(
-      `ProfileRegistrationService: saving profile, avatar length ${this.avatar.length}`
+      `ProfileRegistrationService: saving profile, avatar length ${this.avatar.length}`,
     );
     const profile = {
       name: this.name,
       created_at: new Date().toISOString(),
-      avatar: this.avatar
+      avatar: this.avatar,
     };
     this.stateService?.setPresence?.('person', true);
     this.stateService?.setLocalAuthReady?.(true);
@@ -107,6 +99,10 @@ export default class ProfileRegistrationService {
     return Boolean(this.name) || this._imported || this._exported;
   }
 
+  clearUserRuntimeContext() {
+    this._handleReset();
+  }
+
   _handleReset() {
     this.name = '';
     this.avatar = null;
@@ -115,10 +111,5 @@ export default class ProfileRegistrationService {
     this.stateService?.setLocalAuthReady?.(false);
   }
 
-  dispose() {
-    if (this._resetHandler) {
-      this.bus?.unsubscribe?.(this._resetHandler);
-      this._resetHandler = null;
-    }
-  }
+  dispose() {}
 }

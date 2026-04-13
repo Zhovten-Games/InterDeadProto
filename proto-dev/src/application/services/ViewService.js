@@ -10,7 +10,7 @@ import {
   CAMERA_PREVIEW_CLEARED,
   RESET_OPTIONS_REQUESTED,
   DETECTION_DONE_EVENT,
-  APP_RESET_REQUESTED
+  APP_RESET_REQUESTED,
 } from '../../core/events/constants.js';
 
 export default class ViewService {
@@ -35,7 +35,7 @@ export default class ViewService {
     historyService = null,
     historyBuffer = null,
     mediaRepository = null,
-    loginPrefillService = null
+    loginPrefillService = null,
   ) {
     this.templateService = templateService;
     this.panelService = panelService;
@@ -66,14 +66,11 @@ export default class ViewService {
      */
     this.lastDetection = null;
 
-    this._nextHandler = async evt => {
+    this._nextHandler = async (evt) => {
       if (evt.type !== 'next') return;
       let nextScreen = null;
       if (this.currentScreen === 'welcome') nextScreen = 'registration';
-      else if (
-        this.currentScreen === 'registration' &&
-        this.profileRegService?.canProceed()
-      )
+      else if (this.currentScreen === 'registration' && this.profileRegService?.canProceed())
         nextScreen = 'apartment-plan';
       else if (this.currentScreen === 'apartment-plan') nextScreen = 'registration-camera';
       if (nextScreen && nextScreen !== this.currentScreen) {
@@ -81,12 +78,11 @@ export default class ViewService {
       }
     };
 
-    this._handler = async evt => {
+    this._handler = async (evt) => {
       if (!evt || evt.type !== 'SCREEN_CHANGE') return;
 
       if (
-        (this.currentScreen === 'camera' ||
-          this.currentScreen === 'registration-camera') &&
+        (this.currentScreen === 'camera' || this.currentScreen === 'registration-camera') &&
         evt.screen !== this.currentScreen
       ) {
         this.bus.emit({ type: 'CAMERA_VIEW_CLOSED' });
@@ -109,31 +105,31 @@ export default class ViewService {
           force: evt.screen === 'registration-camera' ? true : evt.options?.force,
           onDetected: (target, blob, box, mask) =>
             this.bus.emit({ type: DETECTION_DONE_EVENT, target, blob, box, mask }),
-          ...evt.options
+          ...evt.options,
         };
         this.bus.emit({
           type: VIEW_CAMERA_RENDER_REQUESTED,
           screen: evt.screen,
           camera: {
             options: cameraOptions,
-            panel: { screen: evt.screen }
-          }
+            panel: { screen: evt.screen },
+          },
         });
       } else {
         const viewPayload = {};
-      if (evt.screen === 'messenger') {
-        const posts = await this.postsService.getPostsForCurrent();
-        viewPayload.posts = posts;
-      }
-      if (evt.screen === 'registration') {
-        this.loginPrefillService?.prefillIfNeeded?.();
-        viewPayload.registration = { name: this.profileRegService?.name || '' };
-      }
+        if (evt.screen === 'messenger') {
+          const posts = await this.postsService.getPostsForCurrent();
+          viewPayload.posts = posts;
+        }
+        if (evt.screen === 'registration') {
+          this.loginPrefillService?.prefillIfNeeded?.();
+          viewPayload.registration = { name: this.profileRegService?.name || '' };
+        }
         this.bus.emit({
           type: VIEW_RENDER_REQUESTED,
           screen: evt.screen,
           payload: evt.payload || {},
-          view: viewPayload
+          view: viewPayload,
         });
         if (evt.screen === 'messenger' && viewPayload.posts) {
           this.bus.emit({ type: MESSENGER_POSTS_READY, posts: viewPayload.posts });
@@ -146,20 +142,20 @@ export default class ViewService {
           type: BUTTON_STATE_UPDATED,
           button: btn,
           active,
-          screen: evt.screen
+          screen: evt.screen,
         });
       });
       this.currentScreen = evt.screen;
     };
 
-    this._geoHandler = async evt => {
+    this._geoHandler = async (evt) => {
       if (evt.type === 'detect-geo') {
         try {
           const coords = await this.geoService.getCurrentLocation();
           this.bus.emit({
             type: GEO_STATUS_UPDATED,
             status: coords ? { mode: 'coords', coords } : { mode: 'local' },
-            panel: { screen: 'apartment-plan', cameraSectionManager: this.cameraSectionManager }
+            panel: { screen: 'apartment-plan', cameraSectionManager: this.cameraSectionManager },
           });
           this.bus.emit({ type: 'NEXT_BUTTON_ENABLE', enabled: true });
         } catch (err) {
@@ -168,25 +164,25 @@ export default class ViewService {
       }
     };
 
-    this._mainHandler = async evt => {
+    this._mainHandler = async (evt) => {
       if (evt.type === 'post') {
         await this.publishPost();
       } else if (evt.type === 'toggle-camera' || evt.type === 'toggle-messenger') {
         this.toggleCameraSection();
-      } else if (evt.type === 'reset-data') {
+      } else if (evt.type === 'reset-account') {
         await this.resetData();
       }
     };
 
-    this._captureHandler = evt => this.handleCaptureEvents(evt);
+    this._captureHandler = (evt) => this.handleCaptureEvents(evt);
 
-    this._registrationHandler = evt => {
+    this._registrationHandler = (evt) => {
       if (evt.type !== REGISTRATION_NAME_CHANGED) return;
       const value = evt.payload?.value || '';
       this.profileRegService.setName(value);
       this.bus.emit({
         type: 'NEXT_BUTTON_ENABLE',
-        enabled: this.profileRegService.canProceed()
+        enabled: this.profileRegService.canProceed(),
       });
       this.bus.emit({ type: 'enter-name', payload: { value } });
     };
@@ -212,7 +208,7 @@ export default class ViewService {
     if (this._registrationHandler) this.bus.unsubscribe(this._registrationHandler);
   }
 
-  handleCaptureEvents = async evt => {
+  handleCaptureEvents = async (evt) => {
     if (evt.type === 'capture-btn') {
       if (this.lastDetection?.blob) {
         this.bus.emit({ type: 'CAMERA_STATUS', status: 'hidden' });
@@ -223,7 +219,7 @@ export default class ViewService {
             coords,
             this.lastDetection.blob,
             this.lastDetection.box,
-            this.lastDetection.mask
+            this.lastDetection.mask,
           );
         } else {
           const avatar = await this._storeAvatarFromBlob(this.lastDetection.blob);
@@ -232,7 +228,7 @@ export default class ViewService {
           this.cameraSectionManager.markCaptured();
           this.bus.emit({
             type: 'BUTTON_STATE_UPDATED',
-            screen: this.currentScreen
+            screen: this.currentScreen,
           });
         }
         this.lastDetection = null;
@@ -241,10 +237,7 @@ export default class ViewService {
       const blob = await this.cameraService.takeSelfie();
       this.bus.emit({ type: 'CAMERA_STATUS', status: 'checking' });
       const req = this.dualityManager?.getRequirement?.();
-      const target =
-        this.currentScreen === 'registration-camera'
-          ? 'person'
-          : req?.target;
+      const target = this.currentScreen === 'registration-camera' ? 'person' : req?.target;
       if (!target) {
         this.bus.emit({ type: 'CAMERA_STATUS', status: 'not_found' });
         this.cameraSectionManager.resumeDetection();
@@ -260,12 +253,7 @@ export default class ViewService {
       if (this.currentScreen === 'camera') {
         const quest = this.dualityManager?.getQuest?.() || null;
         const coords = quest?.overlay || {};
-        await this.cameraSectionManager.captureOverlay(
-          coords,
-          blob,
-          result.box,
-          result.mask
-        );
+        await this.cameraSectionManager.captureOverlay(coords, blob, result.box, result.mask);
       } else {
         const avatar = await this._storeAvatarFromBlob(blob);
         this.cameraService.stopStream?.();
@@ -286,7 +274,7 @@ export default class ViewService {
         }
         this.notificationManager?.notify?.({
           type: 'success',
-          message: 'profile-saved'
+          message: 'profile-saved',
         });
         this.cameraSectionManager.stopDetection?.();
         this.cameraService.stopStream?.();
@@ -313,7 +301,7 @@ export default class ViewService {
         target: evt.target,
         blob: evt.blob,
         box: evt.box,
-        mask: evt.mask
+        mask: evt.mask,
       };
       this.bus.emit({ type: 'BUTTON_STATE_UPDATED', screen: this.currentScreen });
     }
@@ -350,9 +338,7 @@ export default class ViewService {
       const avatar = await this._blobToBase64(blob);
       if (avatar) {
         this.profileRegService.setAvatar(avatar);
-        this.logger?.info?.(
-          `ViewService: captured avatar (${avatar.length} chars)`
-        );
+        this.logger?.info?.(`ViewService: captured avatar (${avatar.length} chars)`);
       } else {
         this.logger?.warn?.('ViewService: empty avatar after conversion');
       }
@@ -381,7 +367,7 @@ export default class ViewService {
       if (typeof document === 'undefined') {
         this.bus.emit({
           type: APP_RESET_REQUESTED,
-          payload: { source: 'view', reason: 'no_modal' }
+          payload: { source: 'view', reason: 'no_modal' },
         });
         return;
       }

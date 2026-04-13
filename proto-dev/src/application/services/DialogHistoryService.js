@@ -23,21 +23,26 @@ export default class DialogHistoryService {
       const timestamp = msg.timestamp ?? base + idx;
       const order = msg.order ?? idx + 1;
       const candidateSrc = msg.persistSrc || msg.src;
-      const rawSrc = typeof candidateSrc === 'string' && candidateSrc.startsWith('blob:') ? null : candidateSrc;
+      const rawSrc =
+        typeof candidateSrc === 'string' && candidateSrc.startsWith('blob:') ? null : candidateSrc;
       const media = msg.media?.id ? { id: msg.media.id } : null;
       const normalizedReaction = this._normalizeReaction(msg.reaction);
       const reactionValue = normalizedReaction === '' ? null : normalizedReaction;
       const reactionOrigin = msg.reactionOrigin === 'system' ? 'system' : 'user';
-      const stageId = typeof msg.stageId === 'string' && msg.stageId.trim() !== '' ? msg.stageId.trim() : null;
+      const stageId =
+        typeof msg.stageId === 'string' && msg.stageId.trim() !== '' ? msg.stageId.trim() : null;
       const fingerprint = messageFingerprint({
-        fingerprint: msg.fingerprint && !String(msg.fingerprint).includes('blob:') ? msg.fingerprint : undefined,
+        fingerprint:
+          msg.fingerprint && !String(msg.fingerprint).includes('blob:')
+            ? msg.fingerprint
+            : undefined,
         ghost,
         stageId: stageId || '',
         author: msg.author,
         text: msg.text || '',
         type: msg.type || '',
         src: rawSrc || undefined,
-        media
+        media,
       });
       if (seen.has(fingerprint)) return;
       seen.add(fingerprint);
@@ -53,7 +58,7 @@ export default class DialogHistoryService {
           avatar: msg.avatar,
           reaction: reactionValue,
           reaction_origin: reactionValue ? reactionOrigin : null,
-          stage_id: stageId
+          stage_id: stageId,
         });
         return;
       }
@@ -64,7 +69,7 @@ export default class DialogHistoryService {
         order,
         fingerprint,
         reaction: reactionValue,
-        reaction_origin: reactionValue ? reactionOrigin : null
+        reaction_origin: reactionValue ? reactionOrigin : null,
       };
       if (msg.avatar) obj.avatar = msg.avatar;
       if (rawSrc) obj.src = rawSrc;
@@ -84,7 +89,7 @@ export default class DialogHistoryService {
       author: msg.author || '',
       type: msg.type || '',
       text: msg.text || '',
-      src: msg.src || (msg.media && (msg.media.id || msg.media.src)) || ''
+      src: msg.src || (msg.media && (msg.media.id || msg.media.src)) || '',
     });
   }
 
@@ -130,6 +135,11 @@ export default class DialogHistoryService {
     this._seen.clear();
   }
 
+  clearUserRuntimeContext() {
+    // Runtime reset hook: clear only in-memory session cache.
+    this._seen.clear();
+  }
+
   /**
    * Save messages for a specific ghost.
    * Uses append semantics with unique constraint.
@@ -139,7 +149,7 @@ export default class DialogHistoryService {
   save(ghostName, messages) {
     const prepared = this._prepare(ghostName, messages);
     this.repo?.appendUnique?.(ghostName, prepared);
-    prepared.forEach(m => this.markSeen(ghostName, m));
+    prepared.forEach((m) => this.markSeen(ghostName, m));
   }
 
   /**
@@ -149,11 +159,11 @@ export default class DialogHistoryService {
    */
   load(ghostName) {
     let rows = this.repo?.loadAll?.(ghostName) || [];
-    const legacy = rows.filter(r => /^\d+$/.test(String(r.fingerprint)));
+    const legacy = rows.filter((r) => /^\d+$/.test(String(r.fingerprint)));
     if (legacy.length && typeof this.repo?.replaceFingerprints === 'function') {
       const unique = [];
       const seen = new Set();
-      rows.forEach(r => {
+      rows.forEach((r) => {
         const media = r.media_id ? { id: r.media_id } : undefined;
         const fp = /^\d+$/.test(String(r.fingerprint))
           ? messageFingerprint({
@@ -163,17 +173,21 @@ export default class DialogHistoryService {
               text: r.text || '',
               type: r.type || '',
               src: r.src || '',
-              media
+              media,
             })
           : r.fingerprint;
         if (seen.has(fp)) return;
         seen.add(fp);
         unique.push({ ...r, fingerprint: fp });
       });
-      this.repo.replaceFingerprints(ghostName, unique, legacy.map(l => l.fingerprint));
+      this.repo.replaceFingerprints(
+        ghostName,
+        unique,
+        legacy.map((l) => l.fingerprint),
+      );
       rows = unique;
     }
-    return rows.map(r => {
+    return rows.map((r) => {
       const msg = {
         author: r.author,
         text: r.text,
@@ -181,7 +195,7 @@ export default class DialogHistoryService {
         avatar: r.avatar,
         fingerprint: r.fingerprint,
         timestamp: Number(r.timestamp),
-        order: Number(r.order)
+        order: Number(r.order),
       };
       if (r.src) msg.src = r.src;
       if (r.media_id) msg.media = { id: r.media_id };
@@ -208,10 +222,10 @@ export default class DialogHistoryService {
    */
   appendUnique(ghostName, messages) {
     const existing = this.load(ghostName);
-    const seen = new Set(existing.map(m => m.fingerprint));
+    const seen = new Set(existing.map((m) => m.fingerprint));
     const prepared = this._prepare(ghostName, messages, seen);
     this.repo?.appendUnique?.(ghostName, prepared);
-    prepared.forEach(m => this.markSeen(ghostName, m));
+    prepared.forEach((m) => this.markSeen(ghostName, m));
   }
 
   append(ghostName, messages) {

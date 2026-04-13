@@ -3,7 +3,7 @@ import deepMerge from '../../utils/deepMerge.js';
 import {
   AI_STATE_CHANGED,
   APP_RESET_COMPLETED,
-  USER_PROFILE_SAVED
+  USER_PROFILE_SAVED,
 } from '../../core/events/constants.js';
 
 export default class StateService {
@@ -27,13 +27,13 @@ export default class StateService {
     this.config = { ...defaultConfig };
     const ghost = this.ghostService.getCurrentGhost();
     await this._loadGhostConfig(ghost.name);
-    this._handler = async evt => {
+    this._handler = async (evt) => {
       if (evt.type === 'GHOST_CHANGE') {
         this.config = { ...defaultConfig };
         await this._loadGhostConfig(evt.payload.name);
         this.eventBus.emit({
           type: 'BUTTON_STATE_UPDATED',
-          screen: this.currentScreen
+          screen: this.currentScreen,
         });
       }
       if (evt.type === AI_STATE_CHANGED) {
@@ -47,10 +47,16 @@ export default class StateService {
         this._emitButtonRefresh();
       }
       if (evt.type === APP_RESET_COMPLETED) {
+        // IMPORTANT: See docs/runtime-reset-boundaries.md
+        // Account reset must clear user-scoped runtime data only.
+        // Do NOT reset aiState here; AI readiness belongs to infrastructure runtime.
         this.setLocalAuthReady(false);
-        this.setAiState('IDLE');
         this.resetPresence();
         this.resetCaptured();
+        return;
+      }
+      if (evt.type === 'SCREEN_CHANGE') {
+        this.currentScreen = evt.screen || null;
         this._emitButtonRefresh();
       }
     };
@@ -59,9 +65,7 @@ export default class StateService {
 
   async _loadGhostConfig(name) {
     try {
-      const mod = await import(
-        new URL(`../../config/spirits/${name}.js`, import.meta.url)
-      );
+      const mod = await import(new URL(`../../config/spirits/${name}.js`, import.meta.url));
       this.config = deepMerge(this.config, mod.default);
     } catch (err) {
       this.logger?.warn?.(`No override for ghost: ${name}`);
@@ -71,10 +75,14 @@ export default class StateService {
   isButtonEnabled(screen, action) {
     this.currentScreen = screen;
     const rules = this.config[screen]?.[action];
+    // IMPORTANT:
+    // Missing button rule is treated as disabled.
+    // Non-scenario controls that must remain available
+    // need explicit always-enabled rules in button-state config.
     if (!Array.isArray(rules) || rules.length === 0) {
       return false;
     }
-    return rules.every(rule => this._evaluate(rule));
+    return rules.every((rule) => this._evaluate(rule));
   }
 
   setPresence(type, value) {
@@ -148,7 +156,7 @@ export default class StateService {
     if (!screen) return;
     this.eventBus.emit({
       type: 'BUTTON_STATE_UPDATED',
-      screen
+      screen,
     });
   }
 }

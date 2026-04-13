@@ -5,6 +5,10 @@ import MessengerPostsWidget from '../widgets/MessengerPostsWidget.js';
 import LocationStatusWidget from '../widgets/LocationStatusWidget.js';
 import { resolveAssetUrl } from '../../config/assetsBaseUrl.js';
 import {
+  PROFILE_UI_PREFERENCES_KEY,
+  normalizeProfileUiPreferences,
+} from '../../config/profileUiPreferences.config.js';
+import {
   VIEW_RENDER_REQUESTED,
   VIEW_CAMERA_RENDER_REQUESTED,
   MESSENGER_POSTS_READY,
@@ -24,6 +28,7 @@ import {
   PROFILE_EXPORT_READY,
   PROFILE_TRANSFER_FAILED,
   PROFILE_IMPORT_SELECTED,
+  PROFILE_SETTINGS_REQUESTED,
   STATUS_SHOW,
   MODAL_SHOW,
   MODAL_HIDE,
@@ -42,6 +47,7 @@ export default class GlobalViewPresenter {
     mediaRepository = null,
     logger = console,
     detectionService = null,
+    persistence = null,
   ) {
     this.templateService = templateService;
     this.panelService = panelService;
@@ -50,6 +56,7 @@ export default class GlobalViewPresenter {
     this.mediaRepository = mediaRepository;
     this.logger = logger;
     this.detectionService = detectionService;
+    this.persistence = persistence;
     this.currentScreen = null;
     this.dialogWidget = null;
     this.cameraUi = null;
@@ -113,6 +120,9 @@ export default class GlobalViewPresenter {
       case PROFILE_EXPORT_REQUESTED:
         this._handleProfileExportRequest();
         break;
+      case PROFILE_SETTINGS_REQUESTED:
+        this._handleProfileSettingsRequested();
+        break;
       case PROFILE_EXPORT_READY:
         this._handleProfileExportReady(evt);
         break;
@@ -120,7 +130,7 @@ export default class GlobalViewPresenter {
         this._handleProfileTransferFailure(evt);
         break;
       case PROFILE_IMPORT_COMPLETED:
-        this._handleProfileImportCompleted();
+        this._handleProfileImportCompleted(evt);
         break;
       case RESET_OPTIONS_REQUESTED:
         this._handleResetOptionsRequested();
@@ -458,8 +468,123 @@ export default class GlobalViewPresenter {
     this._hideModal();
   }
 
-  _handleProfileImportCompleted() {
+  _handleProfileSettingsRequested() {
+    const node = this._renderProfileSettingsModal();
+    if (node) this._showModal(node);
+  }
+
+  _renderProfileSettingsModal() {
+    if (typeof document === 'undefined') return null;
+    const container = document.createElement('div');
+    container.className = 'reset-choice-modal';
+
+    const title = document.createElement('h2');
+    title.className = 'reset-choice-modal__title';
+    title.setAttribute('data-i18n', 'profile_settings_title');
+    container.appendChild(title);
+
+    const description = document.createElement('p');
+    description.className = 'reset-choice-modal__message';
+    description.setAttribute('data-i18n', 'profile_settings_description');
+    container.appendChild(description);
+
+    const loginField = document.createElement('p');
+    loginField.className = 'profile-transfer__field profile-transfer__field--stack';
+    const loginLabel = document.createElement('span');
+    loginLabel.setAttribute('data-i18n', 'profile_settings_login_label');
+    const loginValue = document.createElement('strong');
+    loginValue.className = 'profile-transfer__login';
+    loginValue.textContent = String(this.panelService?.profileRegService?.name || '').trim();
+    if (!loginValue.textContent) {
+      loginValue.setAttribute('data-i18n', 'profile_settings_login_empty');
+    }
+    loginField.appendChild(loginLabel);
+    loginField.appendChild(loginValue);
+    container.appendChild(loginField);
+
+    const exportButton = document.createElement('button');
+    exportButton.type = 'button';
+    exportButton.className = 'reset-choice-modal__button reset-choice-modal__button--app';
+    exportButton.setAttribute('data-i18n', 'profile_settings_download');
+    container.appendChild(exportButton);
+
+    const prefs = this._loadProfileUiPreferences();
+
+    const hoverField = document.createElement('label');
+    hoverField.className = 'profile-transfer__field profile-transfer__field--toggle';
+    const hoverInput = document.createElement('input');
+    hoverInput.type = 'checkbox';
+    hoverInput.checked = prefs.disableHoverPulse === true;
+    const hoverText = document.createElement('span');
+    hoverText.setAttribute('data-i18n', 'profile_settings_disable_hover');
+    hoverField.appendChild(hoverInput);
+    hoverField.appendChild(hoverText);
+    container.appendChild(hoverField);
+
+    const membraneField = document.createElement('label');
+    membraneField.className = 'profile-transfer__field profile-transfer__field--toggle';
+    const membraneInput = document.createElement('input');
+    membraneInput.type = 'checkbox';
+    membraneInput.checked = prefs.membraneDisabled === true;
+    const membraneText = document.createElement('span');
+    membraneText.setAttribute('data-i18n', 'profile_settings_disable_membrane');
+    membraneField.appendChild(membraneInput);
+    membraneField.appendChild(membraneText);
+    container.appendChild(membraneField);
+
+    const actions = document.createElement('div');
+    actions.className = 'reset-choice-modal__actions';
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'reset-choice-modal__button reset-choice-modal__button--cancel';
+    close.setAttribute('data-i18n', 'profile_transfer_cancel');
+    actions.appendChild(close);
+    container.appendChild(actions);
+
+    const savePreferences = () => {
+      const next = {
+        disableHoverPulse: hoverInput.checked,
+        membraneDisabled: membraneInput.checked,
+      };
+      this._saveProfileUiPreferences(next);
+      document.dispatchEvent(
+        new CustomEvent('interdead:membrane-settings-updated', { detail: next }),
+      );
+    };
+
+    hoverInput.addEventListener('change', savePreferences);
+    membraneInput.addEventListener('change', savePreferences);
+
+    exportButton.addEventListener('click', () => {
+      this._hideModal();
+      this._handleProfileExportRequest();
+    });
+
+    close.addEventListener('click', () => this._hideModal());
+
+    this.languageManager.applyLanguage(container);
+    return container;
+  }
+
+  _loadProfileUiPreferences() {
+    const stored = this.persistence?.load?.(PROFILE_UI_PREFERENCES_KEY);
+    return normalizeProfileUiPreferences(stored);
+  }
+
+  _saveProfileUiPreferences(preferences) {
+    this.persistence?.save?.(
+      PROFILE_UI_PREFERENCES_KEY,
+      normalizeProfileUiPreferences(preferences),
+    );
+  }
+  _handleProfileImportCompleted(evt) {
     this._showStatus('profile_import_success');
+    const preferences = evt?.payload?.preferences;
+    if (preferences && typeof window !== 'undefined') {
+      document.dispatchEvent(
+        new CustomEvent('interdead:membrane-settings-updated', { detail: preferences }),
+      );
+    }
   }
 
   async _showStatus(i18nKey) {
@@ -477,10 +602,10 @@ export default class GlobalViewPresenter {
   _renderTransferModal(mode) {
     if (typeof document === 'undefined') return null;
     const container = document.createElement('div');
-    container.className = 'profile-transfer';
+    container.className = 'reset-choice-modal';
 
     const title = document.createElement('h2');
-    title.className = 'profile-transfer__title';
+    title.className = 'reset-choice-modal__title';
     title.setAttribute(
       'data-i18n',
       mode === 'import' ? 'profile_import_title' : 'profile_export_title',
@@ -488,7 +613,7 @@ export default class GlobalViewPresenter {
     container.appendChild(title);
 
     const description = document.createElement('p');
-    description.className = 'profile-transfer__description';
+    description.className = 'reset-choice-modal__message';
     description.setAttribute(
       'data-i18n',
       mode === 'import' ? 'profile_import_description' : 'profile_export_description',
@@ -529,16 +654,16 @@ export default class GlobalViewPresenter {
     container.appendChild(errorEl);
 
     const actions = document.createElement('div');
-    actions.className = 'profile-transfer__actions';
+    actions.className = 'reset-choice-modal__actions';
     const confirm = document.createElement('button');
-    confirm.className = 'button';
+    confirm.className = 'reset-choice-modal__button reset-choice-modal__button--app';
     confirm.type = 'button';
     confirm.setAttribute(
       'data-i18n',
       mode === 'import' ? 'profile_import_confirm' : 'profile_export_confirm',
     );
     const cancel = document.createElement('button');
-    cancel.className = 'button button--ghost';
+    cancel.className = 'reset-choice-modal__button reset-choice-modal__button--cancel';
     cancel.type = 'button';
     cancel.setAttribute('data-i18n', 'profile_transfer_cancel');
     actions.appendChild(confirm);
