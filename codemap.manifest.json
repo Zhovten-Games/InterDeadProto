@@ -1,0 +1,148 @@
+{
+  "$schema": "https://schemas.interdead.dev/codemap/manifest/v1",
+  "schemaVersion": "2.0.0",
+  "project": {
+    "name": "interdead-proto",
+    "defaultBranch": "main"
+  },
+  "validation": {
+    "profiles": {
+      "default": {
+        "bundleName": "proto-default",
+        "families": {
+          "architecture": {
+            "enabled": true,
+            "failOn": [
+              "error",
+              "critical"
+            ],
+            "thresholds": {
+              "error": 0
+            }
+          },
+          "documentation-contract": {
+            "enabled": true,
+            "failOn": [
+              "error",
+              "critical"
+            ],
+            "thresholds": {
+              "error": 0
+            }
+          },
+          "methodology-semantic": {
+            "enabled": true,
+            "failOn": [
+              "error",
+              "critical"
+            ],
+            "thresholds": {
+              "error": 0
+            }
+          }
+        },
+        "mode": "enforced",
+        "documentation": {
+          "mode": "enforced",
+          "requiredHeaders": [
+            "source",
+            "source_exists",
+            "runtime_role",
+            "contour_primary",
+            "role_group"
+          ],
+          "pathScopes": [
+            {
+              "include": "proto-dev/docs/**/*.md",
+              "mode": "enforced"
+            }
+          ],
+          "projectModes": {
+            "interdead-proto": "enforced"
+          }
+        }
+      }
+    }
+  },
+  "scan": {
+    "include": [
+      "proto-dev/src/**/*.{js,jsx,ts,tsx,mjs,cjs}",
+      "proto-dev/tests/**/*.js",
+      "proto-dev/**/*.md"
+    ],
+    "exclude": [
+      "**/node_modules/**",
+      "**/dist/**"
+    ],
+    "followSymlinks": false,
+    "parser": {
+      "javascript": true,
+      "typescript": true,
+      "markdown": true
+    }
+  },
+  "methodology": {
+    "visual": {
+      "id": "hexagonal",
+      "version": "1.0.0"
+    },
+    "semantic": {
+      "id": "layered-boundaries",
+      "version": "1.0.0"
+    }
+  },
+  "documentation": {
+    "sources": [
+      {
+        "id": "proto-docs",
+        "type": "markdown-headers",
+        "include": [
+          "proto-dev/docs/**/*.md"
+        ],
+        "mode": "full"
+      }
+    ]
+  },
+  "publish": {
+    "mode": "artifacts-only",
+    "readme": {
+      "enabled": false
+    },
+    "preview": {
+      "enabled": false
+    }
+  },
+  "output": {
+    "rootDir": "code-map/generated",
+    "artifacts": [
+      {
+        "id": "map-json",
+        "kind": "json",
+        "enabled": true,
+        "path": "map/code-map.json",
+        "publicSafe": false
+      },
+      {
+        "id": "map-report",
+        "kind": "markdown",
+        "enabled": true,
+        "path": "reports/code-map-report.md",
+        "publicSafe": true
+      },
+      {
+        "id": "map-mermaid",
+        "kind": "mermaid",
+        "enabled": true,
+        "path": "map/code-map.mmd",
+        "publicSafe": true
+      },
+      {
+        "id": "diagnostics-summary",
+        "kind": "json",
+        "enabled": true,
+        "path": "diagnostics/diagnostics.json",
+        "publicSafe": true
+      }
+    ]
+  }
+}
