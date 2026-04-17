@@ -1,0 +1,2 @@
+const e={"boot.db":["Memory Archives","Echo Database","Residue Vault"],"boot.camera":["Spectral Lens","Optic Relay","Ghostlight Aperture"],"boot.lang":["Tongue Synchronizer","Polyglot Bridge","Voice Matrix"],"boot.templates":["Interface Schematics","Glyph Library","Frame Composer"],"boot.geo":["Coordinates Oracle","Locator Pulse","Wayfinder Console"]};export{e as default};
+

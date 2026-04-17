@@ -1,0 +1,80 @@
+  <div class="app__controls-panel panel panel--double-frame panel--sectors-count-6" data-js="panel-controls">
+    <div class="panel__top-left panel--hidden" data-state-key="dialogReactionLock">👍</div>
+    <div class="panel__top-right panel--hidden" data-state-key="dialogReactionLock">👎</div>
+
+  <div class="panel__mask">
+      <div class="panel__circle">
+        <ul class="panel__sectors">
+          <li class="panel__sector" style="--i:0">
+            <span class="panel__sector-emoji" data-slot="0">⬜</span>
+          </li>
+          <li class="panel__sector" style="--i:1">
+            <span class="panel__sector-emoji" data-slot="1">⬜</span>
+          </li>
+          <li class="panel__sector" style="--i:2">
+            <span class="panel__sector-emoji" data-slot="2">⬜</span>
+          </li>
+          <li class="panel__sector" style="--i:3">
+            <span class="panel__sector-emoji" data-slot="3">⬜</span>
+          </li>
+          <li class="panel__sector" style="--i:4">
+            <span class="panel__sector-emoji" data-slot="4">⬜</span>
+          </li>
+          <li class="panel__sector" style="--i:5">
+            <span class="panel__sector-emoji" data-slot="5">⬜</span>
+          </li>
+        </ul>
+      </div>
+      <button class="panel__selection-badge panel__selection-badge--hidden" type="button" data-js="reaction-badge">
+        <span class="panel__selection-badge-countdown" aria-hidden="true">6</span>
+        <span class="sr-only" data-i18n="reaction_confirm"></span>
+      </button>
+    </div>
+
+    <div class="panel__bottom" data-js="panel-bottom">
+      <div class="panel__bottom-inner" data-js="panel-bottom-inner">
+        <!-- UNUSED: selfie-thumbnail
+        <img class="app__selfie-thumbnail panel--hidden" data-js="selfie-thumbnail" src="" alt="Selfie Thumbnail" style="width: 50px; height: 50px; border-radius: 50%;">
+        -->
+        <!-- Landing Buttons -->
+        <div class="app__landing-buttons buttons panel--hidden" data-js="landing-buttons"></div>
+        <div class="app__registration-buttons buttons" data-js="registration-buttons"></div>
+        <div class="app__apartment-plan-buttons buttons panel--hidden" data-js="apartment-plan-buttons"></div>
+        <div class="app__selfie-buttons buttons panel--hidden" data-js="selfie-buttons"></div>
+        <!-- Messenger Screen Buttons -->
+        <div class="app__messenger-buttons buttons panel--hidden" data-js="messenger-buttons">
+          <button class="control-button is-primary" type="button" data-js="post-btn" data-state-key="postBtn" data-i18n-title="post">
+            <span class="control-button__icon" aria-hidden="true">✉️</span>
+            <span class="control-button__label" data-i18n="post"></span>
+          </button>
+          <button class="control-button" type="button" data-js="toggle-camera" data-state-key="cameraBtn" data-i18n-title="open_camera">
+            <span class="control-button__icon" aria-hidden="true">📷</span>
+            <span class="control-button__label" data-i18n="open_camera"></span>
+          </button>
+          <button class="control-button is-danger" type="button" data-js="reset-data" data-i18n-title="reset">
+            <span class="control-button__icon" aria-hidden="true">♻️</span>
+            <span class="control-button__label" data-i18n="reset"></span>
+          </button>
+        </div>
+        <!-- Camera Screen Buttons -->
+        <div class="app__camera-buttons buttons panel--hidden" data-js="camera-buttons">
+          <button class="control-button" type="button" data-js="capture-btn" data-i18n-title="start_analysis">
+            <span class="control-button__icon" aria-hidden="true">🔍</span>
+            <span class="control-button__label" data-i18n="start_analysis"></span>
+          </button>
+          <button class="control-button" type="button" data-js="toggle-messenger" data-i18n-title="open_messenger">
+            <span class="control-button__icon" aria-hidden="true">💬</span>
+            <span class="control-button__label" data-i18n="open_messenger"></span>
+          </button>
+          <button class="control-button is-danger" type="button" data-js="reset-data" data-i18n-title="reset">
+            <span class="control-button__icon" aria-hidden="true">♻️</span>
+            <span class="control-button__label" data-i18n="reset"></span>
+          </button>
+        </div>
+        <div class="app__ghost-switcher-buttons buttons panel--hidden" data-js="ghost-switcher-buttons"></div>
+        <!-- Buttons for manual chat scrolling -->
+        <button class="panel__scroll-button panel__scroll-button--up panel--hidden" data-js="scroll-up" aria-label="Scroll up">&#9650;</button>
+        <button class="panel__scroll-button panel__scroll-button--down panel--hidden" data-js="scroll-down" aria-label="Scroll down">&#9660;</button>
+      </div>
+    </div>
+  </div>
