@@ -54,3 +54,23 @@ This repository is a monorepo that contains multiple InterDead application versi
 - Production build/deploy branch: [`proto`](https://github.com/Zhovten-Games/InterDeadProto/tree/proto)
 
 For implementation details, start from [`proto-dev/README.md`](./proto-dev/README.md).
+
+## Governance and licensing
+
+This repository connects two reviewed external policy sources as pinned Git
+submodules:
+
+- [Code Constitution](https://github.com/FOP-Oksana-Dubinetska/code-constitution) at `.code-constitution/`;
+- [Repository Licensing Policy](https://github.com/FOP-Oksana-Dubinetska/repository-licensing-policy) at `.licensing-policy/`.
+
+Initialize them after cloning:
+
+```bash
+git submodule update --init --recursive
+```
+
+Project-specific governance material lives under [`governance/`](./governance/).
+The current Development Regulation is a draft candidate pending completion and
+ratification of the project Founding Profile. Licensing is declared by
+[`LICENSE.md`](./LICENSE.md), with game-content exceptions in
+[`LICENSING-OVERRIDES.md`](./LICENSING-OVERRIDES.md).
