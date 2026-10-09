@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "runId",
+    "startedAt",
+    "finishedAt",
+    "mode",
+    "diagnostic",
+    "driverProtocol",
+    "gates",
+    "phaseStatus",
+    "releaseStatus",
+    "blockers"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "runId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "startedAt": {
+      "type": "string"
+    },
+    "finishedAt": {
+      "type": "string"
+    },
+    "mode": {
+      "enum": ["integrity", "prebuild", "postbuild", "all", "check"]
+    },
+    "diagnostic": {
+      "type": "boolean"
+    },
+    "driverProtocol": {
+      "const": "idp-public-driver-v1"
+    },
+    "sourceSha": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "sourceTreeSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "clean": {
+      "type": "boolean"
+    },
+    "pins": {
+      "type": "object"
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "phase", "mandatory", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phase": {
+            "enum": ["integrity", "prebuild", "assembly", "postbuild", "manual", "aggregation"]
+          },
+          "mandatory": {
+            "const": true
+          },
+          "status": {
+            "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "phaseStatus": {
+      "type": "object",
+      "properties": {
+        "integrity": {
+          "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+        },
+        "prebuild": {
+          "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+        },
+        "assembly": {
+          "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+        },
+        "postbuild": {
+          "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+        },
+        "manual": {
+          "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+        },
+        "aggregation": {
+          "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+        }
+      }
+    },
+    "releaseStatus": {
+      "enum": ["passed", "pending"]
+    },
+    "blockers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "reason"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

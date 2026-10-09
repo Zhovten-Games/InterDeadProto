@@ -1,0 +1,285 @@
+{
+  "schemaVersion": 1,
+  "gates": [
+    {
+      "id": "historical-integrity",
+      "phase": "integrity",
+      "mandatory": true
+    },
+    {
+      "id": "toolchain",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "governance-corpus",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "format",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "javascript-lint",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "source-codemap",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "complete-unit-corpus",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "warden-refusal-fixtures",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-BOOT-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-HISTORY-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-MIGRATION-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-CAMERA-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-SWITCH-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-RESTORE-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-AI-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "isolated-assembly",
+      "phase": "assembly",
+      "mandatory": true
+    },
+    {
+      "id": "artifact-content-identity",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "distribution-scope-licensing",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "http-resources-root-subpath",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "browser-fresh-four-locales",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "browser-profile-reload-subpath",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "browser-worker-cpu-responsive",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "browser-service-worker-generation",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "frozen-artifact-after-postbuild",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "frozen-artifact",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-ARTIFACT-001.v1",
+      "phase": "postbuild",
+      "mandatory": true
+    },
+    {
+      "id": "governance-ratification",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-itch-grant",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-itch-deny",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-itch-pending",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-noir-grant",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-noir-deny",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-noir-pending",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-subpath-grant",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-subpath-deny",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-subpath-pending",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-local-grant",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-local-deny",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.opera-local-pending",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.legacy-import-recovery",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.reset-preserves-infrastructure",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.licensing-host-boundaries",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.test-boundary",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.localization-focus-en",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.localization-focus-ru",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.localization-focus-uk",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "manual.localization-focus-ja",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "immutable-source",
+      "phase": "aggregation",
+      "mandatory": true
+    },
+    {
+      "id": "clean-source",
+      "phase": "aggregation",
+      "mandatory": true
+    },
+    {
+      "id": "dependency-audit",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "ci-publication-policy",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "gate-inventory",
+      "phase": "aggregation",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-CAMERA-002.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "IDP-WH-PROFILE-001.v1",
+      "phase": "prebuild",
+      "mandatory": true
+    },
+    {
+      "id": "manual.normative-semantic-review",
+      "phase": "manual",
+      "mandatory": true
+    },
+    {
+      "id": "report-schema",
+      "phase": "aggregation",
+      "mandatory": true
+    }
+  ]
+}

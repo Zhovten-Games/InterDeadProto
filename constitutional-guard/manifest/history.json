@@ -1,0 +1,391 @@
+{
+  "schemaVersion": 1,
+  "revision": "1.0.0-candidate",
+  "entries": [
+    {
+      "id": "IDP-WH-BOOT-001.v1",
+      "path": "constitutional-guard/history/boot/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "d237b3bba33bd2b6669f00efd04cfde99de01253eddcbf0cdea2bc6523d7f883",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-003", "revision": "1.0.0-candidate" },
+      "cases": ["boot.coalescing", "boot.reverse-rollback", "boot.dispose-pending"],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-HISTORY-001.v1",
+      "path": "constitutional-guard/history/history/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "0b0efa78f5b4d2ba56997e8979885c4324500037170094e2be1a21886fa42690",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-005", "revision": "1.0.0-candidate" },
+      "cases": [
+        "history.sequence",
+        "history.immutable-metadata",
+        "history.legitimate-repetition",
+        "history.rollback"
+      ],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-MIGRATION-001.v1",
+      "path": "constitutional-guard/history/migration/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "70e15747580129c47d17d439164521cf0e013f89d7e34cc0abc1bc7e502d3968",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-008", "revision": "1.0.0-candidate" },
+      "cases": [
+        "migration.legacy-determinism",
+        "migration.idempotence",
+        "migration.backup",
+        "migration.invalid-import",
+        "migration.media-reload"
+      ],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-CAMERA-001.v1",
+      "path": "constitutional-guard/history/camera/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "766fca4469d47486f6f460e8eea2f0e73cff94300665ace9b8065f26b358f53c",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-004", "revision": "1.0.0-candidate" },
+      "cases": ["camera.late-permission", "camera.metadata-close", "camera.repeated-close"],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-SWITCH-001.v1",
+      "path": "constitutional-guard/history/switch/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "2f5c27368419292d6c9f1c08c6a7ceaff0eafe0e7e19e877475011e226745b45",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-004", "revision": "1.0.0-candidate" },
+      "cases": ["switch.A-B-A", "switch.stale-failure", "switch.reset-pending"],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-RESTORE-001.v1",
+      "path": "constitutional-guard/history/restore/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "eb5b4846aa99cc705cad58d18af4dbca65d56ec9d98518e292ada11540435008",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-006", "revision": "1.0.0-candidate" },
+      "cases": [
+        "restore.late-mount",
+        "restore.no-live-effects",
+        "restore.concurrent-append",
+        "restore.stale-snapshot"
+      ],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-AI-001.v1",
+      "path": "constitutional-guard/history/ai/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "8173c344b83168dd233507f3860507308f4dd81c7c398b0eaef5786cfea93d65",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-002", "revision": "1.0.0-candidate" },
+      "cases": [
+        "ai.bounded-frame",
+        "ai.cancel-retains-model",
+        "ai.stale-result",
+        "ai.restart-dispose"
+      ],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-CAMERA-002.v1",
+      "path": "constitutional-guard/history/camera-result/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "4bf83ee80f5d181efc5fa505d235906622b77e7c8134805047192e4418259324",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-004", "revision": "1.0.0-candidate" },
+      "cases": [
+        "camera.stale-inference",
+        "camera.stale-finally",
+        "camera.close-current",
+        "camera.no-stale-retry"
+      ],
+      "dependencies": [
+        "constitutional-guard/driver-tools.mjs",
+        "proto-dev/tests/fixtures/camera-context.js"
+      ]
+    },
+    {
+      "id": "IDP-WH-PROFILE-001.v1",
+      "path": "constitutional-guard/history/profile/v1.mjs",
+      "phase": "prebuild",
+      "sha256": "916b013bb0f4d8a978015b5ac24071926431e016a684cefe3853ccf74bc0e965",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-008", "revision": "1.0.0-candidate" },
+      "cases": [
+        "profile.legacy-import",
+        "profile.atomic-quota-refusal",
+        "profile.invalid-snapshot",
+        "profile.progress-export",
+        "profile.immutable-backup",
+        "profile.portable-export"
+      ],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    },
+    {
+      "id": "IDP-WH-ARTIFACT-001.v1",
+      "path": "constitutional-guard/history/artifact/v1.mjs",
+      "phase": "postbuild",
+      "sha256": "932a696e88b233dabde378f8f4f5a5d2a5af8c09680a1f0dfbe4d341db8545f0",
+      "status": "active",
+      "rule": { "id": "IDP-DEV-011", "revision": "1.0.0-candidate" },
+      "cases": [
+        "artifact.frozen-content",
+        "artifact.public-templates",
+        "artifact.unknown-resource"
+      ],
+      "dependencies": ["constitutional-guard/driver-tools.mjs"]
+    }
+  ],
+  "protectedDependencies": [
+    {
+      "path": ".github/workflows/proto-pipeline.yml",
+      "sha256": "648f244fb24b266f729fca3b332801829acfffa536cdba082b0abcf23553cc5e"
+    },
+    {
+      "path": "build/artifact-map.json",
+      "sha256": "88cdf82f8a9f3c74f400ea70585cf0355f24c74c8e276a373f566c3df5f15c34"
+    },
+    {
+      "path": "build/assemble.mjs",
+      "sha256": "afaa0eb208f312368f64aea7c877afd8b71b07f6418a0d84639b126904841cf9"
+    },
+    {
+      "path": "build/audit.mjs",
+      "sha256": "b7e2de4662dc8c2444f530599f73ccc6b951fa7c82b25e1467f8edd2c81538b5"
+    },
+    {
+      "path": "build/check-ci.mjs",
+      "sha256": "deed37999c29b19bab5a915a1b739f608f593366d77324d9359dfad547050a08"
+    },
+    {
+      "path": "build/check-source.mjs",
+      "sha256": "ef962b85a26d60e0a107bd1147d03ad19969072fc10f057a7b7954c1866970d8"
+    },
+    {
+      "path": "build/format.mjs",
+      "sha256": "f32d68dbb1bd39b86d4cc575116ae129b7f0557d1f44c0aa647fa527985435d8"
+    },
+    {
+      "path": "build/http-smoke.mjs",
+      "sha256": "a09badba2942798eda404e4872e33ccc9975f6d66b910ea4f10c67e7b03430ac"
+    },
+    {
+      "path": "build/lib.mjs",
+      "sha256": "170cf80c8d813d6f8e41c9ed79309b74c8c97b7c9a6b0c382b45880f99543018"
+    },
+    {
+      "path": "build/lint.mjs",
+      "sha256": "8d27059f64774e7a007dafa3f6a5e47b20801e81ab0ef77eb1fd7a531e9ddae1"
+    },
+    {
+      "path": "build/local-lab.mjs",
+      "sha256": "6b98c22d12c94f8a8e59bf6bb0e76841b99bc0a3b1b70adc2856b222a9cb2dcb"
+    },
+    {
+      "path": "build/schemas/codemap-manifest.schema.json",
+      "sha256": "143d791e031bdf835bed135d56deb020f32e176ea996f111adfc185f6554133c"
+    },
+    {
+      "path": "build/serve.mjs",
+      "sha256": "8c4f174741337b8112b63bcff0c3f7e44aad0597215c68434f7aa95775bb20c7"
+    },
+    {
+      "path": "build/transformations.json",
+      "sha256": "58d93565d1ef637a2764ea8158abe212d4e4dd9f2a1f8fa1050252754fa1da67"
+    },
+    {
+      "path": "build/verify-release.mjs",
+      "sha256": "8426646db6cad48d3ee50ed8f7d9214afb89be148d32c4b2464997609f2d5f58"
+    },
+    {
+      "path": "constitutional-guard/driver-tools.mjs",
+      "sha256": "564a8099b59de3b23c96d2460f79883a14a125bb2a4e954ffe2846e40205edc8"
+    },
+    {
+      "path": "constitutional-guard/governance.mjs",
+      "sha256": "ee8825af5ae38cce903b5c5e57aed80a1f6d49c2346c2aed16684de9d4d64e77"
+    },
+    {
+      "path": "constitutional-guard/integrity.mjs",
+      "sha256": "a2e06ad71e9c7be17a06e4e41a3894c039f5c7e65eb1ecb10a91ade3b0ed4ce6"
+    },
+    {
+      "path": "constitutional-guard/manifest/gates.json",
+      "sha256": "a2db1605d8b70110311621091dda6e5d33389d6f018e3f5763fe0a688b0ee613"
+    },
+    {
+      "path": "constitutional-guard/manifest/manual-matrix.json",
+      "sha256": "aa532edf52e9f26cdfa323527f300be5c5781aadc2882d2cdb292cb76c6ad7a8"
+    },
+    {
+      "path": "constitutional-guard/manual-evidence.mjs",
+      "sha256": "05765f1445cd505f93c06e46ed074dfeb1a3e687b22beb59ffe57942c2b965d0"
+    },
+    {
+      "path": "constitutional-guard/negative-checks.mjs",
+      "sha256": "14023412b38b9cfad392053b1d87ee8ac0404407dedf86878dc5977df01e8876"
+    },
+    {
+      "path": "constitutional-guard/postbuild.mjs",
+      "sha256": "00cf3968ef7dcca54afb7058185a89613a2095488fa468b967d83b715f0ed192"
+    },
+    {
+      "path": "constitutional-guard/run.mjs",
+      "sha256": "0ecd3bfc9ec575d00c0aa09a1fe24917ad3f6f3149b4eb2aabfe3e5521ef358e"
+    },
+    {
+      "path": "constitutional-guard/schemas/history.schema.json",
+      "sha256": "d6f7a48465741b0633f6cbe924660b3a641446ccf597e52b02249540c8c90b5a"
+    },
+    {
+      "path": "constitutional-guard/schemas/manual-evidence.schema.json",
+      "sha256": "ba845dbae2aac689e072fe743ce8d559142ea798aedbd0c32a748c8d7085dcc0"
+    },
+    {
+      "path": "constitutional-guard/schemas/report.schema.json",
+      "sha256": "ea053e3de8d04893b8a9ad8f06e4912f2edf252463da64421f748b923ac65f04"
+    },
+    {
+      "path": "constitutional-guard/testing-interface/artifact-driver.mjs",
+      "sha256": "0debcc22dfcd216ac778978876ef6b702a4f06688add0e48a143ad120e267a9f"
+    },
+    {
+      "path": "constitutional-guard/verdict.mjs",
+      "sha256": "7de48a9ac85c3c49f7964648704cc8683321f503931534556ffcad0447199ae8"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "sha256": "ac175fefe42033fffde32056ae148fb88a16c30610b796e8c40ce8410e324187"
+    },
+    {
+      "path": "manifest/dependencies.json",
+      "sha256": "a2480a4a1b5e9c365014576970f308292115f9c851bf738c746370afec92da91"
+    },
+    {
+      "path": "manifest/rule-checks.json",
+      "sha256": "b1a3045488b2205b67a6ca8eea7c3b60a71b53059ce23beb9af5fe2bc45f72c2"
+    },
+    {
+      "path": "manifest/technical-regulators.json",
+      "sha256": "bbd63625a515607dfddb8099fad2cff300a7c84608e4e7b35683339bf07ebafa"
+    },
+    {
+      "path": "manifest/test-corpus.json",
+      "sha256": "2e2856535037280b93e8a1520dd221c8fa4f5b8883bc4e082b36ab0451bac5bd"
+    },
+    {
+      "path": "proto-dev/package-lock.json",
+      "sha256": "1373191d5148a3988789419f386ed7e30ac2f69792fd373a57279e9311335a3d"
+    },
+    {
+      "path": "proto-dev/package.json",
+      "sha256": "750d9c0b8bd1b8e3b0c0635096886510f1c3e14b4e6016e37df3cd5eb30ce8cc"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/bootstrap-context.js",
+      "sha256": "cd2b9f5d7eb8d82226948a97e5240b1b5e9202ff2c51f8d1f3205b1406f47156"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/camera-context.js",
+      "sha256": "0aaf60bafc14751de9e19157b04dd0d6ec6234024e296d0be797eea51abc1019"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/dom-image.js",
+      "sha256": "b96c63f6efea17dea14b03ae27b568f2362a400722c40fc582ad72d57eeff976"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/external/interdead-it/LICENSE",
+      "sha256": "5d00755b65ba769034dbf47e791d7bc532214c225bd018cedd69c82869f2614d"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/external/interdead-it/README.md",
+      "sha256": "c43f2287493e5238ceac081179b7e3471a9770bd16d08ba53c678e00b26fa50f"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/external/interdead-it/session.js",
+      "sha256": "99881a98ffbe0cb845dca4f99b58816b80d7bdc2dea2a2021ce1fe75dcf3ffae"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/port-contracts.js",
+      "sha256": "bb047c0f96a0e1dcf187d42ad48b696d3313414e96fc72d55bac022a8d6e8d97"
+    },
+    {
+      "path": "proto-dev/tests/fixtures/sql-initializer.js",
+      "sha256": "d662ec6591fab0e2af9d944bfa447030cbf0f8ce6a53f816775ed6481b019544"
+    },
+    {
+      "path": "proto-dev/tools/public-routes.mjs",
+      "sha256": "060cb32e7188c237f649c37f4a3ea43c1560094b3ef855b1396d0d05b0679644"
+    },
+    {
+      "path": "proto-dev/tools/run-tests.mjs",
+      "sha256": "c2260b2499dac495bb28b58b758c4709c4e88239819e985a3601b78738928fcb"
+    }
+  ],
+  "productionContracts": [
+    {
+      "path": "proto-dev/src/app-shell/bootstrap/application-bootstrap.js",
+      "methods": ["start", "dispose"]
+    },
+    {
+      "path": "proto-dev/src/app-shell/bootstrap/boot-manager.js",
+      "methods": ["bootAll", "bootPhase", "disposeAll"]
+    },
+    {
+      "path": "proto-dev/src/camera/browser/camera-adapter.js",
+      "methods": ["startStream", "stopStream", "takeSelfie", "getState"]
+    },
+    {
+      "path": "proto-dev/src/camera/application/camera-orchestrator-service.js",
+      "methods": [
+        "open",
+        "closeSession",
+        "start",
+        "resumeDetection",
+        "captureOverlay",
+        "dispose",
+        "getSessionToken",
+        "isSessionCurrent"
+      ]
+    },
+    {
+      "path": "proto-dev/src/messenger/history/dialog-timeline.js",
+      "methods": ["subscribe", "getSnapshot", "replaceMessages", "accept"]
+    },
+    {
+      "path": "proto-dev/src/contact-sessions/application/contact-transition-controller.js",
+      "methods": ["request", "cancel"]
+    },
+    {
+      "path": "proto-dev/src/storage/browser/local-storage-adapter.js",
+      "methods": ["replaceOwned", "backupUserContext", "exportUserProgress", "clear"]
+    },
+    {
+      "path": "proto-dev/src/storage/browser/database-adapter.js",
+      "methods": ["fork", "commitSnapshot", "exportSnapshot"]
+    },
+    {
+      "path": "proto-dev/src/identity/application/profile-registration-service.js",
+      "methods": ["prepareImport", "commitImportedContext", "exportProfile"]
+    },
+    {
+      "path": "proto-dev/src/spirit-contacts/application/ghost-service.js",
+      "methods": ["boot", "getCurrentGhost", "commitCurrentGhost"]
+    },
+    {
+      "path": "proto-dev/src/spirit-contacts/application/ghost-switch-service.js",
+      "methods": ["boot", "restoreUserContext", "clearUserRuntimeContext"]
+    },
+    {
+      "path": "proto-dev/src/localization/browser/language-adapter.js",
+      "methods": ["boot", "dispose", "setLanguage", "applyLanguage"]
+    }
+  ]
+}

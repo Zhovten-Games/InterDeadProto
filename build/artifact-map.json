@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "templates": [
+    {
+      "source": "proto-dev/src/quests/presentation/templates/apartment-plan.html",
+      "publicPath": "src/presentation/templates/apartment-plan.html"
+    },
+    {
+      "source": "proto-dev/src/app-shell/controls/templates/button.html",
+      "publicPath": "src/presentation/templates/buttons/button.html"
+    },
+    {
+      "source": "proto-dev/src/identity/presentation/templates/export-button.html",
+      "publicPath": "src/presentation/templates/buttons/export-button.html"
+    },
+    {
+      "source": "proto-dev/src/spirit-contacts/presentation/templates/ghost-switcher.html",
+      "publicPath": "src/presentation/templates/buttons/ghost-switcher.html"
+    },
+    {
+      "source": "proto-dev/src/identity/presentation/templates/import-button.html",
+      "publicPath": "src/presentation/templates/buttons/import-button.html"
+    },
+    {
+      "source": "proto-dev/src/identity/presentation/templates/input-name.html",
+      "publicPath": "src/presentation/templates/buttons/input-name.html"
+    },
+    {
+      "source": "proto-dev/src/localization/presentation/templates/language-selector.html",
+      "publicPath": "src/presentation/templates/buttons/language-selector.html"
+    },
+    {
+      "source": "proto-dev/src/identity/presentation/templates/profile-settings-button.html",
+      "publicPath": "src/presentation/templates/buttons/profile-settings-button.html"
+    },
+    {
+      "source": "proto-dev/src/camera/presentation/templates/camera.html",
+      "publicPath": "src/presentation/templates/camera.html"
+    },
+    {
+      "source": "proto-dev/src/app-shell/presentation/templates/footer.html",
+      "publicPath": "src/presentation/templates/footer.html"
+    },
+    {
+      "source": "proto-dev/src/messenger/presentation/templates/messenger.html",
+      "publicPath": "src/presentation/templates/messenger.html"
+    },
+    {
+      "source": "proto-dev/src/app-shell/controls/templates/panel.html",
+      "publicPath": "src/presentation/templates/panel.html"
+    },
+    {
+      "source": "proto-dev/src/camera/presentation/templates/registration-camera.html",
+      "publicPath": "src/presentation/templates/registration-camera.html"
+    },
+    {
+      "source": "proto-dev/src/identity/presentation/templates/registration.html",
+      "publicPath": "src/presentation/templates/registration.html"
+    },
+    {
+      "source": "proto-dev/src/app-shell/presentation/templates/triad.html",
+      "publicPath": "src/presentation/templates/triad.html"
+    },
+    {
+      "source": "proto-dev/src/app-shell/presentation/templates/welcome.html",
+      "publicPath": "src/presentation/templates/welcome.html"
+    },
+    {
+      "source": "proto-dev/src/messenger/presentation/templates/dialog-message.html",
+      "publicPath": "src/presentation/templates/widgets/dialog-message.html"
+    }
+  ],
+  "locales": {
+    "source": "proto-dev/src/localization/locales",
+    "publicPath": "src/i18n/locales",
+    "mode": "bundled plus explicit remote compatibility route"
+  },
+  "javascriptNamespace": "src/[name]-[hash].js",
+  "assets": "proto-dev/assets"
+}

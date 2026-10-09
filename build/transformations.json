@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "active": [
+    {
+      "id": "locale-source-substitution",
+      "phase": "Vite resolve",
+      "source": "proto-dev/src/localization/adapters/localization-adapter.js",
+      "replacement": "proto-dev/tests/local-build-lab/overrides/localization-adapter.deploy.js",
+      "precondition": "exact resolved module path and four domain dictionaries per locale",
+      "postcondition": "bundled loader domains plus one declared remote mirror"
+    },
+    {
+      "id": "template-and-static-mapping",
+      "phase": "assembly",
+      "manifest": "build/artifact-map.json",
+      "precondition": "every registered source exists; no duplicate or escaping public paths",
+      "postcondition": "all declared public files hashed and served"
+    },
+    {
+      "id": "service-worker-build-id",
+      "phase": "assembly",
+      "source": "proto-dev/sw.js",
+      "expectedOccurrences": 1,
+      "postcondition": "fallback build ID equals exact distribution build ID"
+    }
+  ],
+  "retired": [
+    {
+      "id": "spirit-registry",
+      "reason": "Behavior made canonical and covered by public-contract tests; no deployment-only business rewrite",
+      "source": "proto-dev/src/app-shell/composition/configuration-index.js"
+    },
+    {
+      "id": "state-spirit-load",
+      "reason": "Behavior made canonical and covered by public-contract tests; no deployment-only business rewrite",
+      "source": "proto-dev/src/app-shell/state/application-state-service.js"
+    },
+    {
+      "id": "dialog-spirit-load",
+      "reason": "Behavior made canonical and covered by public-contract tests; no deployment-only business rewrite",
+      "source": "proto-dev/src/messenger/application/dialog-orchestrator-service.js"
+    },
+    {
+      "id": "asset-root-normalization",
+      "reason": "Behavior made canonical and covered by public-contract tests; no deployment-only business rewrite",
+      "source": "proto-dev/src/asset-delivery/paths/assets-base-url.js"
+    },
+    {
+      "id": "database-wasm-root",
+      "reason": "Behavior made canonical and covered by public-contract tests; no deployment-only business rewrite",
+      "source": "proto-dev/src/storage/browser/database-adapter.js"
+    },
+    {
+      "id": "blanket-perl-artifact-rewrites",
+      "reason": "Behavior made canonical and covered by public-contract tests; no deployment-only business rewrite",
+      "source": "proto-dev/vite.config.js"
+    }
+  ],
+  "artifactOnly": [
+    {
+      "id": "source-map-exclusion",
+      "operation": "Do not emit or copy public source maps; canonical sources are unchanged"
+    },
+    {
+      "id": "isolated-environment",
+      "operation": "Ignore local .env/config.env when copying canonical source into assembly; no untracked build input"
+    },
+    {
+      "id": "profile-envelope",
+      "operation": "No build rewrite: user context migration is canonical runtime logic"
+    }
+  ]
+}

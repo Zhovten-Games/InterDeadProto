@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "revision",
+    "entries",
+    "protectedDependencies",
+    "productionContracts"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "revision": { "type": "string", "minLength": 1 },
+    "controlChange": {
+      "type": "string",
+      "pattern": "^governance/decisions/[A-Za-z0-9._-]+\\.json$"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "path", "sha256", "phase", "status", "rule", "cases", "dependencies"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^IDP-WH-[A-Z]+-[0-9]{3}\\.v[0-9]+$" },
+          "path": {
+            "type": "string",
+            "pattern": "^constitutional-guard/history/[a-z-]+/v[0-9]+\\.mjs$"
+          },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "phase": { "enum": ["prebuild", "postbuild"] },
+          "status": { "enum": ["active", "superseded"] },
+          "rule": {
+            "type": "object",
+            "required": ["id", "revision"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^IDP-DEV-[0-9]{3}$" },
+              "revision": { "type": "string", "minLength": 1 }
+            }
+          },
+          "cases": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "dependencies": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^(constitutional-guard|proto-dev/tests/fixtures|proto-dev/tools|build|manifest)/[A-Za-z0-9/._-]+$"
+            }
+          },
+          "supersededBy": { "type": "string" },
+          "decision": {
+            "type": "string",
+            "pattern": "^governance/decisions/[A-Za-z0-9._-]+\\.(md|json)$"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "protectedDependencies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256"],
+        "properties": {
+          "path": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "productionContracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "methods"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^proto-dev/src/[a-z/.-]+\\.js$" },
+          "methods": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 1 }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

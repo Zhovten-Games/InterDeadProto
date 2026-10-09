@@ -15,12 +15,12 @@ apply to this repository.
 Unless a more specific third-party notice, subtree notice, file-level notice,
 or project-specific override applies:
 
-| Scope | Default license |
-|---|---|
-| Original articles, prose, documentation, publication sources, and original non-brand editorial materials | `CC-BY-SA-4.0` |
-| Original source code, scripts, tests, examples, reusable schemas, and reusable templates | `MIT` |
-| Names, logos, trademarks, brand assets, and visual identity elements | No license granted; all rights reserved |
-| Third-party materials | Their original upstream licenses and notices |
+| Scope                                                                                                    | Default license                              |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| Original articles, prose, documentation, publication sources, and original non-brand editorial materials | `CC-BY-SA-4.0`                               |
+| Original source code, scripts, tests, examples, reusable schemas, and reusable templates                 | `MIT`                                        |
+| Names, logos, trademarks, brand assets, and visual identity elements                                     | No license granted; all rights reserved      |
+| Third-party materials                                                                                    | Their original upstream licenses and notices |
 
 ## Historical revisions
 

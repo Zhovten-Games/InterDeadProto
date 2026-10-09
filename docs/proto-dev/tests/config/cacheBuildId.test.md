@@ -3,7 +3,7 @@ domains: []
 emits: []
 implements: []
 imports:
-  - src/config/cacheBuildId.js
+  - src/asset-delivery/cache/cache-build-id.js
 listens: []
 owns: []
 schemaVersion: 1

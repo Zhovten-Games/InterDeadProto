@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schemaVersion", "project", "scan", "documentation", "runner", "output"],
+  "properties": {
+    "schemaVersion": {
+      "const": "2.0.0"
+    },
+    "project": {
+      "type": "object",
+      "required": ["name", "defaultBranch"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "defaultBranch": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "scan": {
+      "type": "object",
+      "required": ["include", "exclude", "followSymlinks", "parser"],
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "followSymlinks": {
+          "const": false
+        },
+        "parser": {
+          "type": "object"
+        }
+      }
+    },
+    "documentation": {
+      "type": "object",
+      "required": ["sources"],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "runner": {
+      "type": "object",
+      "required": ["command", "scope", "limits", "schemaCompatibility"],
+      "properties": {
+        "command": {
+          "const": "node build/check-source.mjs"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limits": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schemaCompatibility": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["rootDir", "artifacts"],
+      "properties": {
+        "rootDir": {
+          "const": "build/results"
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

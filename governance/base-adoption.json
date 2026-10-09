@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "status": "candidate",
+  "source": ".code-constitution/governance/legislation/DEVELOPMENT.md",
+  "sourceRevision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+  "entries": [
+    {
+      "id": "BASE-S01",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-T01",
+      "status": "not-adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "PROFILE P16 selects JavaScript ESM; upstream TS/CSS profile is not universal."
+    },
+    {
+      "id": "BASE-T02",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "JavaScript runtime uses validated application ports and input schemas; build adapters own filesystem/Git/time/hashing. Strict TypeScript-only models are outside this profile."
+    },
+    {
+      "id": "BASE-C01",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-C02",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-C03",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-C04",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-F01",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "IDP-DEV-009 explicitly selects spaces for JavaScript indentation and .test.js files; UTF-8/LF/final newline and kebab naming are retained."
+    },
+    {
+      "id": "BASE-F02",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-F03",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-F04",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-L01",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-L02",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-L03",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-L04",
+      "status": "not-adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "PROFILE P16 selects JavaScript ESM; upstream TS/CSS profile is not universal."
+    },
+    {
+      "id": "BASE-N01",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-N02",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-N03",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-CSS-N01",
+      "status": "not-adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "PROFILE P16 selects JavaScript ESM; upstream TS/CSS profile is not universal."
+    },
+    {
+      "id": "BASE-A01",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-A02",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-Q01",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-Q02",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-Q03",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-Q04",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-D01",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-D02",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Exact versions, integrity and dependency inventory are retained. The isolated assembler performs declared npm ci network acquisition; payload construction then uses local locked inputs."
+    },
+    {
+      "id": "BASE-D03",
+      "status": "adapted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Project-local implementation and checks in IDP-DEV-009–015 and rule-checks registry."
+    },
+    {
+      "id": "BASE-X01",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    },
+    {
+      "id": "BASE-X02",
+      "status": "adopted",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "reason": "Portable rule selected explicitly; source revision remains pinned."
+    }
+  ]
+}

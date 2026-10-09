@@ -1,0 +1,23 @@
+---
+domains: []
+emits: []
+implements: []
+imports: []
+listens: []
+owns: []
+schemaVersion: 1
+source: src/localization/locales/ru/loader.json
+used_by: []
+source_exists: true
+runtime_role: loader
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: context memory index
+---
+
+# Russian Loader Strings
+
+Localized loader module nicknames for the boot sequence. `boot.db`, `boot.camera`, `boot.lang`, `boot.templates`, and `boot.geo` each include multiple variants so the loader animation can rotate through different phrases while the overlay plays.[^1]
+
+[^1]: Loader arrays [src/localization/locales/ru/loader.json#L1-L21](../../../../../../proto-dev/src/localization/locales/ru/loader.json)

@@ -6,3 +6,12 @@
 
 # Local Build Lab disposable build output
 .local-dist/
+
+# Verification outputs and external acceptance evidence
+/build/results/
+/build/workspace/
+/build/output/
+/build/warden-report.json
+/build/manual-evidence.json
+/build/*.zip
+/constitutional-guard/.fixtures/

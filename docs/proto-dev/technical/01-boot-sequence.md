@@ -2,7 +2,7 @@
 
 ## 1.1 Entry point and mode selection
 
-- `proto-dev/src/infrastructure/bootstrap/index.js` is the single entry point. It creates the dependency container via `composeApplication()` and asks `EmbeddingModeResolver` whether we are in `launcher` or full‑app mode.
+- `proto-dev/src/app-shell/bootstrap/index.js` is the single entry point. It creates the dependency container via `composeApplication()` and asks `EmbeddingModeResolver` whether we are in `launcher` or full‑app mode.
 - In launcher mode the `LauncherBootstrapper` is used; in the default path the `FullAppBootstrapper` is used.
 
 ## 1.2 Full application boot

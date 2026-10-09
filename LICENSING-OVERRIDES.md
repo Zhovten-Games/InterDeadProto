@@ -22,8 +22,8 @@ Original narrative, character, dialogue, lore, and localized game-copy content
 under the following paths is not licensed under the default
 `CC-BY-SA-4.0` grant. No license is granted; all rights are reserved:
 
-- `proto-dev/src/config/spirits/**`
-- `proto-dev/src/i18n/locales/**`
+- `proto-dev/src/spirit-contacts/configuration/**`
+- `proto-dev/src/localization/locales/**`
 
 Where a file in these paths also contains reusable executable code, the code
 structure remains `MIT` unless a more specific notice applies; this override is

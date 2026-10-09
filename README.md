@@ -74,3 +74,12 @@ The current Development Regulation is a draft candidate pending completion and
 ratification of the project Founding Profile. Licensing is declared by
 [`LICENSE.md`](./LICENSE.md), with game-content exceptions in
 [`LICENSING-OVERRIDES.md`](./LICENSING-OVERRIDES.md).
+
+The stabilization candidate is checked through
+[`experimental WARDEN`](./constitutional-guard/README.md). From the root, install
+the pinned Node/npm environment, initialize submodules, run
+`npm --prefix proto-dev ci`, install Playwright Chromium and run
+`npm --prefix proto-dev run check`. The complete
+[`acceptance map`](./docs/proto-dev/technical/implementation-matrix.md) identifies
+automatic checks and required human evidence. `proto` is generated; the main-push
+release pipeline sends the same verified tree to `proto` and itch.io.

@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "ruleId": "IDP-DEV-001",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "state-ownership",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["IDP-WH-HISTORY-001.v1", "IDP-WH-SWITCH-001.v1", "IDP-WH-PROFILE-001.v1"]
+    },
+    {
+      "ruleId": "IDP-DEV-002",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "resource-lifecycle",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": [
+        "IDP-WH-BOOT-001.v1",
+        "IDP-WH-CAMERA-001.v1",
+        "IDP-WH-AI-001.v1",
+        "IDP-WH-CAMERA-002.v1"
+      ]
+    },
+    {
+      "ruleId": "IDP-DEV-003",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "bootstrap",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["IDP-WH-BOOT-001.v1", "browser-fresh-four-locales"]
+    },
+    {
+      "ruleId": "IDP-DEV-004",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "async-revisions",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["IDP-WH-CAMERA-001.v1", "IDP-WH-SWITCH-001.v1", "IDP-WH-CAMERA-002.v1"]
+    },
+    {
+      "ruleId": "IDP-DEV-005",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "chronology",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["IDP-WH-HISTORY-001.v1", "IDP-WH-MIGRATION-001.v1"]
+    },
+    {
+      "ruleId": "IDP-DEV-006",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "snapshot-restoration",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["IDP-WH-RESTORE-001.v1", "browser-profile-reload-subpath"]
+    },
+    {
+      "ruleId": "IDP-DEV-007",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "regression-corpus",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["complete-unit-corpus", "historical-integrity"]
+    },
+    {
+      "ruleId": "IDP-DEV-008",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "save-migration",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": [
+        "IDP-WH-MIGRATION-001.v1",
+        "manual.legacy-import-recovery",
+        "IDP-WH-PROFILE-001.v1"
+      ]
+    },
+    {
+      "ruleId": "IDP-DEV-009",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "toolchain",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["toolchain", "javascript-lint", "format", "dependency-audit"]
+    },
+    {
+      "ruleId": "IDP-DEV-010",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "source-topology",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["source-codemap"]
+    },
+    {
+      "ruleId": "IDP-DEV-011",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "artifact-paths",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": [
+        "source-codemap",
+        "http-resources-root-subpath",
+        "artifact-content-identity",
+        "IDP-WH-ARTIFACT-001.v1"
+      ]
+    },
+    {
+      "ruleId": "IDP-DEV-012",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "warden-integrity",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["historical-integrity", "warden-refusal-fixtures"]
+    },
+    {
+      "ruleId": "IDP-DEV-013",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "evidence-binding",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["artifact-content-identity", "frozen-artifact", "manual.licensing-host-boundaries"]
+    },
+    {
+      "ruleId": "IDP-DEV-014",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "assembly-parity",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["isolated-assembly", "artifact-content-identity", "ci-publication-policy"]
+    },
+    {
+      "ruleId": "IDP-DEV-015",
+      "revision": "1.0.0-candidate",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "gate": "profile-reset",
+      "mechanism": "WARDEN prebuild/postbuild plus declared mandatory manual cases",
+      "owner": "maintainer/reviewer; human identity pending P05",
+      "changeProcedure": "PROFILE P06/P11",
+      "checks": ["manual.reset-preserves-infrastructure", "browser-profile-reload-subpath"]
+    },
+    {
+      "ruleId": "BASE-S01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": [
+        "source-codemap",
+        "immutable-source",
+        "clean-source",
+        "manual.normative-semantic-review"
+      ],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-T02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["complete-unit-corpus", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-C01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["complete-unit-corpus", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-C02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": [
+        "ci-publication-policy",
+        "governance-ratification",
+        "manual.normative-semantic-review"
+      ],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-C03",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": [
+        "governance-corpus",
+        "governance-ratification",
+        "manual.normative-semantic-review"
+      ],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-C04",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["governance-corpus", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-F01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["format", "source-codemap", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-F02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["format", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-F03",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["format", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-F04",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["javascript-lint", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-L01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["javascript-lint", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-L02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["javascript-lint", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-L03",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["source-codemap", "complete-unit-corpus", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-N01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["source-codemap", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-N02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["source-codemap", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-N03",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["source-codemap", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-A01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["source-codemap", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-A02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["IDP-WH-BOOT-001.v1", "IDP-WH-CAMERA-002.v1", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-Q01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": [
+        "complete-unit-corpus",
+        "warden-refusal-fixtures",
+        "manual.normative-semantic-review"
+      ],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-Q02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["governance-corpus", "gate-inventory", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-Q03",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["gate-inventory", "immutable-source", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-Q04",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": [
+        "artifact-content-identity",
+        "frozen-artifact",
+        "gate-inventory",
+        "manual.normative-semantic-review"
+      ],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-D01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["dependency-audit", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-D02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": [
+        "isolated-assembly",
+        "artifact-content-identity",
+        "manual.normative-semantic-review"
+      ],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-D03",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["dependency-audit", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-X01",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["governance-corpus", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    },
+    {
+      "ruleId": "BASE-X02",
+      "revision": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+      "scope": ["proto-dev/src/**", "proto-dev/tests/**", "build/**", "constitutional-guard/**"],
+      "gate": "base-conformance",
+      "mechanism": "Objective boundaries plus expressly assigned substantive human review",
+      "owner": "Competent maintainer/reviewer designated under PROFILE P05",
+      "changeProcedure": "PROFILE P06/P11; exact BASE source revision is pinned",
+      "checks": ["governance-corpus", "manual.normative-semantic-review"],
+      "humanReview": "Read the exact source provision and review semantic conformance in its entire scope; record concrete exceptions, translation losses/defaults and dispositions in referenced evidence."
+    }
+  ]
+}

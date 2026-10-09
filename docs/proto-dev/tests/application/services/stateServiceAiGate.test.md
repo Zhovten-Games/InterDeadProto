@@ -3,8 +3,8 @@ domains: []
 emits: []
 implements: []
 imports:
-  - src/application/services/StateService.js
-  - src/utils/Observer.js
+  - src/app-shell/state/application-state-service.js
+  - src/runtime-events/subscriptions/observer.js
 listens: []
 owns: []
 schemaVersion: 1

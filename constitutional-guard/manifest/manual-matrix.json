@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "freshnessDays": 30,
+  "cases": [
+    {
+      "id": "manual.opera-itch-grant",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission grant; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
+      "origin": "itch.io"
+    },
+    {
+      "id": "manual.opera-itch-deny",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission deny; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
+      "origin": "itch.io"
+    },
+    {
+      "id": "manual.opera-itch-pending",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission pending; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
+      "origin": "itch.io"
+    },
+    {
+      "id": "manual.opera-noir-grant",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission grant; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
+      "origin": "noir.phantom-draft.com"
+    },
+    {
+      "id": "manual.opera-noir-deny",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission deny; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
+      "origin": "noir.phantom-draft.com"
+    },
+    {
+      "id": "manual.opera-noir-pending",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission pending; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
+      "origin": "noir.phantom-draft.com"
+    },
+    {
+      "id": "manual.opera-subpath-grant",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission grant; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required."
+    },
+    {
+      "id": "manual.opera-subpath-deny",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission deny; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required."
+    },
+    {
+      "id": "manual.opera-subpath-pending",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission pending; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required."
+    },
+    {
+      "id": "manual.opera-local-grant",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission grant; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required."
+    },
+    {
+      "id": "manual.opera-local-deny",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission deny; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required."
+    },
+    {
+      "id": "manual.opera-local-pending",
+      "family": "camera-host",
+      "browser": "Opera",
+      "procedure": "Permission pending; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required."
+    },
+    {
+      "id": "manual.legacy-import-recovery",
+      "family": "migration-profile",
+      "procedure": "Legacy save/import; reject invalid import without partial commit; use immutable backup; continue bear → reload → bed → reload; rollback drill."
+    },
+    {
+      "id": "manual.reset-preserves-infrastructure",
+      "family": "migration-profile",
+      "procedure": "Reset only project user state; preserve unrelated host storage and loaded model; re-register/continue in the same lifecycle."
+    },
+    {
+      "id": "manual.licensing-host-boundaries",
+      "family": "external-boundaries",
+      "procedure": "Review notices, host permissions/origins, actual proto/NOIR/Cloudflare relation, external destinations and source/artifact mapping."
+    },
+    {
+      "id": "manual.test-boundary",
+      "family": "external-boundaries",
+      "procedure": "Ratify archival of two person tests with absent production sources; confirm baseline provenance and no unreported lost families."
+    },
+    {
+      "id": "manual.localization-focus-en",
+      "family": "localization-accessibility",
+      "procedure": "en: fresh/returning profile, translated camera/AI failures, keyboard/focus/loader/overlay, messenger/media/profile flows."
+    },
+    {
+      "id": "manual.localization-focus-ru",
+      "family": "localization-accessibility",
+      "procedure": "ru: fresh/returning profile, translated camera/AI failures, keyboard/focus/loader/overlay, messenger/media/profile flows."
+    },
+    {
+      "id": "manual.localization-focus-uk",
+      "family": "localization-accessibility",
+      "procedure": "uk: fresh/returning profile, translated camera/AI failures, keyboard/focus/loader/overlay, messenger/media/profile flows."
+    },
+    {
+      "id": "manual.localization-focus-ja",
+      "family": "localization-accessibility",
+      "procedure": "ja: fresh/returning profile, translated camera/AI failures, keyboard/focus/loader/overlay, messenger/media/profile flows."
+    },
+    {
+      "id": "manual.normative-semantic-review",
+      "family": "governance-semantics",
+      "procedure": "Review each adopted/adapted BASE rule against its pinned text and declared scope: semantic names/stanzas, responsibility and hierarchy, public contracts and lifecycle/state ownership, external input/error boundaries, source/docs truth, dependency risks and licenses, waiver/regulator completeness, normative-translation losses/defaults and human discretion. Record concrete discrepancies and decisions; automation confirms only its declared objective boundaries."
+    }
+  ]
+}

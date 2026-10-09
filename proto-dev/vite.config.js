@@ -1,16 +1,18 @@
 import { defineConfig } from 'vite';
+import publicRoutes from './tools/public-routes.mjs';
 
 const FAVICON_RE = /(?:^|\/)favicon|apple-touch-icon|site\.webmanifest$/;
 
 export default defineConfig({
   base: './',
+  plugins: [publicRoutes()],
   build: {
     target: 'esnext',
     outDir: 'dist',
     emptyOutDir: true,
     sourcemap: true,
-    minify: 'esbuild',
-    rollupOptions: {
+    minify: true,
+    rolldownOptions: {
       output: {
         entryFileNames: 'src/[name]-[hash].js',
         chunkFileNames: 'src/[name]-[hash].js',

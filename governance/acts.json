@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "profile": {
+    "id": "idp-profile-001",
+    "path": "governance/PROFILE.md",
+    "revision": "1.0.0-candidate",
+    "language": "ru",
+    "status": "candidate"
+  },
+  "acts": [
+    {
+      "id": "idp-act-development-001",
+      "path": "governance/legislation/DEVELOPMENT.md",
+      "revision": "1.0.0-candidate",
+      "language": "en",
+      "status": "candidate",
+      "rules": [
+        "IDP-DEV-001",
+        "IDP-DEV-002",
+        "IDP-DEV-003",
+        "IDP-DEV-004",
+        "IDP-DEV-005",
+        "IDP-DEV-006",
+        "IDP-DEV-007",
+        "IDP-DEV-008",
+        "IDP-DEV-009",
+        "IDP-DEV-010",
+        "IDP-DEV-011",
+        "IDP-DEV-012",
+        "IDP-DEV-013",
+        "IDP-DEV-014",
+        "IDP-DEV-015"
+      ]
+    }
+  ],
+  "pins": {
+    ".code-constitution": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+    ".licensing-policy": "6e4c2627717c079827ed4aa9044a5346b3ea3ddb"
+  }
+}

@@ -1,6 +1,7 @@
 # InterDeadProto Development Regulation
 
-Status: `draft-candidate`
+Act ID: `idp-act-development-001`. Revision: `1.0.0-candidate`.
+Status: `candidate`
 
 Constitution source: `.code-constitution/` at
 `220dc9c286ae06f8b6ed60cdda75112eed0408ed`.
@@ -80,7 +81,7 @@ ordering rule.
 The EventBus is a transport for notifications and commands; it MUST NOT become
 the sole durable state store.
 
-Restoring an existing state snapshot SHOULD use an atomic state/view replacement
+Restoring an existing state snapshot MUST use an atomic state/view replacement
 contract rather than simulating a sequence of new live events when those events
 have side effects such as deduplication, progression, persistence, analytics,
 or seen-state mutation.
@@ -118,3 +119,40 @@ order:
 
 This section records the initial remediation sequence, not a permanent priority
 rule. Changing the sequence does not amend IDP-DEV-001 through IDP-DEV-008.
+
+## IDP-DEV-009 — Profile-controlled environment
+
+The technical environment MUST follow PROFILE P16. JavaScript ES modules and scoped JS lint replace unadopted TypeScript-only BASE requirements. No test/typecheck interface is declared unless implemented. Toolchain changes require a separate decision and locked verification.
+
+JavaScript uses two spaces for indentation and `.test.js` for unit families;
+UTF-8, LF and a final newline are retained. This explicitly adapts BASE-F01/F02.
+JavaScript input adapters validate external shapes and convert them to the
+application port contract; this adapts the TypeScript-specific part of BASE-T02.
+The complete candidate pass performs declared external acquisition (`npm ci`,
+browser installation before the pass, and the separate dependency-audit command).
+Payload construction uses locked local inputs after acquisition. This explicitly
+adapts the offline requirements in BASE-Q03/D02; an unavailable audit is a blocker.
+
+## IDP-DEV-010 — Semantic module topology
+
+The first source level MUST name a product capability or an exact external boundary. Program and test filenames MUST use kebab-case, except declared entry/conventional names. Placement follows actual responsibility. Splitting responsibility MAY require subsequent moves; the migration map MUST retain provenance.
+
+## IDP-DEV-011 — Source-to-artifact compatibility
+
+Source relocation MUST update imports, dynamic paths, docs, tests, licensing, CI and Local Build Lab together. Public paths MUST be preserved through an explicit artifact map or migrated by a reviewed compatibility decision. Diagnostic builds MUST NOT mutate canonical checkout sources.
+
+## IDP-DEV-012 — Experimental WARDEN
+
+Full check MUST execute integrity, prebuild, distribution assembly, postbuild and evidence aggregation. Missing/modified/unregistered history or protected dependencies MUST cause fail-closed refusal before dependent phases. Supersession MUST preserve predecessor and reviewed decision. Check MUST NOT update control hashes.
+
+## IDP-DEV-013 — Verification evidence
+
+Evidence MUST bind exact source SHA, normative pins, lockfile, toolchain, build ID, artifact tree and ZIP. passed, failed, unavailable and pending MUST be distinguished. releaseStatus is passed only after every mandatory gate passes in a full run. Any diagnostic or incomplete run MUST exit nonzero for release certification.
+
+## IDP-DEV-014 — Deployment assembly
+
+CI and Local Build Lab MUST invoke the same isolated locked assembler. Publication MUST use its verified artifact without rebuild or mutation, only on an authorized main push and passed release gate. proto is generated; itch ZIP has no enclosing directory. PR/manual diagnostic runs MUST NOT publish.
+
+## IDP-DEV-015 — Profile reset boundary
+
+Reset MUST invalidate user/session operations, transient history/UI and camera queries while preserving infrastructure AI readiness. Persisted data is removed only by an explicit option. APP_RESET_COMPLETED/SCREEN_CHANGE MUST rederive UI through its ordinary contract.

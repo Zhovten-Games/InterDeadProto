@@ -15,7 +15,6 @@ InterDeadProto is a **narrative-driven interface prototype**. The active impleme
 3. **Runtime entry points:** [`docs/proto-dev/index.md`](../index.md) and [`docs/proto-dev/sw.md`](../sw.md).
 4. **Narrative materials:** [`InterDeadReferenceLibrary/wiki/en`](../../../InterDeadReferenceLibrary/wiki/en/).
 
-
 ## Current proto limitations
 
 - Direct free-form user messaging is intentionally disabled in this prototype runtime.

@@ -1,302 +1,178 @@
-name: InterDeadProto Pipeline
+name: InterDeadProto verified candidate and release
 
 on:
   push:
-    branches: [ main, proto-dev ]
+    branches: [main, proto-dev]
     paths:
-      - "proto-dev/**"
-      - ".github/workflows/proto-pipeline.yml"
-      - ".github/scripts/apply-ci-overrides.sh"
+      - 'proto-dev/**'
+      - 'build/**'
+      - 'constitutional-guard/**'
+      - 'governance/**'
+      - 'manifest/**'
+      - 'docs/**'
+      - 'DEVELOPMENT.md'
+      - 'LICENSE.md'
+      - 'LICENSING-OVERRIDES.md'
+      - 'codemap.manifest.json'
+      - '.code-constitution'
+      - '.licensing-policy'
+      - '.github/**'
+      - '.gitmodules'
+      - '.nvmrc'
+      - 'eslint.config.mjs'
+      - '.prettierrc*'
+      - '.prettierignore'
   pull_request:
-    branches: [ main, proto-dev ]
-    paths:
-      - "proto-dev/**"
-      - ".github/workflows/proto-pipeline.yml"
-      - ".github/scripts/apply-ci-overrides.sh"
+    branches: [main, proto-dev]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: interdead-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build dist + ensure runtime + zip
+  candidate:
+    name: Full WARDEN candidate (manual gates remain visible)
     runs-on: ubuntu-latest
-
+    outputs:
+      release-status: ${{ steps.verdict.outputs.release-status }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: proto-dev/package-lock.json
-
-      - name: Install
-        working-directory: proto-dev
-        run: npm ci
-
-      - name: Apply CI-only compatibility overrides
-        shell: bash
-        run: ./.github/scripts/apply-ci-overrides.sh
-
-      - name: Build
-        working-directory: proto-dev
-        env:
-          VITE_CACHE_BUILD_ID: ${{ github.sha }}
-        run: npm run build:deploy
-
-      - name: Mirror static assets to dist
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p "proto-dev/dist/assets"
-          cp -R "proto-dev/assets/." "proto-dev/dist/assets/"
-
-          test -f "proto-dev/dist/assets/images/logo.png"
-          test -f "proto-dev/dist/assets/audio/ghost_effect.mp3"
-
-      - name: Ensure runtime libs
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          mkdir -p "proto-dev/dist/assets/libs"
-          mkdir -p "proto-dev/dist/assets/libs/db"
-
-          # SQL.js WASM
-          if [ ! -f "proto-dev/dist/assets/libs/db/sql-wasm.wasm" ]; then
-            if [ -f "proto-dev/assets/libs/db/sql-wasm.wasm" ]; then
-              cp "proto-dev/assets/libs/db/sql-wasm.wasm" "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
-            elif [ -f "assets/libs/db/sql-wasm.wasm" ]; then
-              cp "assets/libs/db/sql-wasm.wasm" "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
-            elif [ -f "proto-dev/node_modules/sql.js/dist/sql-wasm.wasm" ]; then
-              cp "proto-dev/node_modules/sql.js/dist/sql-wasm.wasm" "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
-            else
-              echo "sql-wasm.wasm not found"
-              exit 1
-            fi
-          fi
-
-          # tf.min.js + coco-ssd.min.js
-          for f in "tf.min.js" "coco-ssd.min.js"; do
-            if [ ! -f "proto-dev/dist/assets/libs/${f}" ]; then
-              if [ -f "proto-dev/assets/libs/${f}" ]; then
-                cp "proto-dev/assets/libs/${f}" "proto-dev/dist/assets/libs/${f}"
-              elif [ -f "assets/libs/${f}" ]; then
-                cp "assets/libs/${f}" "proto-dev/dist/assets/libs/${f}"
-              else
-                echo "${f} not found"
-                exit 1
-              fi
-            fi
-          done
-
-      - name: Ensure COCO-SSD model in dist (local hosting)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          SRC=""
-          if [ -d "proto-dev/assets/models/coco-ssd" ]; then
-            SRC="proto-dev/assets/models/coco-ssd"
-          elif [ -d "assets/models/coco-ssd" ]; then
-            SRC="assets/models/coco-ssd"
-          else
-            echo "COCO-SSD model folder not found in repo"
-            exit 1
-          fi
-
-          mkdir -p "proto-dev/dist/assets/models/coco-ssd"
-          cp -R "${SRC}/." "proto-dev/dist/assets/models/coco-ssd/"
-          test -f "proto-dev/dist/assets/models/coco-ssd/model.json"
-
-      - name: Ensure templates in dist (mirror proto-dev/src)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          SRC=""
-          if [ -d "proto-dev/src/presentation/templates" ]; then
-            SRC="proto-dev/src/presentation/templates"
-          elif [ -d "src/presentation/templates" ]; then
-            SRC="src/presentation/templates"
-          else
-            echo "templates source folder not found"
-            exit 1
-          fi
-
-          mkdir -p "proto-dev/dist/src/presentation/templates"
-          rm -rf "proto-dev/dist/src/presentation/templates" || true
-          mkdir -p "proto-dev/dist/src/presentation/templates"
-          cp -R "${SRC}/." "proto-dev/dist/src/presentation/templates/"
-
-          test -f "proto-dev/dist/src/presentation/templates/welcome.html"
-
-      - name: Ensure sw.js
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [ ! -f "proto-dev/dist/sw.js" ]; then
-            if [ -f "proto-dev/sw.js" ]; then
-              cp "proto-dev/sw.js" "proto-dev/dist/sw.js"
-            elif [ -f "sw.js" ]; then
-              cp "sw.js" "proto-dev/dist/sw.js"
-            else
-              echo "sw.js not found (will skip)"
-              exit 0
-            fi
-          fi
-
-      - name: Ensure favicon (from proto-dev/assets/favicons)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [ ! -f "proto-dev/dist/favicon.ico" ]; then
-            if [ -f "proto-dev/assets/favicons/favicon.ico" ]; then
-              cp "proto-dev/assets/favicons/favicon.ico" "proto-dev/dist/favicon.ico"
-            elif [ -f "proto-dev/favicon.ico" ]; then
-              cp "proto-dev/favicon.ico" "proto-dev/dist/favicon.ico"
-            elif [ -f "favicon.ico" ]; then
-              cp "favicon.ico" "proto-dev/dist/favicon.ico"
-            fi
-          fi
-
-          test -f "proto-dev/dist/favicon.ico"
-
-      - name: Patch dist (safe path fixes; strip sourcemaps)
-        shell: bash
-        run: |
-          set -euo pipefail
-          shopt -s globstar nullglob
-
-          # Apply to all JS (incl. minified bundles), and index.html
-          TARGETS=(proto-dev/dist/**/*.js proto-dev/dist/index.html)
-
-          # 1) /src/... -> src/... (avoid domain root on GitHub Pages)
-          perl -pi -e 's|"/src/|"src/|g; s|'\''/src/|'\''src/|g' "${TARGETS[@]}" || true
-
-          # 2) ../i18n/... -> i18n/...  AND the broken "..i18n/..." -> i18n/...
-          perl -pi -e 's|\.\./i18n/|i18n/|g; s|\.\.i18n/|i18n/|g' "${TARGETS[@]}" || true
-
-          # 3) favicon absolute -> relative inside project
-          perl -pi -e 's|href="/favicon\.ico"|href="favicon.ico"|g; s|href='\''/favicon\.ico'\''|href='\''favicon.ico'\''|g' proto-dev/dist/index.html || true
-
-          # 4) Strip sourcemap markers and delete map files
-          perl -pi -e 's@^\s*//# sourceMappingURL=.*$@@mg; s@/\*# sourceMappingURL=.*?\*/@@g' proto-dev/dist/**/*.js || true
-          rm -f proto-dev/dist/**/*.map || true
-
-      - name: Final fail-fast check for broken asset prefixes in dist
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if rg -n "/s/assets/" "proto-dev/dist"; then
-            echo "Detected forbidden '/s/assets/' paths in final dist output."
-            exit 1
-          fi
-
-          if rg -n "/s/assets/.*sql-wasm\.wasm|sql-wasm\.wasm.*?/s/assets/" "proto-dev/dist"; then
-            echo "Detected SQL.js wasm reference with forbidden '/s/assets/' prefix."
-            exit 1
-          fi
-
-          echo "No forbidden '/s/assets/' prefixes detected in final dist."
-
-      - name: Verify key files
-        shell: bash
-        run: |
-          set -euo pipefail
-          test -f "proto-dev/dist/assets/libs/db/sql-wasm.wasm"
-          test -f "proto-dev/dist/assets/libs/tf.min.js"
-          test -f "proto-dev/dist/assets/libs/coco-ssd.min.js"
-          test -f "proto-dev/dist/assets/models/coco-ssd/model.json"
-          test -f "proto-dev/dist/src/presentation/templates/welcome.html"
-          test -f "proto-dev/dist/assets/images/logo.png"
-          test -f "proto-dev/dist/favicon.ico"
-
-      - name: Create zip
-        shell: bash
-        run: |
-          set -euo pipefail
-          TAG="${GITHUB_SHA:0:8}"
-          ZIP="InterDeadProto_${TAG}.zip"
-          (cd proto-dev/dist && zip -r "../../${ZIP}" .)
-
-      - name: Upload dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: proto-dev/dist
-
-      - name: Upload zip
-        uses: actions/upload-artifact@v4
-        with:
-          name: itch-zip
-          path: InterDeadProto_*.zip
-
-  deploy-proto:
-    name: Deploy dist to proto branch
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
-
-      - name: Download dist
-        uses: actions/download-artifact@v4
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          name: dist
-          path: dist
+          node-version: 24.19.0
+          cache: npm
+          cache-dependency-path: proto-dev/package-lock.json
+      - name: Install exact toolchain and locked packages
+        run: |
+          npm install --global npm@11.9.0
+          npm --prefix proto-dev ci
+          ./proto-dev/node_modules/.bin/playwright install --with-deps chromium
+      - name: Materialize optional external manual evidence
+        shell: bash
+        env:
+          MANUAL_EVIDENCE: ${{ secrets.IRON_WARDEN_MANUAL_EVIDENCE_JSON }}
+        run: |
+          mkdir -p build/results
+          if [ -n "$MANUAL_EVIDENCE" ]; then
+            printf '%s' "$MANUAL_EVIDENCE" > build/results/manual-evidence.json
+            echo "IRON_WARDEN_MANUAL_EVIDENCE_FILE=$PWD/build/results/manual-evidence.json" >> "$GITHUB_ENV"
+          fi
+      - name: Full lifecycle and release verdict
+        id: warden
+        continue-on-error: true
+        run: npm --prefix proto-dev run check
+      - name: Require all automatic candidate gates
+        id: verdict
+        run: |
+          node build/verify-release.mjs --candidate
+          node --input-type=module <<'JS'
+          import { readFile, appendFile } from 'node:fs/promises';
+          const report = JSON.parse(await readFile('build/results/warden-report.json', 'utf8'));
+          await appendFile(process.env.GITHUB_OUTPUT, `release-status=${report.releaseStatus}\n`);
+          await appendFile(process.env.GITHUB_STEP_SUMMARY, `Source candidate: automatic gates passed. Public release: **${report.releaseStatus}**.\n\n${report.blockers.map(row => `- ${row.id}: ${row.status}`).join('\n')}\n`);
+          JS
+      - name: Upload exact frozen distribution and ZIP
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: idp-frozen-distribution
+          path: build/output
+          include-hidden-files: true
+          if-no-files-found: error
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: idp-warden-evidence
+          path: |
+            build/results/warden-report.json
+            build/results/distribution.json
+            build/results/unit-tests.json
+            build/results/source-check.json
+            build/results/browser
+          if-no-files-found: error
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4
+  deploy-proto:
+    name: Publish verified tree to generated proto branch
+    needs: candidate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.candidate.outputs.release-status == 'passed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.19.0
+      - run: |
+          npm install --global npm@11.9.0
+          npm --prefix proto-dev ci
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: idp-frozen-distribution
+          path: build/output
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: idp-warden-evidence
+          path: build/results
+      - run: node build/verify-release.mjs
+      - uses: JamesIves/github-pages-deploy-action@fa24774553152dd7873cd16ebd8d959b010c5445 # v4
         with:
           branch: proto
-          folder: dist
+          folder: build/output/dist
           clean: true
           single-commit: true
           token: ${{ secrets.INTERDEAD_PROTO_DEPLOY_TOKEN }}
 
   deploy-itch:
-    name: Deploy dist to itch.io via Butler
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: build
+    name: Publish the same verified tree via Butler
+    needs: candidate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.candidate.outputs.release-status == 'passed'
     runs-on: ubuntu-latest
-
     steps:
-      - name: Download dist
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          name: dist
-          path: dist
-
-      - name: Install Butler
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.19.0
+      - run: |
+          npm install --global npm@11.9.0
+          npm --prefix proto-dev ci
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: idp-frozen-distribution
+          path: build/output
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: idp-warden-evidence
+          path: build/results
+      - run: node build/verify-release.mjs
+      - name: Install pinned Butler
         shell: bash
         run: |
           set -euo pipefail
-          # Butler pinned version — update manually when needed.
-          BUTLER_URL="https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default"
-          curl -fL "$BUTLER_URL" -o butler.zip
-
-          unzip -o butler.zip -d butler-bin
-          chmod +x butler-bin/butler
-          echo "$PWD/butler-bin" >> "$GITHUB_PATH"
-
-      - name: Push build to itch.io
-        shell: bash
+          curl -fL "https://broth.itch.zone/butler/linux-amd64/15.24.0/archive/default" -o "$RUNNER_TEMP/butler.zip"
+          unzip -q "$RUNNER_TEMP/butler.zip" -d "$RUNNER_TEMP/butler-bin"
+          chmod +x "$RUNNER_TEMP/butler-bin/butler"
+          "$RUNNER_TEMP/butler-bin/butler" -V | tee "$RUNNER_TEMP/butler-version.txt"
+          rg '15\.24\.0' "$RUNNER_TEMP/butler-version.txt"
+          echo "$RUNNER_TEMP/butler-bin" >> "$GITHUB_PATH"
+      - name: Upload verified tree
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        run: |
-          set -euo pipefail
-          butler -V
-          butler push dist zhovten-games/interdead:web
+        run: butler push build/output/dist zhovten-games/interdead:web

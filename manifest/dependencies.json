@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "status": "candidate",
+  "decision": "governance/decisions/IDP-DEC-TOOLCHAIN-001.md",
+  "entries": [
+    {
+      "name": "@interdead/framework",
+      "version": "0.1.1",
+      "status": "runtime",
+      "function": "Shared host/auth/framework integration",
+      "scope": "Application host boundary",
+      "source": "https://www.npmjs.com/package/@interdead/framework",
+      "license": "MIT",
+      "supportedLine": "0.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "ajv",
+      "version": "8.20.0",
+      "status": "development",
+      "function": "Draft 2020-12 verification and evidence schemas",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "ajv-validator/ajv",
+      "license": "MIT",
+      "supportedLine": "8.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "eslint",
+      "version": "10.12.0",
+      "status": "development",
+      "function": "JavaScript correctness and declared style boundaries",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "eslint/eslint",
+      "license": "MIT",
+      "supportedLine": "10.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "espree",
+      "version": "10.4.0",
+      "status": "development",
+      "function": "AST imports and public interface/source contract checks",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "https://github.com/eslint/js.git",
+      "license": "BSD-2-Clause",
+      "supportedLine": "10.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "fflate",
+      "version": "0.8.3",
+      "status": "development",
+      "function": "Deterministic ZIP creation and consumption checks",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "https://github.com/101arrowz/fflate",
+      "license": "MIT",
+      "supportedLine": "0.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "globals",
+      "version": "14.0.0",
+      "status": "development",
+      "function": "Explicit JavaScript environment global names for lint",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "sindresorhus/globals",
+      "license": "MIT",
+      "supportedLine": "14.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "js-yaml",
+      "version": "4.3.2",
+      "status": "development",
+      "function": "CodeMap frontmatter and CI configuration parsing",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "nodeca/js-yaml",
+      "license": "MIT",
+      "supportedLine": "4.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "jsdom",
+      "version": "28.1.0",
+      "status": "development",
+      "function": "Real DOM integration in the unit corpus",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "git+https://github.com/jsdom/jsdom.git",
+      "license": "MIT",
+      "supportedLine": "28.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "mocha",
+      "version": "12.0.3",
+      "status": "development",
+      "function": "Legacy Mocha family execution without skipped/pending cases",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "https://github.com/mochajs/mocha.git",
+      "license": "MIT",
+      "supportedLine": "12.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "playwright",
+      "version": "1.58.2",
+      "status": "development",
+      "function": "Production artifact Chromium execution",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "git+https://github.com/microsoft/playwright.git",
+      "license": "Apache-2.0",
+      "supportedLine": "1.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "prettier",
+      "version": "3.8.1",
+      "status": "development",
+      "function": "Canonical project formatting",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "prettier/prettier",
+      "license": "MIT",
+      "supportedLine": "3.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "remark-gfm",
+      "version": "4.0.1",
+      "status": "development",
+      "function": "Markdown GFM link/table syntax parsing",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "remarkjs/remark-gfm",
+      "license": "MIT",
+      "supportedLine": "4.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "remark-parse",
+      "version": "11.0.0",
+      "status": "development",
+      "function": "Markdown syntax tree",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "https://github.com/remarkjs/remark/tree/main/packages/remark-parse",
+      "license": "MIT",
+      "supportedLine": "11.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "sql.js",
+      "version": "1.14.2",
+      "status": "development",
+      "function": "Actual SQLite/WASM persistence in tests",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "http://github.com/sql-js/sql.js.git",
+      "license": "MIT",
+      "supportedLine": "1.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "unified",
+      "version": "11.0.5",
+      "status": "development",
+      "function": "Markdown processing pipeline",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "unifiedjs/unified",
+      "license": "MIT",
+      "supportedLine": "11.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    },
+    {
+      "name": "vite",
+      "version": "8.3.4",
+      "status": "development",
+      "function": "Production asset bundling with Rolldown/Oxc",
+      "scope": "Build/verification; tooling is excluded from public runtime distribution",
+      "source": "git+https://github.com/vitejs/vite.git",
+      "license": "MIT",
+      "supportedLine": "8.x; exact vendor compatibility and lifecycle are subject to adoption review",
+      "reason": "Established library provides a maintained parser/runtime/tool implementation and preserves existing interfaces; replacing it locally would expand unsupported code.",
+      "risks": "npm acquisition is external input. Locked integrity and immutable source checks apply; native/install-script transitive tools are assessed below. Browser downloads are separate controlled tooling inputs."
+    }
+  ],
+  "installationAssessment": {
+    "scope": "Locked npm tree and Playwright browser installation",
+    "mechanisms": [
+      "Rolldown/Oxc platform native binaries and their package-install selection",
+      "npm integrity verification and package lifecycle scripts",
+      "Playwright Chromium binary download before verification"
+    ],
+    "effect": "Execute third-party installation/native tools inside the isolated build/tooling workspace; the source checkout and public payload remain separated.",
+    "controls": [
+      "Exact Node/npm and lockfile",
+      "npm ci",
+      "No production/debug/evidence files in artifact",
+      "Dependency audit and emitted exact dependency inventory",
+      "Full corpus and real artifact browser checks"
+    ],
+    "humanReview": "manual.normative-semantic-review; competent adoption of tool and license risks remains pending."
+  }
+}

@@ -1,0 +1,938 @@
+{
+  "schemaVersion": 1,
+  "baselineCount": 231,
+  "active": [
+    {
+      "path": "proto-dev/tests/camera/ai/detection-adapter.cache-build-param.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/ai/model-load-strategy.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/ai/test-detection-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/ai/test-item-detection-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/camera/test-camera-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/camera-record-indicator.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/database/test-db-publisher.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/storage/database/test-database-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/storage/database/test-persistence.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/detection-adapter-target.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/encryption/test-browser-crypto-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/geo/test-geolocation-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/logging/test-event-bus-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-diagnostics/logging/test-logging-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/notification/test-notification-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/persistence/test-local-storage-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/ui/awaiting-buttons.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/ui/test-language-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/ui/test-localization-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/ui/test-panel-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/ui/test-template-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/ui/test-view-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/ui/test-visual-effects-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-diagnostics/managers/error-manager.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/drum-layout-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/duality-config-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/panel-drum-layout.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/reactions/services/reaction-mapping-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/avatar-persistence.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/identity/services/avatar-service-warning.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/button-service-disposal.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/button-service-reset.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/button-visibility-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-deps-constructor.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-detection-flow.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-detection-mutex.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-detection-retry.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-detection-serialization.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-error-logging.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-guide-person-detection.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-orchestrator-effects.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-orchestrator-registration.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-overlay-blob-fallback.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-overlay-dedup.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-overlay-mask-integration.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-overlay-mode-resolution.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-overlay-order.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/camera-overlay-replay.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-presence-reset.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-quest-activation.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-quest-completion.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-quest-overlay.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/camera-quest-reload.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-quest-start-resume.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-requirement.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/camera-stream-persistence.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/camera-toggle-messenger-state.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/camera-toilet-requirement.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/capture-button-visibility.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/capture-validation.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-avatar-refresh.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-camera-return-history.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-cold-start-dedup.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-duality-completion-unlock.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-ghost-dedup.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-ghost-switch-await-reset.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-ghost-switch-clear.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-history-buffer.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-history-observer-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-history-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-input-gate-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-no-duplicates-ready-race.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-orchestrator-deduplication.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-orchestrator-effects.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-orchestrator-normalize.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-orchestrator-reset.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-orchestrator-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-pending-post-replay.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/dialog-post-progression.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/dialog-reload-awaiting-user.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-reload-completion.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-reload-post-replay.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-replay-fingerprint-dedup.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/services/dialog-replay-idempotent.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/dialog-screen-remount-guard.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/contact-sessions/services/ghost-reboot-checkpoint-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/services/ghost-reselect-no-greeting-dup.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/media/services/image-composer-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/quests/services/item-overlay-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/modal-messenger-shortcut.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/services/modal-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/identity/services/profile-transfer-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/quest-activation-requirement.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/quest-no-fallback.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/identity/services/reset-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/selfie-auto-finish.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/selfie-preview-auto-populate.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/state-service-ai-gate.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/spirit-contacts/services/state-service-ghost-switch.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/state-service-welcome-registration-buttons.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/test-button-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/test-button-state-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/services/test-camera-orchestrator-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/spirit-contacts/services/test-ghost-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/services/test-posts-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/services/test-profile-registration-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/services/test-selfie-finish-state.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/services/test-state-service.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/services/view-service-reset-fallback.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/asset-delivery/assets-base-url.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/auto-discovery.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/browser-spirits-load.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/asset-delivery/cache-build-id.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/default-config.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/spirit-contacts/guest-stages.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/spirits/testguest-one.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/spirit-contacts/spirits/testguide.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/testbutton-state.config.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/testcontrols.config.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/testdefault.config.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/testindex.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/dialog/dialog.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/dialog/dialog-manager.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/dialog/test-dialog.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/dialog/test-dialog-manager.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/dsl/compiler.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/dsl/driver.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/duality/duality-manager.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/duality/duality-manager-reload-completion.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/duality/is-quest-active.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/duality/quest-trigger.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/duality/test-duality-manager.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/engine/reducer.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/events/event.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/events/constants.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/events/test-event.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/events/test-event-observer.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/quests/quests/quest.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/quests/test-quest.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/quests/quests/test-quest-observer.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/sequence/quest-load-start.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/detection-mutex.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/dsl-basic-flow.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/history-single-replay.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/locales/combined/testlocales.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/locales/spirits/testlocales.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/bootstrap/camera-capture-container.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/bootstrap/test-boot-manager.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/bootstrap/test-loader.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-diagnostics/bootstrap/test-logger.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/bootstrap/test-startup-messenger.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/bootstrap/test-startup-messenger-db-fallback.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/bootstrap/testindex.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/container/test-container.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/dialog-history-migration.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/storage/dialog-repository-upsert.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/media/repositories/media-repository.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/host-integration/interdead-auth-worker.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/test-i-camera.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/storage/test-i-database.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/storage/test-i-database-publisher.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/test-i-detection.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/storage/test-i-encryption.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/test-i-event-bus.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/identity/test-i-geolocation.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/test-i-item-detection.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/localization/test-i-language.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/localization/test-i-localization.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-diagnostics/test-i-logging.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/notifications/test-i-notification.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/test-i-panel.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/storage/test-i-persistence.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/test-i-template-renderer.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/test-i-view.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/test-i-visual-effects.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/boot-overlay-view.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/button-label-truncator.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/camera-button-highlight.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/camera-messenger-screen-switch.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/camera-toggle.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/chat-scroll-rebind.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/presentation/components/text-animation-manager.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/control-panel-nav-highlight.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/control-panel-visibility.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/dialog-deduplication.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/dialog-empty-indicator.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/dialog-history-persistence.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/dialog-image-dedup.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/dialog-lazy-load.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/dialog-order-and-dedup.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/dialog-reload-idempotent.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/dialog-widget-clear.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/global-view-presenter-camera-dispose.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/global-view-presenter-reset.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/global-view-presenter-reset-modal.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/index-html-noscript-fallback.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/initial-guide-message.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/media/media-lightbox.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/panel-adapter.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/panel-scroll-and-lazy-load.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/panel-scroll-buttons.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/post-button-state.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/registration-flow-message.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/retry-overlay-visibility.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/test-input-toggle.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/test-language-selector.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/unified-overlay-view.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/view-adapter-finish.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/app-shell/view-adapter-no-replay.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/widgets/control-panel/testindex.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/camera/widgets/detection-sensitivity-control.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/widgets/dialog-append-latest.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/narrative-runtime/widgets/dialog-avatar-guard.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/widgets/dialog-boot-idempotent.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/widgets/dialog-message-image.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/widgets/dialog-new-messages-indicator.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/widgets/dialog-render-lock.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/widgets/dialog-revoke.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/widgets/modal-widget.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/quests/quest-gate.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/media/sound-service.test.js",
+      "runner": "node:test"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/single-progress-driver.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/messenger/message-fingerprint.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/test-image-utils.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-events/test-observer.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/testdeep-merge.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/asset-delivery/testload-script.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/runtime-configuration/testurl-utils.test.js",
+      "runner": "mocha"
+    },
+    {
+      "path": "proto-dev/tests/media/youtube.test.js",
+      "runner": "mocha"
+    }
+  ],
+  "archivedExternal": [
+    {
+      "oldPath": "proto-dev/tests/person/application/WeightedScoreEngine.test.js",
+      "path": "constitutional-guard/archive/person/weighted-score-engine.test.js",
+      "sha256": "cf1829d284713d106d7b1a4f6efe571629d35c5e834af04ebd24bf5af4d8229b",
+      "status": "external-source-unavailable",
+      "reason": "Foreign person prototype sources never existed in this repository; retained verbatim for recovery, not an InterDead application test."
+    },
+    {
+      "oldPath": "proto-dev/tests/person/presentation/ScreeningAppHighlight.test.js",
+      "path": "constitutional-guard/archive/person/screening-app-highlight.test.js",
+      "sha256": "bb695211a24b55b36c5dc8c9a84a904c00546a1f3a2ad12361c00baef893f599",
+      "status": "external-source-unavailable",
+      "reason": "Foreign person prototype sources never existed in this repository; retained verbatim for recovery, not an InterDead application test."
+    }
+  ]
+}

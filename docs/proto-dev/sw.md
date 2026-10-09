@@ -11,7 +11,7 @@ owns: []
 schemaVersion: 1
 source: sw.js
 used_by:
-  - proto-dev/src/infrastructure/bootstrap/ServiceWorkerRegistrar.js
+  - proto-dev/src/asset-delivery/service-worker/service-worker-registrar.js
 ---
 
 # Service Worker (proto-dev/sw.js)

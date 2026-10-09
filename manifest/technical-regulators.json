@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "state-ownership",
+      "ruleId": "IDP-DEV-001",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-001",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "proto-dev/src/app-shell/state/application-state-service.js",
+        "proto-dev/src/narrative-runtime/engine/store.js"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "resource-lifecycle",
+      "ruleId": "IDP-DEV-002",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-002",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "proto-dev/src/camera/browser/camera-adapter.js",
+        "proto-dev/src/media/persistence/media-repository.js"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "bootstrap",
+      "ruleId": "IDP-DEV-003",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-003",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": ["proto-dev/src/app-shell/bootstrap/boot-manager.js"],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "async-revisions",
+      "ruleId": "IDP-DEV-004",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-004",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "proto-dev/src/contact-sessions/application/contact-transition-controller.js"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "chronology",
+      "ruleId": "IDP-DEV-005",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-005",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": ["proto-dev/src/messenger/persistence/dialog-repository.js"],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "snapshot-restoration",
+      "ruleId": "IDP-DEV-006",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-006",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": ["proto-dev/src/messenger/history/dialog-timeline.js"],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "regression-corpus",
+      "ruleId": "IDP-DEV-007",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-007",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": ["manifest/test-corpus.json", "proto-dev/tools/run-tests.mjs"],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "save-migration",
+      "ruleId": "IDP-DEV-008",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-008",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "proto-dev/src/messenger/persistence/dialog-repository.js",
+        "proto-dev/src/identity/application/profile-transfer-service.js"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "toolchain",
+      "ruleId": "IDP-DEV-009",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-009",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "proto-dev/package.json",
+        "proto-dev/package-lock.json",
+        "eslint.config.mjs"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "source-topology",
+      "ruleId": "IDP-DEV-010",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-010",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "docs/proto-dev/technical/source-topology.json",
+        "build/check-source.mjs"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "artifact-paths",
+      "ruleId": "IDP-DEV-011",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-011",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": ["build/artifact-map.json", "build/transformations.json"],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "warden-integrity",
+      "ruleId": "IDP-DEV-012",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-012",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "constitutional-guard/manifest/history.json",
+        "constitutional-guard/integrity.mjs"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "evidence-binding",
+      "ruleId": "IDP-DEV-013",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-013",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "constitutional-guard/manifest/manual-matrix.json",
+        "build/verify-release.mjs"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "assembly-parity",
+      "ruleId": "IDP-DEV-014",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-014",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": [
+        "build/assemble.mjs",
+        "build/local-lab.mjs",
+        ".github/workflows/proto-pipeline.yml"
+      ],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    },
+    {
+      "id": "profile-reset",
+      "ruleId": "IDP-DEV-015",
+      "defaults": "PROFILE P16 and declared application ports",
+      "observation": "manifest/rule-checks.json and build/results/warden-report.json",
+      "changeProcedure": "PROFILE P06/P11",
+      "status": "candidate",
+      "basis": {
+        "ruleId": "IDP-DEV-015",
+        "revision": "1.0.0-candidate",
+        "source": "governance/legislation/DEVELOPMENT.md"
+      },
+      "kind": "runtime controller and/or verification gate",
+      "effect": "The declared mechanism permits or refuses state/resource transitions or candidate/release acceptance; failed, unavailable and incomplete mandatory results block release.",
+      "scope": ["proto-dev/**", "build/**", "constitutional-guard/**"],
+      "participants": [
+        "maintainer",
+        "contributor",
+        "reviewer",
+        "tester",
+        "application user where a runtime boundary applies"
+      ],
+      "owner": "Competent human authority designated by PROFILE P05; candidate pending designation",
+      "configurationPaths": ["proto-dev/src/identity/application/profile-reset-service.js"],
+      "contestation": "PROFILE P08: report exact rule/configuration/candidate identity and observed effect; independent competent human review decides correction or supersession.",
+      "disabling": "PROFILE P06/P11 or bounded P14 emergency decision; preserve the historical corpus and compensating release gate. Removing a check does not create a passed result."
+    }
+  ]
+}

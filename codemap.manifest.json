@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schemas.interdead.dev/codemap/manifest/v1",
+  "$schema": "./build/schemas/codemap-manifest.schema.json",
   "schemaVersion": "2.0.0",
   "project": {
     "name": "interdead-proto",
@@ -12,33 +12,25 @@
         "families": {
           "architecture": {
             "enabled": true,
-            "failOn": [
-              "error",
-              "critical"
-            ],
+            "failOn": ["error", "critical"],
             "thresholds": {
               "error": 0
             }
           },
           "documentation-contract": {
             "enabled": true,
-            "failOn": [
-              "error",
-              "critical"
-            ],
+            "failOn": ["error", "critical"],
             "thresholds": {
               "error": 0
             }
           },
           "methodology-semantic": {
             "enabled": true,
-            "failOn": [
-              "error",
-              "critical"
-            ],
+            "failOn": ["error", "critical"],
             "thresholds": {
               "error": 0
-            }
+            },
+            "mechanism": "Objective topology/name checks plus manual.normative-semantic-review; no external semantic certification is asserted"
           }
         },
         "mode": "enforced",
@@ -47,14 +39,28 @@
           "requiredHeaders": [
             "source",
             "source_exists",
+            "imports",
+            "implements",
+            "owns",
+            "listens",
+            "emits",
+            "used_by",
             "runtime_role",
             "contour_primary",
             "role_group"
           ],
           "pathScopes": [
             {
-              "include": "proto-dev/docs/**/*.md",
+              "include": "docs/proto-dev/src/**/*.md",
               "mode": "enforced"
+            },
+            {
+              "include": "docs/proto-dev/technical/**/*.md",
+              "mode": "informational"
+            },
+            {
+              "include": "proto-dev/docs/**/*.md",
+              "mode": "informational"
             }
           ],
           "projectModes": {
@@ -66,18 +72,16 @@
   },
   "scan": {
     "include": [
-      "proto-dev/src/**/*.{js,jsx,ts,tsx,mjs,cjs}",
+      "proto-dev/src/**/*.js",
       "proto-dev/tests/**/*.js",
-      "proto-dev/**/*.md"
+      "docs/proto-dev/**/*.md",
+      "proto-dev/docs/**/*.md"
     ],
-    "exclude": [
-      "**/node_modules/**",
-      "**/dist/**"
-    ],
+    "exclude": ["**/node_modules/**", "**/dist/**"],
     "followSymlinks": false,
     "parser": {
       "javascript": true,
-      "typescript": true,
+      "typescript": false,
       "markdown": true
     }
   },
@@ -87,7 +91,7 @@
       "version": "1.0.0"
     },
     "semantic": {
-      "id": "layered-boundaries",
+      "id": "capability-boundaries",
       "version": "1.0.0"
     }
   },
@@ -96,9 +100,7 @@
       {
         "id": "proto-docs",
         "type": "markdown-headers",
-        "include": [
-          "proto-dev/docs/**/*.md"
-        ],
+        "include": ["docs/proto-dev/src/**/*.md"],
         "mode": "full"
       }
     ]
@@ -113,36 +115,21 @@
     }
   },
   "output": {
-    "rootDir": "code-map/generated",
+    "rootDir": "build/results",
     "artifacts": [
       {
-        "id": "map-json",
+        "id": "source-codemap-report",
         "kind": "json",
         "enabled": true,
-        "path": "map/code-map.json",
+        "path": "source-check.json",
         "publicSafe": false
-      },
-      {
-        "id": "map-report",
-        "kind": "markdown",
-        "enabled": true,
-        "path": "reports/code-map-report.md",
-        "publicSafe": true
-      },
-      {
-        "id": "map-mermaid",
-        "kind": "mermaid",
-        "enabled": true,
-        "path": "map/code-map.mmd",
-        "publicSafe": true
-      },
-      {
-        "id": "diagnostics-summary",
-        "kind": "json",
-        "enabled": true,
-        "path": "diagnostics/diagnostics.json",
-        "publicSafe": true
       }
     ]
+  },
+  "runner": {
+    "command": "node build/check-source.mjs",
+    "scope": "source syntax/import graph, declared boundaries, complete source/docs/locale/template mappings",
+    "limits": "Does not certify runtime races or substitute human semantic review",
+    "schemaCompatibility": "Project-local manifest 2.0.0 / markdown-headers 1; exact semantic responsibility review is manual; external CodeMap certification is not asserted"
   }
 }

@@ -1,0 +1,32 @@
+---
+domains: []
+emits: []
+implements: []
+imports: []
+listens: []
+owns: []
+schemaVersion: 1
+source: src/spirit-contacts/configuration/sample.json
+used_by: []
+source_exists: true
+runtime_role: sample
+contour_primary: HIPPO-INDEX
+contour_secondary: none
+role_group: memory_narrative
+narrative_role: context memory index
+---
+
+# Sample Spirit JSON
+
+`sample.json` demonstrates the JSON format expected by `DualityConfigService`, defining unlock behaviour, an avatar, and ordered stages with chat events and optional quests[^1]. `DualityConfigService` fetches such JSON files when loading spirit definitions[^2].
+
+## Authoring constraints for stable replay/reboot
+
+- A quest is attached to a **stage boundary**, not to a message inside `event.messages`.
+- You can place multiple `ghost -> user` turns inside one stage; this is the preferred pattern for long text-only onboarding blocks before the first quest.
+- Avoid splitting one logical intro into many tiny text-only stages right before a quest. During replay/reboot this increases boundary churn and makes button-gate synchronization more fragile.
+- If a user acknowledgement semantically belongs **after** a camera action, place that user message in the stage after the quest stage, not before the quest is executed.
+
+[^1]: [`sample.json`](../../../../../proto-dev/src/spirit-contacts/configuration/sample.json)
+
+[^2]: [`DualityConfigService.js`](../../../../../proto-dev/src/narrative-runtime/configuration/duality-config-service.js)

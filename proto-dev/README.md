@@ -92,7 +92,6 @@ The project now uses a **single overlay host** (`UnifiedOverlayView`) backed by 
 Boot and AI loaders are state publishers only, and they must never render their own `.app__loader` roots.
 This prevents duplicate overlays, keeps priority rules deterministic, and centralizes overlay actions (including multi-tab guard bypass).
 
-
 ## Overlay event-driven transition policy and resilience guards
 
 `OverlayOrchestratorService` now manages an explicit stage lifecycle (`pre_boot`, `boot_done`, `ai_warmup`, `ready`, `blocked`) and applies transition policy from events.
@@ -110,7 +109,6 @@ Reliability guards:
 - Illegal backward stage transitions are rejected unless a forced transition or explicit `reset()` is used.
 
 Invariant: the app has a single overlay host and deterministic final card state under event storms.
-
 
 ## Overlay contact-line contract
 

@@ -1,37 +1,25 @@
-# Deployment policy and targets
+# Source, distribution и каналы публикации
 
-This document defines deployment behavior for `InterDeadProto/proto-dev` and explains why compatibility path fixes are handled by shell scripts.
+main содержит canonical source/governance/tooling. proto — generated deployment
+branch для Pages; она не редактируется как исходники. Butler публикует тот же
+проверенный tree в zhovten-games/interdead:web. Текущую связь NOIR/Cloudflare с
+proto оператор подтверждает отдельным host evidence; workflow не доказывает её.
 
-## Core policy: immutable source, mutable artifacts
+Полный `npm --prefix proto-dev run check` создаёт в изолированном workspace
+production distribution и ZIP, связывает source SHA/tree, normative pins, toolchain,
+lockfile/mapping/transformation hashes, historical manifest и exact artifact bytes.
+Deployment jobs скачивают этот output и проверяют consumption gate, затем используют
+его без rebuild. Все automatic и manual gates должны пройти; candidate CI отделён
+от release verdict. Изменения нормативного candidate не публикуются автоматически.
 
-- `proto-dev/src` is the canonical, environment-agnostic source of truth.
-- Environment-specific path rewrites are applied only during build/deploy stages.
-- Rewrites are performed on isolated workspace files and/or generated artifacts.
-- Direct edits to source files only for a deployment host are considered a policy violation.
+Source capability paths и public URLs — отдельные контракты. Все 17 templates
+сохраняют src/presentation/templates/\*; locales — src/i18n/locales; bundles —
+src/[name]-[hash].js; runtime/model — assets/libs и assets/models. Полная карта:
+[artifact-map.json](../../../build/artifact-map.json). Source исправляет business
+behavior; declared plugin/static copy/build-ID transformations изменяют только
+производную поставку. Shell wrapper не содержит business substitutions.
 
-This policy keeps runtime behavior deterministic across targets, avoids accidental source drift, and preserves a clean review history.
-
-## Why shell scripts are required
-
-Shell-based pipeline steps provide a reproducible compatibility layer that can:
-
-- normalize host-specific path roots,
-- apply deploy-only substitutions,
-- verify expected markers after rewrite,
-- fail fast when compatibility assumptions no longer hold.
-
-In this repository, Local Build Lab (`proto-dev/tests/local-build-lab`) reproduces CI behavior in an isolated workspace so these transformations stay explicit and auditable.
-
-## Deployment targets
-
-`proto-dev` is deployed to more than one host platform:
-
-1. **Cloudflare** (project hosting and related delivery pipeline).
-2. **itch.io** (distribution using itch.io deployment mechanisms).
-
-Because these targets can differ in path/root semantics, compatibility rewrites are intentionally centralized in pipeline scripts rather than encoded in source modules.
-
-## Operational note
-
-If a path issue appears (for example malformed `/s` fragments in runtime requests), fix the pipeline compatibility layer first.
-Do not patch canonical source files only to satisfy one deployment host.
+Local Build Lab использует общий assembler с diagnostic=true и optional local
+package provenance. Инструкции: [Local Build Lab](../../../proto-dev/tests/local-build-lab/README.md).
+Исходный profile/reset lifecycle сохраняется; rollback требует data backup и проверки
+[save migration](../technical/save-migration.md), а не очистки localStorage.

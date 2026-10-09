@@ -1,0 +1,106 @@
+import {
+  APP_RESET_REQUESTED,
+  RESET_OPTIONS_REQUESTED,
+  PROFILE_IMPORT_REQUESTED,
+  PROFILE_EXPORT_REQUESTED,
+  PROFILE_SETTINGS_REQUESTED,
+} from '../../runtime-events/domain/constants.js';
+
+export default class ButtonService {
+  constructor(templateService, languageManager, profileRegService, bus, persistence = null) {
+    this.templateService = templateService;
+    this.languageManager = languageManager;
+    this.profileRegService = profileRegService;
+    /** @type {import('../../runtime-events/ports/event-bus-port.js').default} */
+    this.bus = bus;
+    this.storage = persistence;
+    this._booted = false;
+
+    this._handler = (evt) => {
+      if (evt.type === 'BUTTON_ACTION') {
+        this.handleAction(evt);
+      }
+    };
+  }
+
+  async boot() {
+    if (this._booted) return;
+    this.bus.subscribe(this._handler);
+    this._booted = true;
+  }
+
+  dispose() {
+    if (!this._booted) return;
+    this.bus.unsubscribe(this._handler);
+    this._booted = false;
+  }
+
+  async renderButtons(defs = []) {
+    const parts = await Promise.all(
+      defs.map((d) => {
+        const data = {
+          ...d,
+          icon: d.icon || '',
+          i18nKey: d.i18n || d.action,
+          iconPositionClass: d.iconPosition ? `control-button--icon-${d.iconPosition}` : '',
+          mobileLabelClass: d.keepLabelOnMobile ? 'control-button--mobile-label' : '',
+        };
+        return this.templateService.render(`buttons/${d.template}`, data);
+      }),
+    );
+    return parts.join('');
+  }
+
+  async init(container, defs) {
+    const html = await this.renderButtons(defs);
+    this.bus.emit({ type: 'BUTTONS_RENDER', container, html });
+  }
+
+  async handleAction(evt) {
+    const { action, value } = evt;
+    if (action === 'change-language') {
+      this.languageManager.setLanguage(value);
+      return;
+    }
+    if (action === 'capture-btn') {
+      this.bus.emit({ type: 'capture-btn' });
+      return;
+    }
+    if (action === 'import-profile') {
+      this.bus.emit({ type: PROFILE_IMPORT_REQUESTED });
+      return;
+    }
+    if (action === 'export-profile') {
+      this.bus.emit({ type: PROFILE_EXPORT_REQUESTED });
+      return;
+    }
+    if (action === 'open-profile-settings') {
+      this.bus.emit({ type: PROFILE_SETTINGS_REQUESTED });
+      return;
+    }
+    if (action === 'reset-account') {
+      // Reset button opens options modal; reset execution is confirmed separately.
+      this.bus.emit({ type: RESET_OPTIONS_REQUESTED, payload: { source: 'button' } });
+      return;
+    }
+    if (action === 'confirm-reset-data') {
+      const payload = { source: 'reset-modal' };
+      if (value && typeof value === 'object') {
+        payload.options = value;
+      }
+      this.bus.emit({ type: APP_RESET_REQUESTED, payload });
+      return;
+    }
+    if (action === 'enter-name' && this.profileRegService) {
+      this.profileRegService.setName(value);
+      this.bus.emit({
+        type: 'NEXT_BUTTON_ENABLE',
+        enabled: this.profileRegService.canProceed(),
+      });
+      this.bus.emit({ type: 'enter-name', payload: { value } });
+      return;
+    }
+    const payload = value !== undefined ? { value } : undefined;
+    this.bus.emit({ type: action, payload });
+  }
+}
