@@ -21,6 +21,9 @@
 *.toml text eol=lf
 *.env text eol=lf
 
+# Protected extensionless text files
+/proto-dev/tests/fixtures/external/interdead-it/LICENSE text eol=lf
+
 # Hugo / web
 *.html text eol=lf
 *.css text eol=lf
