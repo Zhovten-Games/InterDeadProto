@@ -9,6 +9,25 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
+function waitForEvent(bus, type, timeoutMs = 2000) {
+  return new Promise((resolve, reject) => {
+    const handler = (evt) => {
+      if (evt?.type !== type) return;
+
+      clearTimeout(timer);
+      bus.unsubscribe(handler);
+      resolve(evt);
+    };
+
+    const timer = setTimeout(() => {
+      bus.unsubscribe(handler);
+      reject(new Error(`Timed out waiting for ${type}`));
+    }, timeoutMs);
+
+    bus.subscribe(handler);
+  });
+}
+
 describe('ViewAdapter camera cleanup', () => {
   let dom;
   let bus;
@@ -166,8 +185,11 @@ describe('ViewAdapter camera cleanup', () => {
       if (evt.type === 'DETECTION_DONE') detections++;
     });
 
+    const firstDetection = waitForEvent(bus, 'DETECTION_DONE');
+
     bus.emit({ type: 'SCREEN_CHANGE', screen: 'registration-camera' });
-    await sleep(150);
+
+    await firstDetection;
     assert.ok(detections > 0);
 
     bus.emit({ type: 'finish' });
