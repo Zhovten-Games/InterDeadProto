@@ -185,15 +185,19 @@ describe('ViewAdapter camera cleanup', () => {
       if (evt.type === 'DETECTION_DONE') detections++;
     });
 
-    const firstDetection = waitForEvent(bus, 'DETECTION_DONE');
+    const detectionCommitted = waitForEvent(bus, 'BUTTON_STATE_UPDATED');
 
     bus.emit({ type: 'SCREEN_CHANGE', screen: 'registration-camera' });
 
-    await firstDetection;
+    await detectionCommitted;
     assert.ok(detections > 0);
+    assert.strictEqual(cameraSectionManager.stateService.captured, true);
+    assert.strictEqual(cameraSectionManager.stateService.presence.person, true);
 
+    const finishTransition = waitForEvent(bus, 'SCREEN_CHANGE');
     bus.emit({ type: 'finish' });
-    await sleep(150);
+    await finishTransition;
+
     const after = detections;
     await sleep(150);
     assert.strictEqual(detections, after);
