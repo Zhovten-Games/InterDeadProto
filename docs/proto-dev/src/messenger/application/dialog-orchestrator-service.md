@@ -40,6 +40,7 @@ owns:
   - _lastReplayedIndex
   - _pendingAvatarRefresh
   - _pendingPosts
+  - _postingTurn
   - _readyHandler
   - _replayedFingerprints
   - _widgetReady
@@ -86,6 +87,12 @@ narrative_role: executive coordination hub
 # DialogOrchestratorService
 
 Оркестрирует narrative progression текущего committed spirit через ContactTransitionController. Сначала подготавливает config/history/avatar/stage в локальном candidate, затем одним актуальным revision commits dialog/duality/snapshot. requested и committed ghost различаются. Legacy occurrence сопоставляется по stage/content один раз с сохранением исходной identity; live accepted occurrence не переписывается по равному тексту. Готовый widget получает snapshot, а Post выводится из фактического await-user state.
+
+Каждая `_advanceGate` синхронизирует command lock и UI Post, включая возврат к
+уже ожидающей user turn и stage, подготовленный на экране камеры. `_postingTurn`
+владеет pending avatar lookup; readiness сохраняет блокировку повторной отправки.
+Смена экрана, contact или reset отменяют token, а поздний результат не продвигает
+текущую переписку. Завершение актуальной операции освобождает token в `finally`.
 
 Проверки: `IDP-WH-SWITCH-001.v1; IDP-WH-RESTORE-001.v1; browser-profile-reload-subpath`. Public exports, методы, imports, state fields и consumers
 зафиксированы в source-topology.json; путь пересматривается по IDP-DEV-010.

@@ -87,10 +87,10 @@ export default class DialogOrchestratorService {
     // Retains fingerprints for replayed messages keyed by their dialog index
     // so subsequent progression reuses the same identifiers.
     this._replayedFingerprints = new Map();
-    // Prevents handling multiple `post` events for a single user prompt.
-    // Cleared when the EventBus emits `EVENT_MESSAGE_READY` for the next
-    // user-facing message, unlocking the button.
+    // Derived from the current screen/turn and a pending posting operation.
+    // Gate evaluation restores it even when no new message is emitted.
     this.postLocked = false;
+    this._postingTurn = null;
     // Captures user posts made before the dialog widget reports readiness so
     // they can be replayed once the UI becomes available.
     this._pendingPosts = [];
@@ -244,6 +244,7 @@ export default class DialogOrchestratorService {
       this.historyService?.save?.(previous, shown);
     }
     this.postLocked = true;
+    this._postingTurn = null;
     try {
       return await this.transitions.request(
         ghostName,
@@ -351,12 +352,16 @@ export default class DialogOrchestratorService {
   _updatePostLockFromDialogState() {
     const upcoming = this.dialogManager.dialog?.messages?.[this.dialogManager.dialog?.index];
     const expectsUserInput =
-      this.onMessenger && !this.dialogManager.dialog?.isComplete?.() && upcoming?.author === 'user';
+      this.onMessenger &&
+      !this._postingTurn &&
+      !this.dialogManager.dialog?.isComplete?.() &&
+      upcoming?.author === 'user';
     this.postLocked = !expectsUserInput;
     this.buttonStateService?.setScreenState?.('messenger', 'post', expectsUserInput);
   }
 
   _resetRuntimeState({ keepWidgetReady = false } = {}) {
+    this._postingTurn = null;
     this.historyBuffer?.reset?.();
     this._pendingPosts = [];
     this._replayedFingerprints.clear();
@@ -542,6 +547,10 @@ export default class DialogOrchestratorService {
     if ((this.dialogManager.dialog?.index ?? 0) !== idx && this._widgetReady) {
       this._refreshLastReplayedIndex();
     }
+    // Returning to an already-awaited turn emits no new message. Derive the
+    // command lock here as well as the visual button state, including quests
+    // whose next stage was prepared while the camera remained active.
+    this._updatePostLockFromDialogState();
   }
 
   /**
@@ -652,6 +661,7 @@ export default class DialogOrchestratorService {
           }
         } else {
           this.transitions.cancel();
+          this._postingTurn = null;
           this.postLocked = true;
           this._widgetReady = false;
           if (this.currentGhost) this.historyBuffer.flushTo(this.historyService, this.currentGhost);
@@ -680,66 +690,85 @@ export default class DialogOrchestratorService {
           this._updatePostLockFromDialogState();
         }
       }
-      // Guard against rapid fire `post` events by ignoring additional clicks
-      // until the lock is released by the next message-ready event.
+      // Own the posting operation until avatar lookup/progression settles.
+      // Readiness or nested message events cannot release this token early.
       if (evt.type === 'post') {
         if (this.postLocked) {
           return;
         }
         this.postLocked = true;
-        const idx = this.dialogManager.dialog?.index;
-        const upcoming = this.dialogManager.dialog?.messages?.[idx];
-        if (upcoming?.author === 'user') {
-          const revision = this.transitions.revision;
-          const avatar = await this.avatarService?.getUserAvatar?.();
-          if (revision !== this.transitions.revision || !this.onMessenger) return;
-          upcoming.avatar = avatar || '';
-        }
-        if (!this._widgetReady && upcoming) {
-          const snapshot = { ...upcoming };
-          if (snapshot.timestamp === undefined) {
-            snapshot.timestamp = Date.now();
+        const postingTurn = {
+          revision: this.transitions.revision,
+          dialog: this.dialogManager.dialog,
+        };
+        this._postingTurn = postingTurn;
+        this._updatePostLockFromDialogState();
+        try {
+          const idx = this.dialogManager.dialog?.index;
+          const upcoming = this.dialogManager.dialog?.messages?.[idx];
+          if (upcoming?.author === 'user') {
+            const revision = this.transitions.revision;
+            const avatar = await this.avatarService?.getUserAvatar?.();
+            if (
+              revision !== this.transitions.revision ||
+              !this.onMessenger ||
+              this._postingTurn !== postingTurn ||
+              this.dialogManager.dialog !== postingTurn.dialog
+            )
+              return;
+            upcoming.avatar = avatar || '';
           }
-          this.historyBuffer.append({ ...snapshot, ghost: this.currentGhost });
-          this._pendingPosts.push(snapshot);
-        }
-        // Progress the user's line; subsequent ghost replies are handled
-        // by the input gate to avoid duplicate advancement.
-        if (typeof this.inputGate?.progressDialog === 'function') {
-          this.inputGate.progressDialog();
-        } else {
-          const effects = this.store.dispatch(dialogAdvance());
-          if (this.engineEnabled) {
-            this._runEffects(effects);
+          if (!this._widgetReady && upcoming) {
+            const snapshot = { ...upcoming };
+            if (snapshot.timestamp === undefined) {
+              snapshot.timestamp = Date.now();
+            }
+            this.historyBuffer.append({ ...snapshot, ghost: this.currentGhost });
+            this._pendingPosts.push(snapshot);
+          }
+          // Progress the user's line; subsequent ghost replies are handled
+          // by the input gate to avoid duplicate advancement.
+          if (typeof this.inputGate?.progressDialog === 'function') {
+            this.inputGate.progressDialog();
           } else {
-            this.dialogManager.progress();
-          }
-        }
-        this._refreshLastReplayedIndex();
-        let completed = this.dialogManager.dialog?.isComplete?.();
-        if (completed && this._hasAdvanced) {
-          // Starting the quest before evaluating the gate ensures the
-          // camera path becomes available immediately.
-          this.dualityManager.completeCurrentEvent();
-        }
-        if (typeof this.inputGate?.advanceToUserTurn === 'function') {
-          this._advanceGate();
-        } else {
-          // Without an input gate, manually progress through ghost lines.
-          let msg = this.dialogManager.dialog?.messages?.[this.dialogManager.dialog.index];
-          while (msg && msg.author === 'ghost') {
             const effects = this.store.dispatch(dialogAdvance());
             if (this.engineEnabled) {
               this._runEffects(effects);
             } else {
               this.dialogManager.progress();
             }
-            this._refreshLastReplayedIndex();
-            msg = this.dialogManager.dialog.messages[this.dialogManager.dialog.index];
           }
-        }
-        if (!completed && this.dialogManager.dialog?.isComplete?.() && this._hasAdvanced) {
-          this.dualityManager.completeCurrentEvent();
+          this._refreshLastReplayedIndex();
+          let completed = this.dialogManager.dialog?.isComplete?.();
+          if (completed && this._hasAdvanced) {
+            // Starting the quest before evaluating the gate ensures the
+            // camera path becomes available immediately.
+            this.dualityManager.completeCurrentEvent();
+          }
+          if (typeof this.inputGate?.advanceToUserTurn === 'function') {
+            this._advanceGate();
+          } else {
+            // Without an input gate, manually progress through ghost lines.
+            let msg = this.dialogManager.dialog?.messages?.[this.dialogManager.dialog.index];
+            while (msg && msg.author === 'ghost') {
+              const effects = this.store.dispatch(dialogAdvance());
+              if (this.engineEnabled) {
+                this._runEffects(effects);
+              } else {
+                this.dialogManager.progress();
+              }
+              this._refreshLastReplayedIndex();
+              msg = this.dialogManager.dialog.messages[this.dialogManager.dialog.index];
+            }
+          }
+          if (!completed && this.dialogManager.dialog?.isComplete?.() && this._hasAdvanced) {
+            this.dualityManager.completeCurrentEvent();
+          }
+        } finally {
+          if (this._postingTurn === postingTurn) {
+            this._postingTurn = null;
+            this._updatePostLockFromDialogState();
+          }
         }
       }
       if (evt.type === QUEST_STARTED) {

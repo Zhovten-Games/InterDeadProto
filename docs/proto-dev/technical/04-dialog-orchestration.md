@@ -14,8 +14,9 @@ This section maps the narrative “Emoji Protocol: Operation algorithm (basic cy
 When the messenger screen opens:
 
 1. The service loads persisted dialog history from `DialogHistoryService`.
-2. It normalizes timestamps/fingerprints in `_normalizeHistory()`.
-3. It replays the messages with `EVENT_MESSAGE_READY` so the UI can re‑render them.
+2. It retains persisted occurrence identities and canonical sequence order in `_normalizeHistory()`.
+3. It replaces the retained `DialogTimeline` snapshot. `DialogWidget` renders that snapshot;
+   restoration emits no live `EVENT_MESSAGE_READY` events or live effects.
 
 This is the technical equivalent of “continuation of the conversation is determined by validity of the response and confirmation via ACK.” The history replay is the memory layer that makes the “contract” observable in the UI.
 
@@ -36,7 +37,19 @@ When the user presses “Post”:
 - `DialogOrchestratorService` receives the `post` event and applies a **post lock** to avoid double submissions.
 - It attaches the current avatar to the upcoming user message.
 - It advances the dialog through `DialogInputGateService.progressDialog()` (or through engine actions if the gate is missing).
-- Once the next message is emitted (`EVENT_MESSAGE_READY`), the lock is released and the gate evaluates again.
+- Every gate evaluation derives both the command lock and the visible Post state from the
+  current turn and screen. An already-awaited user turn resumes after camera return without
+  needing a new message event.
+- A pending avatar lookup owns a `_postingTurn` token. Widget readiness preserves that lock;
+  screen departure, reset or a contact transition cancels it. Its late result cannot advance
+  the restored or newly selected conversation.
+- The current posting operation releases its token in `finally`; the next turn determines
+  whether Post becomes available.
+
+Snapshot replacement starts a new render generation. Old template, media and animation
+awaits cannot commit DOM, counters or scroll state to it. Loading older messages shares the
+current generation's render queue; live acceptance during that operation remains renderable.
+See [recovery scenarios](messenger-recovery-2026-10-10.md).
 
 This is the concrete version of “the contract defines admissibility, ACK, and what happens next.” The system uses message authorship and the input gate to decide who can act next.
 

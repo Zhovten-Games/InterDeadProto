@@ -117,6 +117,7 @@ export default class DialogWidget {
       }
       if (evt.type === DIALOG_CLEAR) {
         this._viewRevision += 1;
+        this._renderLock = Promise.resolve();
         this.animations.reset();
         this.container.innerHTML = '';
         this.messages = [];
@@ -225,6 +226,7 @@ export default class DialogWidget {
   dispose() {
     if (!this._booted) return;
     this._viewRevision += 1;
+    this._renderLock = Promise.resolve();
     this.animations.dispose();
     this._unsubscribeTimeline?.();
     this._unsubscribeTimeline = null;
@@ -319,6 +321,8 @@ export default class DialogWidget {
     this._snapshotRevision = snapshot.revision;
     this._ghost = snapshot.ghost;
     this._viewRevision += 1;
+    const revision = this._viewRevision;
+    this._renderLock = Promise.resolve();
     this._releaseMediaHandles();
     this.animations.reset();
     this.messages = snapshot.messages.map((message) => ({
@@ -335,7 +339,8 @@ export default class DialogWidget {
     this.renderCount = 0;
     this._clearUnreadState();
     await this.renderLatest();
-    if (this._booted) this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+    if (this._booted && revision === this._viewRevision)
+      this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
   }
 
   async renderLatest() {
@@ -346,15 +351,23 @@ export default class DialogWidget {
 
   async _renderLatest(revision = this._viewRevision) {
     if (!this._booted || revision !== this._viewRevision) return;
+    // A render owns this immutable range. Live acceptance queues a subsequent
+    // range; replacement invalidates this one before any state is committed.
+    const messages = this.messages.slice();
+    const renderedUntil = messages.length;
+    const additional = Math.max(0, renderedUntil - this.lastRenderedIndex);
     this.renderCount = this._isBatchMode
-      ? Math.min(this.batchSize, this.messages.length)
-      : this.messages.length;
+      ? Math.min(
+          renderedUntil,
+          this.renderCount > this.batchSize ? this.renderCount + additional : this.batchSize,
+        )
+      : renderedUntil;
     const start = this._isBatchMode
-      ? Math.max(this.lastRenderedIndex, this.messages.length - this.renderCount)
+      ? Math.max(this.lastRenderedIndex, renderedUntil - this.renderCount)
       : this.lastRenderedIndex;
 
-    for (let i = start; i < this.messages.length; i++) {
-      const msg = this.messages[i];
+    for (let i = start; i < renderedUntil; i++) {
+      const msg = messages[i];
       const isNew = i >= this.lastRenderedIndex;
 
       // Log each rendering attempt for traceability via the EventBus.
@@ -390,6 +403,7 @@ export default class DialogWidget {
         isReplay: msg.replay === true,
         isNew,
       });
+      if (revision !== this._viewRevision || !this._booted) return;
     }
 
     if (this._isBatchMode) {
@@ -403,23 +417,26 @@ export default class DialogWidget {
     this._attachReactionListeners(this.container);
     this._attachNoteListeners(this.container);
     this._attachFinaleListeners(this.container);
-    this.lastRenderedIndex = this.messages.length;
+    this.lastRenderedIndex = renderedUntil;
   }
 
   async renderOlder() {
     const revision = this._viewRevision;
-    if (!this._isBatchMode) {
-      this.renderCount = this.messages.length;
-      this.lastRenderedIndex = this.messages.length;
-      return;
-    }
+    this._renderLock = this._renderLock.catch(() => {}).then(() => this._renderOlder(revision));
+    return this._renderLock;
+  }
 
-    const newCount = Math.min(this.messages.length, this.renderCount + this.batchSize);
+  async _renderOlder(revision) {
+    if (!this._booted || revision !== this._viewRevision) return;
+    if (!this._isBatchMode) return;
+
+    const messages = this.messages.slice();
+    const newCount = Math.min(messages.length, this.renderCount + this.batchSize);
     if (newCount === this.renderCount) return;
 
-    const start = this.messages.length - newCount;
-    const end = this.messages.length - this.renderCount;
-    const older = this.messages.slice(start, end);
+    const start = messages.length - newCount;
+    const end = messages.length - this.renderCount;
+    const older = messages.slice(start, end);
     const prevHeight = this.scrollContainer.scrollHeight;
 
     for (const msg of [...older].reverse()) {
@@ -454,6 +471,7 @@ export default class DialogWidget {
         isReplay: true,
         isNew: false,
       });
+      if (revision !== this._viewRevision || !this._booted) return;
     }
 
     this.renderCount = newCount;
@@ -467,7 +485,6 @@ export default class DialogWidget {
     // Offset scrolling so the user's viewport stays at the same message
     // after older messages are prepended.
     this.scrollContainer.scrollTop += diff;
-    this.lastRenderedIndex = this.messages.length;
   }
 
   async _animateMessage(node, message, context = {}) {

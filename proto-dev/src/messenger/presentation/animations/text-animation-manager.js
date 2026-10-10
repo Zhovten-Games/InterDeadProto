@@ -39,6 +39,8 @@ export default class TextAnimationManager {
   }
   reset() {
     this._revision += 1;
+    // New context work must not wait for an obsolete translation/effect port.
+    this._queue = Promise.resolve();
     for (const controller of this._activeControllers) controller.abort();
     this._activeControllers.clear();
   }

@@ -74,6 +74,12 @@ narrative_role: embodied feedback channel
 
 UI projection retained timeline с view/snapshot revision. boot подписывается на timeline и events; replaceMessages заменяет историю без live animations/sounds/effects. Render lock сериализует операции, stale template/media await не дописывает старый DOM. DOM message содержит stable fingerprint и dialog-message-id. Widget освобождает только собственные media handles; clear/dispose сохраняют handles иных consumers. TextAnimationManager владеет generation/timers typewriter.
 
+Каждая render generation владеет своей очередью и неизменным диапазоном сообщений.
+После animation await проверяется актуальность generation до изменения счётчиков
+или scroll. Replacement не ждёт старые template/media/translation promises.
+renderOlder выполняется в одной очереди с renderLatest, сохраняет newest cursor и
+уже загруженное окно истории при поступлении live сообщения.
+
 Проверки: `IDP-WH-RESTORE-001.v1; complete-unit-corpus; browser-profile-reload-subpath`. Public exports, методы, imports, state fields и consumers
 зафиксированы в source-topology.json; путь пересматривается по IDP-DEV-010.
 

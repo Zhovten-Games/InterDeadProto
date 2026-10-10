@@ -46,3 +46,19 @@ Path provenance and lifecycle/state/build consumers are recorded per module in
 source-topology.json; preserved public paths are in build/artifact-map.json.
 Reports must state mode, source/artifact hashes and blockers. PREPARED records
 are never successful application/deployment records.
+
+## Entry 0004 — Messenger recovery patch prepared
+
+Status: PREPARED. Basis: user-reported Firefox failures after green WARDEN on
+`refactor/idp-stabilization`, baseline `d0d1838546ef94dcb81cd5f468cbafaca76b0d1e`.
+Correction scope: post command/UI synchronization, cancellable pending post ownership,
+generation-safe asynchronous history projection and serialized older-history rendering.
+Existing registered unit families include recovery combinations and capture/sequence/SQLite
+integration. Additional public browser diagnostics consume the frozen deployment artifact.
+
+Source responsibilities and current contracts are updated in the existing messenger paths;
+public artifact topology and both deployment destinations retain their existing contracts.
+Protected historical WARDEN controls retain their bytes and identities. Detailed scenarios and
+commands: [Messenger recovery](messenger-recovery-2026-10-10.md).
+
+User application/deployment and a successful Drive-log completion remain pending verification.
