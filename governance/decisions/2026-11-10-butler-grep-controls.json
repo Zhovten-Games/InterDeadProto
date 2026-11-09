@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "status": "reviewed",
+  "date": "2026-11-09T22:08:20.832Z",
+  "reviewers": ["Sam Starling - owner review of Butler CI portability correction"],
+  "authority": "governance/PROFILE.md (P06/P10); owner review",
+  "basis": "https://github.com/Zhovten-Games/InterDeadProto/actions/runs/42706842415",
+  "scope": "Replace the non-portable ripgrep CLI requirement in the pinned Butler version check with a portable grep check on the exact reported v15.24.0. Keep Butler binary version, immutable artifact, all release gates and historical drivers unchanged.",
+  "changes": [
+    {
+      "path": ".github/workflows/proto-pipeline.yml",
+      "before": "9afc43d4ea3e7bd503b7a8fd39e37ea088f69b08d6756d1ad04803a02aa58cef",
+      "after": "3ca6073a037d9910ca12760587c94c56087579f89cab3735167724fb9f7400d4"
+    }
+  ],
+  "predecessorControlRecord": "governance/decisions/2026-11-09-ubuntu-24.04-controls.json"
+}
