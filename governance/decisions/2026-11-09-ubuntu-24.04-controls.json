@@ -1,89 +1,87 @@
 {
-    "schemaVersion":  1,
-    "status":  "reviewed",
-    "date":  "2026-11-09T14:35:17.450Z",
-    "reviewers":  [
-                      "Sam Starling - owner-reviewed CI runner compatibility change on 2026-11-09"
-                  ],
-    "authority":  "governance/PROFILE.md (P06/P10); owner review",
-    "basis":  "https://github.com/Zhovten-Games/InterDeadProto/actions/runs/42631975936",
-    "scope":  "Cumulative approved control delta relative to the frozen base manifest: preserve 14 changes reviewed 2026-11-07 and update the workflow runner SHA reviewed 2026-11-09. All historical drivers and release gates remain unchanged.",
-    "changes":  [
-                    {
-                        "path":  ".github/workflows/proto-pipeline.yml",
-                        "before":  "648f244fb24b266f729fca3b332801829acfffa536cdba082b0abcf23553cc5e",
-                        "after":  "9afc43d4ea3e7bd503b7a8fd39e37ea088f69b08d6756d1ad04803a02aa58cef"
-                    },
-                    {
-                        "path":  "build/verify-release.mjs",
-                        "before":  "8426646db6cad48d3ee50ed8f7d9214afb89be148d32c4b2464997609f2d5f58",
-                        "after":  "75fecb1ba935654f4fabb445e1904b3d73219cf086d9847cf734be0ec3f40218"
-                    },
-                    {
-                        "path":  "constitutional-guard/governance.mjs",
-                        "before":  "ee8825af5ae38cce903b5c5e57aed80a1f6d49c2346c2aed16684de9d4d64e77",
-                        "after":  "1027b0b5b8e86c4b7ed627c5f6f28dd00c5a6a895ee41966557ffba632707e53"
-                    },
-                    {
-                        "path":  "constitutional-guard/manifest/gates.json",
-                        "before":  "a2db1605d8b70110311621091dda6e5d33389d6f018e3f5763fe0a688b0ee613",
-                        "after":  "6e6c564acd22e06708015b6292f82107f0ddc6d713749dd6b4f90968dfcb0799"
-                    },
-                    {
-                        "path":  "constitutional-guard/manifest/manual-matrix.json",
-                        "before":  "aa532edf52e9f26cdfa323527f300be5c5781aadc2882d2cdb292cb76c6ad7a8",
-                        "after":  "7665eca78558c5e87b8cb5baec03e6077ec1f6c10f7d2f1d98324c84d47b0913"
-                    },
-                    {
-                        "path":  "constitutional-guard/manual-evidence.mjs",
-                        "before":  "05765f1445cd505f93c06e46ed074dfeb1a3e687b22beb59ffe57942c2b965d0",
-                        "after":  "2a3a8b635fc745b9ae1ea8d4f51d468da09dc71806a79d321f8db357c6712803"
-                    },
-                    {
-                        "path":  "constitutional-guard/run.mjs",
-                        "before":  "0ecd3bfc9ec575d00c0aa09a1fe24917ad3f6f3149b4eb2aabfe3e5521ef358e",
-                        "after":  "79026a905b69c31d9bb671d46d208dbcd598c0402f8670f05745dfdb254b5116"
-                    },
-                    {
-                        "path":  "constitutional-guard/schemas/report.schema.json",
-                        "before":  "ea053e3de8d04893b8a9ad8f06e4912f2edf252463da64421f748b923ac65f04",
-                        "after":  "1a121c2f807d8bf0dda607a7adbb064b2667afe311fdbce6683314e6ddbd9fef"
-                    },
-                    {
-                        "path":  "constitutional-guard/verdict.mjs",
-                        "before":  "7de48a9ac85c3c49f7964648704cc8683321f503931534556ffcad0447199ae8",
-                        "after":  "90d215694ae09f83af43bce52ea8b4b85b95b9cf5556c41a863e43ca86bd86f3"
-                    },
-                    {
-                        "path":  "manifest/dependencies.json",
-                        "before":  "a2480a4a1b5e9c365014576970f308292115f9c851bf738c746370afec92da91",
-                        "after":  "9e4a8a60a2551f01bd400f17cf63e8e9516f47e818fbfa9b1f79d16116dddd3e"
-                    },
-                    {
-                        "path":  "manifest/rule-checks.json",
-                        "before":  "b1a3045488b2205b67a6ca8eea7c3b60a71b53059ce23beb9af5fe2bc45f72c2",
-                        "after":  "c5578cc5da24f5522c825c07d7d06e35497ab51276f631526c6b035843d24828"
-                    },
-                    {
-                        "path":  "manifest/technical-regulators.json",
-                        "before":  "bbd63625a515607dfddb8099fad2cff300a7c84608e4e7b35683339bf07ebafa",
-                        "after":  "772f307921c987ba8f908aea5fd35a80e27cb5582360721152ebe76c21e12972"
-                    },
-                    {
-                        "path":  "manifest/test-corpus.json",
-                        "before":  "2e2856535037280b93e8a1520dd221c8fa4f5b8883bc4e082b36ab0451bac5bd",
-                        "after":  "acde167a852a45e267093fbb3b6d39ac50273dea0b9a651c09cef89b6f5c4993"
-                    },
-                    {
-                        "path":  "proto-dev/package-lock.json",
-                        "before":  "1373191d5148a3988789419f386ed7e30ac2f69792fd373a57279e9311335a3d",
-                        "after":  "9586fb503bb94bff1186478cbfe92ed582257105aee4a2d9900515f4a4c48d70"
-                    },
-                    {
-                        "path":  "proto-dev/package.json",
-                        "before":  "750d9c0b8bd1b8e3b0c0635096886510f1c3e14b4e6016e37df3cd5eb30ce8cc",
-                        "after":  "31e94b1059b6eb75aac1647fda55934e7e66ed3a3faa8e1e027c6d83ce61a0fb"
-                    }
-                ],
-    "predecessorControlRecord":  "governance/decisions/2026-11-07-controls.json"
+  "schemaVersion": 1,
+  "status": "reviewed",
+  "date": "2026-11-09T14:35:17.450Z",
+  "reviewers": ["Sam Starling - owner-reviewed CI runner compatibility change on 2026-11-09"],
+  "authority": "governance/PROFILE.md (P06/P10); owner review",
+  "basis": "https://github.com/Zhovten-Games/InterDeadProto/actions/runs/42631975936",
+  "scope": "Cumulative approved control delta relative to the frozen base manifest: preserve 14 changes reviewed 2026-11-07 and update the workflow runner SHA reviewed 2026-11-09. All historical drivers and release gates remain unchanged.",
+  "changes": [
+    {
+      "path": ".github/workflows/proto-pipeline.yml",
+      "before": "648f244fb24b266f729fca3b332801829acfffa536cdba082b0abcf23553cc5e",
+      "after": "9afc43d4ea3e7bd503b7a8fd39e37ea088f69b08d6756d1ad04803a02aa58cef"
+    },
+    {
+      "path": "build/verify-release.mjs",
+      "before": "8426646db6cad48d3ee50ed8f7d9214afb89be148d32c4b2464997609f2d5f58",
+      "after": "75fecb1ba935654f4fabb445e1904b3d73219cf086d9847cf734be0ec3f40218"
+    },
+    {
+      "path": "constitutional-guard/governance.mjs",
+      "before": "ee8825af5ae38cce903b5c5e57aed80a1f6d49c2346c2aed16684de9d4d64e77",
+      "after": "1027b0b5b8e86c4b7ed627c5f6f28dd00c5a6a895ee41966557ffba632707e53"
+    },
+    {
+      "path": "constitutional-guard/manifest/gates.json",
+      "before": "a2db1605d8b70110311621091dda6e5d33389d6f018e3f5763fe0a688b0ee613",
+      "after": "6e6c564acd22e06708015b6292f82107f0ddc6d713749dd6b4f90968dfcb0799"
+    },
+    {
+      "path": "constitutional-guard/manifest/manual-matrix.json",
+      "before": "aa532edf52e9f26cdfa323527f300be5c5781aadc2882d2cdb292cb76c6ad7a8",
+      "after": "7665eca78558c5e87b8cb5baec03e6077ec1f6c10f7d2f1d98324c84d47b0913"
+    },
+    {
+      "path": "constitutional-guard/manual-evidence.mjs",
+      "before": "05765f1445cd505f93c06e46ed074dfeb1a3e687b22beb59ffe57942c2b965d0",
+      "after": "2a3a8b635fc745b9ae1ea8d4f51d468da09dc71806a79d321f8db357c6712803"
+    },
+    {
+      "path": "constitutional-guard/run.mjs",
+      "before": "0ecd3bfc9ec575d00c0aa09a1fe24917ad3f6f3149b4eb2aabfe3e5521ef358e",
+      "after": "79026a905b69c31d9bb671d46d208dbcd598c0402f8670f05745dfdb254b5116"
+    },
+    {
+      "path": "constitutional-guard/schemas/report.schema.json",
+      "before": "ea053e3de8d04893b8a9ad8f06e4912f2edf252463da64421f748b923ac65f04",
+      "after": "1a121c2f807d8bf0dda607a7adbb064b2667afe311fdbce6683314e6ddbd9fef"
+    },
+    {
+      "path": "constitutional-guard/verdict.mjs",
+      "before": "7de48a9ac85c3c49f7964648704cc8683321f503931534556ffcad0447199ae8",
+      "after": "90d215694ae09f83af43bce52ea8b4b85b95b9cf5556c41a863e43ca86bd86f3"
+    },
+    {
+      "path": "manifest/dependencies.json",
+      "before": "a2480a4a1b5e9c365014576970f308292115f9c851bf738c746370afec92da91",
+      "after": "9e4a8a60a2551f01bd400f17cf63e8e9516f47e818fbfa9b1f79d16116dddd3e"
+    },
+    {
+      "path": "manifest/rule-checks.json",
+      "before": "b1a3045488b2205b67a6ca8eea7c3b60a71b53059ce23beb9af5fe2bc45f72c2",
+      "after": "c5578cc5da24f5522c825c07d7d06e35497ab51276f631526c6b035843d24828"
+    },
+    {
+      "path": "manifest/technical-regulators.json",
+      "before": "bbd63625a515607dfddb8099fad2cff300a7c84608e4e7b35683339bf07ebafa",
+      "after": "772f307921c987ba8f908aea5fd35a80e27cb5582360721152ebe76c21e12972"
+    },
+    {
+      "path": "manifest/test-corpus.json",
+      "before": "2e2856535037280b93e8a1520dd221c8fa4f5b8883bc4e082b36ab0451bac5bd",
+      "after": "acde167a852a45e267093fbb3b6d39ac50273dea0b9a651c09cef89b6f5c4993"
+    },
+    {
+      "path": "proto-dev/package-lock.json",
+      "before": "1373191d5148a3988789419f386ed7e30ac2f69792fd373a57279e9311335a3d",
+      "after": "9586fb503bb94bff1186478cbfe92ed582257105aee4a2d9900515f4a4c48d70"
+    },
+    {
+      "path": "proto-dev/package.json",
+      "before": "750d9c0b8bd1b8e3b0c0635096886510f1c3e14b4e6016e37df3cd5eb30ce8cc",
+      "after": "31e94b1059b6eb75aac1647fda55934e7e66ed3a3faa8e1e027c6d83ce61a0fb"
+    }
+  ],
+  "predecessorControlRecord": "governance/decisions/2026-11-07-controls.json"
 }
