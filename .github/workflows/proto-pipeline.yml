@@ -1,4 +1,4 @@
-name: InterDeadProto verified candidate and release
+name: InterDeadProto WARDEN and verified release
 
 on:
   push:
@@ -35,8 +35,8 @@ concurrency:
 
 jobs:
   candidate:
-    name: Full WARDEN candidate (manual gates remain visible)
-    runs-on: ubuntu-latest
+    name: Full WARDEN (host acceptance reported separately)
+    runs-on: ubuntu-24.04
     outputs:
       release-status: ${{ steps.verdict.outputs.release-status }}
     steps:
@@ -134,7 +134,7 @@ jobs:
           folder: build/output/dist
           clean: true
           single-commit: true
-          token: ${{ secrets.INTERDEAD_PROTO_DEPLOY_TOKEN }}
+          token: ${{ secrets.INTERDEAD_PROTO_DEPLOY_TOKEN || github.token }}
 
   deploy-itch:
     name: Publish the same verified tree via Butler

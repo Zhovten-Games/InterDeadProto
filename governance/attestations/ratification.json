@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "status": "operative",
+  "decision": "governance/decisions/2026-11-07-adoption.md",
+  "date": "2026-11-07T11:25:24.375888Z",
+  "reviewers": [
+    "Sam Starling — adopting authority through explicit owner instruction of 2026-11-07; technical preparation delegated to Codex"
+  ],
+  "authority": "Sam Starling",
+  "basis": "owner-instruction-2026-11-07",
+  "effect": "local application of the supplied patch",
+  "separateHumanReviewClaimed": false,
+  "documents": {
+    "governance/PROFILE.md": "82508513fe185a23dc2e14e2746834bb7b755a7c44c8032a954669041972baf1",
+    "governance/release-policy.json": "cf7109eacb14aaf073ff294cc1c43c597a08e5a66691dc7c969b054d0ac8334e",
+    "governance/legislation/DEVELOPMENT.md": "0747911c70b4738e8f17ba5c1eeff8a331dd836aa3d8a1bbcfa28538637cadc1",
+    "governance/base-adoption.json": "f93bf86f934d911e49b978512267b4ef77526c8e61d783e2589d183180ecae42",
+    "governance/acts.json": "ca3ca899f4f5d56eb8d64203f2a54d300b774f0223333ebc6d4545106188c03c",
+    "governance/waivers.json": "7060c267c912e3156b87c646e3bc970eac1ac8bdd964cf0a794b83e6f1250614",
+    "manifest/rule-checks.json": "c5578cc5da24f5522c825c07d7d06e35497ab51276f631526c6b035843d24828",
+    "manifest/technical-regulators.json": "772f307921c987ba8f908aea5fd35a80e27cb5582360721152ebe76c21e12972",
+    "manifest/dependencies.json": "9e4a8a60a2551f01bd400f17cf63e8e9516f47e818fbfa9b1f79d16116dddd3e",
+    "LICENSE.md": "87ac994d00c38f1c3de6c4e0ea37bd94f02774324e23d53c1b39137c2623b5af",
+    "LICENSING-OVERRIDES.md": "0d87d3cd1c532f56d30804e37469f032669da8c893d83f406d591ae1e702bed2"
+  }
+}

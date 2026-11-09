@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "mode": "traditional-warden",
+  "automaticGates": "mandatory",
+  "ratification": "mandatory",
+  "externalManualAcceptance": "post-deployment",
+  "manualAcceptanceMandatory": false,
+  "basis": "governance/decisions/2026-11-07-adoption.md"
+}

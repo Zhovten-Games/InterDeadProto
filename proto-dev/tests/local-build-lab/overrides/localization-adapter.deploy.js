@@ -1,4 +1,5 @@
 import ILocalization from '../../../src/localization/ports/localization-port.js';
+import { resolveProjectLinks } from '../../../src/asset-delivery/paths/project-links.js';
 
 class BundledLocaleSource {
   constructor(loaders) {
@@ -58,6 +59,6 @@ export default class LocalizationAdapter extends ILocalization {
 
   async translate(key, domain = 'ui') {
     const data = await this._loadDomain(this.language, domain);
-    return data[key] || key;
+    return resolveProjectLinks(data[key] || key);
   }
 }

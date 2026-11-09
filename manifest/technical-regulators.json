@@ -7,10 +7,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-001",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -37,10 +37,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-002",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -67,10 +67,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-003",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -94,10 +94,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-004",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -123,10 +123,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-005",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -150,10 +150,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-006",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -177,10 +177,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-007",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -204,10 +204,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-008",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -234,10 +234,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-009",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -265,10 +265,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-010",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -295,10 +295,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-011",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -322,10 +322,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-012",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -352,10 +352,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-013",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -382,10 +382,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-014",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",
@@ -413,10 +413,10 @@
       "defaults": "PROFILE P16 and declared application ports",
       "observation": "manifest/rule-checks.json and build/results/warden-report.json",
       "changeProcedure": "PROFILE P06/P11",
-      "status": "candidate",
+      "status": "operative",
       "basis": {
         "ruleId": "IDP-DEV-015",
-        "revision": "1.0.0-candidate",
+        "revision": "1.1.0",
         "source": "governance/legislation/DEVELOPMENT.md"
       },
       "kind": "runtime controller and/or verification gate",

@@ -1,7 +1,7 @@
 # InterDeadProto Development Regulation
 
-Act ID: `idp-act-development-001`. Revision: `1.0.0-candidate`.
-Status: `candidate`
+Act ID: `idp-act-development-001`. Revision: `1.1.0`.
+Status: `operative`
 
 Constitution source: `.code-constitution/` at
 `220dc9c286ae06f8b6ed60cdda75112eed0408ed`.
@@ -141,7 +141,7 @@ The first source level MUST name a product capability or an exact external bound
 
 Source relocation MUST update imports, dynamic paths, docs, tests, licensing, CI and Local Build Lab together. Public paths MUST be preserved through an explicit artifact map or migrated by a reviewed compatibility decision. Diagnostic builds MUST NOT mutate canonical checkout sources.
 
-## IDP-DEV-012 — Experimental WARDEN
+## IDP-DEV-012 — Traditional WARDEN
 
 Full check MUST execute integrity, prebuild, distribution assembly, postbuild and evidence aggregation. Missing/modified/unregistered history or protected dependencies MUST cause fail-closed refusal before dependent phases. Supersession MUST preserve predecessor and reviewed decision. Check MUST NOT update control hashes.
 
@@ -156,3 +156,7 @@ CI and Local Build Lab MUST invoke the same isolated locked assembler. Publicati
 ## IDP-DEV-015 — Profile reset boundary
 
 Reset MUST invalidate user/session operations, transient history/UI and camera queries while preserving infrastructure AI readiness. Persisted data is removed only by an explicit option. APP_RESET_COMPLETED/SCREEN_CHANGE MUST rederive UI through its ordinary contract.
+
+## IDP-DEV-016 — Host acceptance and deployment
+
+`governance/release-policy.json` defines the traditional WARDEN publication boundary. Integrity, source/lifecycle regressions, dependency audit, frozen assembly, browser/resource checks and normative ratification remain mandatory. Physical Opera/camera/host acceptance is reported as non-mandatory post-deployment acceptance with its actual pending/failed/passed status. This permits publishing the exact artifact before observing it on its destination and removes the circular requirement to test an unpublished hash on itch.io. It does not certify physical hardware or conceal a failed host check. History drivers retain their bytes and scope.

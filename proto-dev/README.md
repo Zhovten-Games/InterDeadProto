@@ -1,6 +1,6 @@
 # proto-dev
 
-> This application should be perceived as an art prototype for the game world: imperfect, but the original starting point of the whole direction. Learn more: [interdead.phantom-draft.com/about](https://interdead.phantom-draft.com/about/).
+> This application should be perceived as an art prototype for the game world: imperfect, but the original starting point of the whole direction. Learn more: [interdead.zhovten.games/about](https://interdead.zhovten.games/about/).
 
 InterDeadProto `proto-dev` is a narrative-driven interface prototype (ES6 modules).
 

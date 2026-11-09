@@ -3,6 +3,7 @@ import path from 'node:path';
 import { root, readJson, hashFile, sourceIdentity } from '../build/lib.mjs';
 export const normativeDocuments = [
   'governance/PROFILE.md',
+  'governance/release-policy.json',
   'governance/legislation/DEVELOPMENT.md',
   'governance/base-adoption.json',
   'governance/acts.json',

@@ -139,102 +139,102 @@
     {
       "id": "manual.opera-itch-grant",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-itch-deny",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-itch-pending",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-noir-grant",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-noir-deny",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-noir-pending",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-subpath-grant",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-subpath-deny",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-subpath-pending",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-local-grant",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-local-deny",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.opera-local-pending",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.legacy-import-recovery",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.reset-preserves-infrastructure",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.licensing-host-boundaries",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.test-boundary",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.localization-focus-en",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.localization-focus-ru",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.localization-focus-uk",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "manual.localization-focus-ja",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "immutable-source",
@@ -274,7 +274,7 @@
     {
       "id": "manual.normative-semantic-review",
       "phase": "manual",
-      "mandatory": true
+      "mandatory": false
     },
     {
       "id": "report-schema",
