@@ -1,0 +1,1 @@
+var e=`Призрак`,t={ghost:e};export{t as default,e as ghost};

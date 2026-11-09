@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "assemblyVersion": "1.0.0",
+  "sourceSha": "6280a2d700a60544084479fb930169b17be8b413",
+  "sourceTreeSha256": "e4c81628cf91ad16fa5429d9c4191775ace88c52e16c3777ebf366d0c0bbbc91",
+  "pins": {
+    ".code-constitution": "220dc9c286ae06f8b6ed60cdda75112eed0408ed",
+    ".licensing-policy": "6e4c2627717c079827ed4aa9044a5346b3ea3ddb"
+  },
+  "clean": true,
+  "buildId": "6280a2d700a60544084479fb930169b17be8b413",
+  "diagnostic": false,
+  "localPackageIdentity": null,
+  "buildEnvironment": {
+    "VITE_CACHE_BUILD_ID": "6280a2d700a60544084479fb930169b17be8b413"
+  },
+  "lockfileSha256": "9586fb503bb94bff1186478cbfe92ed582257105aee4a2d9900515f4a4c48d70",
+  "mappingSha256": "88cdf82f8a9f3c74f400ea70585cf0355f24c74c8e276a373f566c3df5f15c34",
+  "transformationSha256": "58d93565d1ef637a2764ea8158abe212d4e4dd9f2a1f8fa1050252754fa1da67",
+  "tools": {
+    "node": "v24.19.0",
+    "npm": "11.9.0"
+  },
+  "payloadTreeSha256": "e0be6d9c6c9068884d984984a206b8d40566854093ac4134e97eee8424ab55e4",
+  "payloadPolicy": "Sorted relative paths, bytes and SHA-256; excludes the two embedded provenance files only"
+}

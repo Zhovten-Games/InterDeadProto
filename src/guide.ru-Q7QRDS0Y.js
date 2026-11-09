@@ -1,0 +1,1 @@
+var e=`Привет!`,t=`Привет, призрак`,n=`Пока`,r={start:e,reply:t,end:n};export{r as default,n as end,t as reply,e as start};

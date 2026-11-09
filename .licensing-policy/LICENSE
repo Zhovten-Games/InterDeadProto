@@ -1,0 +1,76 @@
+FOP Oksana Dubinetska Repository Licensing Policy License v1.0
+SPDX-License-Identifier: LicenseRef-FOPOD-Repository-Policy-1.0
+
+Copyright (c) 2026 FOP Oksana Dubinetska.
+All rights reserved.
+
+1. Scope
+
+This license applies only to this repository ("Policy Repository"), including
+its README, policy descriptions, translations, templates, and repository
+structure, except for standard third-party license texts stored under
+`LICENSES/` and explicitly identified as reference texts.
+
+This is a restricted license. It is not an open-source license and does not
+grant a general right to redistribute, modify, or sublicense the Policy
+Repository.
+
+2. Permitted uses
+
+Permission is granted to:
+
+a. view and inspect the Policy Repository;
+
+b. reference the Policy Repository by URL, Git tag, or commit hash;
+
+c. clone or fetch an unmodified copy solely as technically required to inspect
+   the policy or use the Policy Repository as a Git submodule;
+
+d. include an unmodified Git submodule reference to the Policy Repository in
+   another repository;
+
+e. copy and adapt files stored under `templates/` into a consuming repository
+   solely for the purpose of declaring that consuming repository's own
+   licensing policy.
+
+3. Uses not granted
+
+Except where applicable law or platform terms require otherwise, no permission
+is granted to:
+
+a. redistribute, mirror, rehost, or republish the Policy Repository or a
+   substantial part of it as a standalone repository or standalone product;
+
+b. distribute modified versions, derivative policy repositories, translations,
+   or repackaged editions of the Policy Repository;
+
+c. sublicense the Policy Repository;
+
+d. use names, logos, branding elements, or organization identifiers except as
+   necessary to identify the source of this Policy Repository;
+
+e. imply endorsement, authorization, partnership, or affiliation.
+
+4. Standard license texts
+
+Files such as `LICENSES/MIT.txt` and `LICENSES/CC-BY-SA-4.0.txt` are included
+as reference texts for consuming repositories. Their inclusion does not apply
+those licenses to the Policy Repository itself.
+
+5. Platform terms
+
+Where this Policy Repository is hosted on a third-party platform, the
+platform's mandatory terms may grant limited technical permissions required
+for hosting, viewing, or platform-level operations. This license does not
+expand those permissions.
+
+6. No warranty
+
+THE POLICY REPOSITORY IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, LEGAL SUFFICIENCY,
+NONINFRINGEMENT, OR FITNESS FOR A PARTICULAR JURISDICTION OR PROJECT.
+
+7. Additional permissions
+
+Additional permissions may be granted only in writing by the rights holder.

@@ -1,0 +1,1 @@
+var e={en:{ghost:`Ghost`},ru:{ghost:`Призрак`}};export{e as default};

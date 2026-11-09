@@ -1,0 +1,1 @@
+var e=`Ghost`,t={ghost:e};export{t as default,e as ghost};

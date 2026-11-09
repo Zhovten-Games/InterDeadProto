@@ -1,0 +1,1 @@
+var e=`幽霊`,t={ghost:e};export{t as default,e as ghost};
