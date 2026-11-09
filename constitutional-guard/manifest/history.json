@@ -176,7 +176,7 @@
   "protectedDependencies": [
     {
       "path": ".github/workflows/proto-pipeline.yml",
-      "sha256": "9afc43d4ea3e7bd503b7a8fd39e37ea088f69b08d6756d1ad04803a02aa58cef"
+      "sha256": "3ca6073a037d9910ca12760587c94c56087579f89cab3735167724fb9f7400d4"
     },
     {
       "path": "build/artifact-map.json",
@@ -418,5 +418,5 @@
       "methods": ["boot", "dispose", "setLanguage", "applyLanguage"]
     }
   ],
-  "controlChange": "governance/decisions/2026-11-09-ubuntu-24.04-controls.json"
+  "controlChange": "governance/decisions/2026-11-10-butler-grep-controls.json"
 }

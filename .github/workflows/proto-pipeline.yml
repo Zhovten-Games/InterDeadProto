@@ -170,7 +170,7 @@ jobs:
           unzip -q "$RUNNER_TEMP/butler.zip" -d "$RUNNER_TEMP/butler-bin"
           chmod +x "$RUNNER_TEMP/butler-bin/butler"
           "$RUNNER_TEMP/butler-bin/butler" -V | tee "$RUNNER_TEMP/butler-version.txt"
-          rg '15\.24\.0' "$RUNNER_TEMP/butler-version.txt"
+          grep -Eq '^v15[.]24[.]0([, ]|$)' "$RUNNER_TEMP/butler-version.txt"
           echo "$RUNNER_TEMP/butler-bin" >> "$GITHUB_PATH"
       - name: Upload verified tree
         env:
