@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "status": "reviewed",
+  "date": "2026-11-09T22:58:10.901Z",
+  "reviewers": ["Sam Starling - owner review of Butler version stderr capture correction"],
+  "authority": "governance/PROFILE.md (P06/P10); owner review",
+  "basis": "https://github.com/Zhovten-Games/InterDeadProto/actions/runs/42710198310/job/129479161206",
+  "scope": "Capture both stderr and stdout from the pinned Butler v15.24.0 version command so the existing grep gate can verify its actual output. Keep Butler binary version, grep match, immutable distribution, publishing destinations, all release gates and historical drivers unchanged.",
+  "changes": [
+    {
+      "path": ".github/workflows/proto-pipeline.yml",
+      "before": "3ca6073a037d9910ca12760587c94c56087579f89cab3735167724fb9f7400d4",
+      "after": "c55cb692dca2f09cb962f7e4d6b9504dcb94e23de1e4bf105b3ec606ae8e1c72"
+    }
+  ],
+  "predecessorControlRecord": "governance/decisions/2026-11-10-butler-grep-controls.json"
+}

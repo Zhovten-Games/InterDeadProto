@@ -169,7 +169,7 @@ jobs:
           curl -fL "https://broth.itch.zone/butler/linux-amd64/15.24.0/archive/default" -o "$RUNNER_TEMP/butler.zip"
           unzip -q "$RUNNER_TEMP/butler.zip" -d "$RUNNER_TEMP/butler-bin"
           chmod +x "$RUNNER_TEMP/butler-bin/butler"
-          "$RUNNER_TEMP/butler-bin/butler" -V | tee "$RUNNER_TEMP/butler-version.txt"
+          "$RUNNER_TEMP/butler-bin/butler" -V 2>&1 | tee "$RUNNER_TEMP/butler-version.txt"
           grep -Eq '^v15[.]24[.]0([, ]|$)' "$RUNNER_TEMP/butler-version.txt"
           echo "$RUNNER_TEMP/butler-bin" >> "$GITHUB_PATH"
       - name: Upload verified tree
