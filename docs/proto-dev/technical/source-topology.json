@@ -12627,6 +12627,14 @@
         "assessment": "Current public exports/methods and static dependencies; resource ownership is described in the module documentation. Semantic placement remains revisable by IDP-DEV-010."
       },
       "currentConsumers": ["proto-dev/src/app-shell/bootstrap/index.js"]
+    },
+    {
+      "newPath": "proto-dev/src/asset-delivery/paths/project-links.js",
+      "reason": "Configurable public link resolver; owner migration mandate 2026-11-07"
+    },
+    {
+      "newPath": "proto-dev/src/asset-delivery/paths/project-endpoints.json",
+      "reason": "One public website endpoint for all locales"
     }
   ],
   "testMoves": [

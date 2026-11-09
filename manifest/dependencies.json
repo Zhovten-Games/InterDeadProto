@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "candidate",
-  "decision": "governance/decisions/IDP-DEC-TOOLCHAIN-001.md",
+  "status": "operative",
+  "decision": "governance/decisions/2026-11-07-adoption.md",
   "entries": [
     {
       "name": "@interdead/framework",
@@ -212,5 +212,23 @@
       "Full corpus and real artifact browser checks"
     ],
     "humanReview": "manual.normative-semantic-review; competent adoption of tool and license risks remains pending."
-  }
+  },
+  "overrides": [
+    {
+      "name": "minimatch",
+      "version": "11.0.5",
+      "scope": "Build/verification transitive dependency",
+      "reason": "November 2026 published advisory remediation; whole regression/lint/assembly corpus must pass",
+      "license": "BlueOak-1.0.0",
+      "source": "https://www.npmjs.com/package/minimatch"
+    },
+    {
+      "name": "glob",
+      "version": "14.0.4",
+      "scope": "Build/verification transitive dependency",
+      "reason": "November 2026 published advisory remediation; whole regression/lint/assembly corpus must pass",
+      "license": "BlueOak-1.0.0",
+      "source": "https://www.npmjs.com/package/glob"
+    }
+  ]
 }

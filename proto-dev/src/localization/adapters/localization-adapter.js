@@ -1,4 +1,5 @@
 import ILocalization from '../ports/localization-port.js';
+import { resolveProjectLinks } from '../../asset-delivery/paths/project-links.js';
 
 export default class LocalizationAdapter extends ILocalization {
   constructor(basePath = null, moduleUrl = import.meta.url) {
@@ -41,6 +42,6 @@ export default class LocalizationAdapter extends ILocalization {
 
   async translate(key, domain = 'ui') {
     const data = await this._loadDomain(this.language, domain);
-    return data[key] || key;
+    return resolveProjectLinks(data[key] || key);
   }
 }

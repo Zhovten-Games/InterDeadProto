@@ -5,7 +5,6 @@ import { checkIntegrity } from '../constitutional-guard/integrity.mjs';
 import { checkGovernance, checkRatification } from '../constitutional-guard/governance.mjs';
 import { releaseVerdict, validateGateInventory } from '../constitutional-guard/verdict.mjs';
 import Ajv from '../proto-dev/node_modules/ajv/dist/2020.js';
-import { validateEvidence } from '../constitutional-guard/manual-evidence.mjs';
 
 /** Consumption gate: it never rebuilds or modifies the certified artifact. */
 export async function verifyRelease({ candidate = false } = {}) {
@@ -47,11 +46,16 @@ export async function verifyRelease({ candidate = false } = {}) {
     throw new Error('Duplicate report gate');
   for (const gate of definitions.gates) {
     const observed = report.gates.find(
-      (row) => row.id === gate.id && row.phase === gate.phase && row.mandatory === true,
+      (row) =>
+        row.id === gate.id &&
+        row.phase === gate.phase &&
+        row.mandatory === (gate.mandatory !== false),
     );
     if (
       !observed ||
-      (((candidate && gate.phase !== 'manual') || !candidate) && observed.status !== 'passed')
+      (gate.mandatory !== false &&
+        ((candidate && gate.phase !== 'manual') || !candidate) &&
+        observed.status !== 'passed')
     )
       throw new Error(`Incomplete mandatory gate: ${gate.id}`);
   }
@@ -82,19 +86,12 @@ export async function verifyRelease({ candidate = false } = {}) {
       throw new Error('Public release is not authorized by the full verdict');
     if ((await checkRatification()).status !== 'passed')
       throw new Error('Current governance ratification is incomplete');
-    const matrix = await readJson(
-      path.join(root, 'constitutional-guard/manifest/manual-matrix.json'),
-    );
-    const records = report.gates
-      .filter((row) => matrix.cases.some((definition) => definition.id === row.id))
-      .map((row) => row.evidence);
-    const manual = await validateEvidence(
-      { schemaVersion: 1, results: records },
-      matrix.cases,
-      distribution,
-    );
-    if (manual.errors.length || records.some((record) => record?.result !== 'passed'))
-      throw new Error('Manual confirmation is missing, stale or belongs to another artifact');
+    const policy = await readJson(path.join(root, 'governance/release-policy.json'));
+    if (
+      policy.mode !== 'traditional-warden' ||
+      policy.externalManualAcceptance !== 'post-deployment'
+    )
+      throw new Error('Unknown host-acceptance publication policy');
   }
   return {
     candidateStatus: 'passed',

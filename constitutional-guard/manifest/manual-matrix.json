@@ -28,21 +28,21 @@
       "family": "camera-host",
       "browser": "Opera",
       "procedure": "Permission grant; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
-      "origin": "noir.phantom-draft.com"
+      "origin": "noir.zhovten.games"
     },
     {
       "id": "manual.opera-noir-deny",
       "family": "camera-host",
       "browser": "Opera",
       "procedure": "Permission deny; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
-      "origin": "noir.phantom-draft.com"
+      "origin": "noir.zhovten.games"
     },
     {
       "id": "manual.opera-noir-pending",
       "family": "camera-host",
       "browser": "Opera",
       "procedure": "Permission pending; metadata/play, warmup, close iframe/screen switch, retry and recovery; OS/version/origins/allow/sandbox/headers/network/long tasks traces required.",
-      "origin": "noir.phantom-draft.com"
+      "origin": "noir.zhovten.games"
     },
     {
       "id": "manual.opera-subpath-grant",

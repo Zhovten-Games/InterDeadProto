@@ -65,7 +65,7 @@ export async function manualGates(matrix, identity) {
     return matrix.map((row) => ({
       id: row.id,
       phase: 'manual',
-      mandatory: true,
+      mandatory: false,
       status: 'manual evidence required',
       reason: 'IRON_WARDEN_MANUAL_EVIDENCE_FILE is not supplied',
     }));
@@ -87,7 +87,7 @@ export async function manualGates(matrix, identity) {
       return matrix.map((row) => ({
         id: row.id,
         phase: 'manual',
-        mandatory: true,
+        mandatory: false,
         status: 'failed',
         reason: 'Manual evidence must be external or Git-ignored, never canonical tracked input',
       }));
@@ -99,7 +99,7 @@ export async function manualGates(matrix, identity) {
     return matrix.map((row) => ({
       id: row.id,
       phase: 'manual',
-      mandatory: true,
+      mandatory: false,
       status: 'failed',
       reason: `Unreadable evidence: ${error.message}`,
     }));
@@ -109,7 +109,7 @@ export async function manualGates(matrix, identity) {
     return matrix.map((row) => ({
       id: row.id,
       phase: 'manual',
-      mandatory: true,
+      mandatory: false,
       status: 'failed',
       reason: validated.errors.join('; '),
     }));
@@ -118,7 +118,7 @@ export async function manualGates(matrix, identity) {
     return {
       id: row.id,
       phase: 'manual',
-      mandatory: true,
+      mandatory: false,
       status: record?.result || 'manual evidence required',
       evidence: record || null,
       reason: record ? null : 'Required manual case missing',

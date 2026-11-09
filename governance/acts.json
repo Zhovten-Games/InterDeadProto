@@ -3,17 +3,17 @@
   "profile": {
     "id": "idp-profile-001",
     "path": "governance/PROFILE.md",
-    "revision": "1.0.0-candidate",
+    "revision": "1.1.0",
     "language": "ru",
-    "status": "candidate"
+    "status": "operative"
   },
   "acts": [
     {
       "id": "idp-act-development-001",
       "path": "governance/legislation/DEVELOPMENT.md",
-      "revision": "1.0.0-candidate",
+      "revision": "1.1.0",
       "language": "en",
-      "status": "candidate",
+      "status": "operative",
       "rules": [
         "IDP-DEV-001",
         "IDP-DEV-002",
@@ -29,7 +29,8 @@
         "IDP-DEV-012",
         "IDP-DEV-013",
         "IDP-DEV-014",
-        "IDP-DEV-015"
+        "IDP-DEV-015",
+        "IDP-DEV-016"
       ]
     }
   ],

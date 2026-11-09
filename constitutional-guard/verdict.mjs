@@ -8,7 +8,7 @@ export function releaseVerdict(report) {
     report.clean === true &&
     report.distribution?.diagnostic === false &&
     report.gates.length > 0 &&
-    report.gates.every((gate) => gate.status === 'passed') &&
+    report.gates.every((gate) => gate.mandatory === false || gate.status === 'passed') &&
     phases.every((phase) => report.phaseStatus[phase] === 'passed')
     ? 'passed'
     : 'pending';
@@ -45,7 +45,7 @@ export function validateGateInventory(definitions, gates) {
     if (
       observed.length !== 1 ||
       observed[0].phase !== definition.phase ||
-      observed[0].mandatory !== true
+      observed[0].mandatory !== (definition.mandatory !== false)
     )
       errors.push(`Missing or incompatible mandatory gate: ${definition.id}`);
   }

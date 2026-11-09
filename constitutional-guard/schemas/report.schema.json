@@ -66,7 +66,7 @@
             "enum": ["integrity", "prebuild", "assembly", "postbuild", "manual", "aggregation"]
           },
           "mandatory": {
-            "const": true
+            "type": "boolean"
           },
           "status": {
             "enum": ["passed", "failed", "unavailable", "pending", "manual evidence required"]

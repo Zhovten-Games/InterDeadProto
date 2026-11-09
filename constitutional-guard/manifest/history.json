@@ -8,7 +8,10 @@
       "phase": "prebuild",
       "sha256": "d237b3bba33bd2b6669f00efd04cfde99de01253eddcbf0cdea2bc6523d7f883",
       "status": "active",
-      "rule": { "id": "IDP-DEV-003", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-003",
+        "revision": "1.0.0-candidate"
+      },
       "cases": ["boot.coalescing", "boot.reverse-rollback", "boot.dispose-pending"],
       "dependencies": ["constitutional-guard/driver-tools.mjs"]
     },
@@ -18,7 +21,10 @@
       "phase": "prebuild",
       "sha256": "0b0efa78f5b4d2ba56997e8979885c4324500037170094e2be1a21886fa42690",
       "status": "active",
-      "rule": { "id": "IDP-DEV-005", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-005",
+        "revision": "1.0.0-candidate"
+      },
       "cases": [
         "history.sequence",
         "history.immutable-metadata",
@@ -33,7 +39,10 @@
       "phase": "prebuild",
       "sha256": "70e15747580129c47d17d439164521cf0e013f89d7e34cc0abc1bc7e502d3968",
       "status": "active",
-      "rule": { "id": "IDP-DEV-008", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-008",
+        "revision": "1.0.0-candidate"
+      },
       "cases": [
         "migration.legacy-determinism",
         "migration.idempotence",
@@ -49,7 +58,10 @@
       "phase": "prebuild",
       "sha256": "766fca4469d47486f6f460e8eea2f0e73cff94300665ace9b8065f26b358f53c",
       "status": "active",
-      "rule": { "id": "IDP-DEV-004", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-004",
+        "revision": "1.0.0-candidate"
+      },
       "cases": ["camera.late-permission", "camera.metadata-close", "camera.repeated-close"],
       "dependencies": ["constitutional-guard/driver-tools.mjs"]
     },
@@ -59,7 +71,10 @@
       "phase": "prebuild",
       "sha256": "2f5c27368419292d6c9f1c08c6a7ceaff0eafe0e7e19e877475011e226745b45",
       "status": "active",
-      "rule": { "id": "IDP-DEV-004", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-004",
+        "revision": "1.0.0-candidate"
+      },
       "cases": ["switch.A-B-A", "switch.stale-failure", "switch.reset-pending"],
       "dependencies": ["constitutional-guard/driver-tools.mjs"]
     },
@@ -69,7 +84,10 @@
       "phase": "prebuild",
       "sha256": "eb5b4846aa99cc705cad58d18af4dbca65d56ec9d98518e292ada11540435008",
       "status": "active",
-      "rule": { "id": "IDP-DEV-006", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-006",
+        "revision": "1.0.0-candidate"
+      },
       "cases": [
         "restore.late-mount",
         "restore.no-live-effects",
@@ -84,7 +102,10 @@
       "phase": "prebuild",
       "sha256": "8173c344b83168dd233507f3860507308f4dd81c7c398b0eaef5786cfea93d65",
       "status": "active",
-      "rule": { "id": "IDP-DEV-002", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-002",
+        "revision": "1.0.0-candidate"
+      },
       "cases": [
         "ai.bounded-frame",
         "ai.cancel-retains-model",
@@ -99,7 +120,10 @@
       "phase": "prebuild",
       "sha256": "4bf83ee80f5d181efc5fa505d235906622b77e7c8134805047192e4418259324",
       "status": "active",
-      "rule": { "id": "IDP-DEV-004", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-004",
+        "revision": "1.0.0-candidate"
+      },
       "cases": [
         "camera.stale-inference",
         "camera.stale-finally",
@@ -117,7 +141,10 @@
       "phase": "prebuild",
       "sha256": "916b013bb0f4d8a978015b5ac24071926431e016a684cefe3853ccf74bc0e965",
       "status": "active",
-      "rule": { "id": "IDP-DEV-008", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-008",
+        "revision": "1.0.0-candidate"
+      },
       "cases": [
         "profile.legacy-import",
         "profile.atomic-quota-refusal",
@@ -134,7 +161,10 @@
       "phase": "postbuild",
       "sha256": "932a696e88b233dabde378f8f4f5a5d2a5af8c09680a1f0dfbe4d341db8545f0",
       "status": "active",
-      "rule": { "id": "IDP-DEV-011", "revision": "1.0.0-candidate" },
+      "rule": {
+        "id": "IDP-DEV-011",
+        "revision": "1.0.0-candidate"
+      },
       "cases": [
         "artifact.frozen-content",
         "artifact.public-templates",
@@ -146,7 +176,7 @@
   "protectedDependencies": [
     {
       "path": ".github/workflows/proto-pipeline.yml",
-      "sha256": "648f244fb24b266f729fca3b332801829acfffa536cdba082b0abcf23553cc5e"
+      "sha256": "4f361b3ca1bbbec59c5279647da4e236f04cf71a489da8c7f87ef35c21405cbf"
     },
     {
       "path": "build/artifact-map.json",
@@ -202,7 +232,7 @@
     },
     {
       "path": "build/verify-release.mjs",
-      "sha256": "8426646db6cad48d3ee50ed8f7d9214afb89be148d32c4b2464997609f2d5f58"
+      "sha256": "75fecb1ba935654f4fabb445e1904b3d73219cf086d9847cf734be0ec3f40218"
     },
     {
       "path": "constitutional-guard/driver-tools.mjs",
@@ -210,7 +240,7 @@
     },
     {
       "path": "constitutional-guard/governance.mjs",
-      "sha256": "ee8825af5ae38cce903b5c5e57aed80a1f6d49c2346c2aed16684de9d4d64e77"
+      "sha256": "1027b0b5b8e86c4b7ed627c5f6f28dd00c5a6a895ee41966557ffba632707e53"
     },
     {
       "path": "constitutional-guard/integrity.mjs",
@@ -218,15 +248,15 @@
     },
     {
       "path": "constitutional-guard/manifest/gates.json",
-      "sha256": "a2db1605d8b70110311621091dda6e5d33389d6f018e3f5763fe0a688b0ee613"
+      "sha256": "6e6c564acd22e06708015b6292f82107f0ddc6d713749dd6b4f90968dfcb0799"
     },
     {
       "path": "constitutional-guard/manifest/manual-matrix.json",
-      "sha256": "aa532edf52e9f26cdfa323527f300be5c5781aadc2882d2cdb292cb76c6ad7a8"
+      "sha256": "7665eca78558c5e87b8cb5baec03e6077ec1f6c10f7d2f1d98324c84d47b0913"
     },
     {
       "path": "constitutional-guard/manual-evidence.mjs",
-      "sha256": "05765f1445cd505f93c06e46ed074dfeb1a3e687b22beb59ffe57942c2b965d0"
+      "sha256": "2a3a8b635fc745b9ae1ea8d4f51d468da09dc71806a79d321f8db357c6712803"
     },
     {
       "path": "constitutional-guard/negative-checks.mjs",
@@ -238,7 +268,7 @@
     },
     {
       "path": "constitutional-guard/run.mjs",
-      "sha256": "0ecd3bfc9ec575d00c0aa09a1fe24917ad3f6f3149b4eb2aabfe3e5521ef358e"
+      "sha256": "79026a905b69c31d9bb671d46d208dbcd598c0402f8670f05745dfdb254b5116"
     },
     {
       "path": "constitutional-guard/schemas/history.schema.json",
@@ -250,7 +280,7 @@
     },
     {
       "path": "constitutional-guard/schemas/report.schema.json",
-      "sha256": "ea053e3de8d04893b8a9ad8f06e4912f2edf252463da64421f748b923ac65f04"
+      "sha256": "1a121c2f807d8bf0dda607a7adbb064b2667afe311fdbce6683314e6ddbd9fef"
     },
     {
       "path": "constitutional-guard/testing-interface/artifact-driver.mjs",
@@ -258,7 +288,7 @@
     },
     {
       "path": "constitutional-guard/verdict.mjs",
-      "sha256": "7de48a9ac85c3c49f7964648704cc8683321f503931534556ffcad0447199ae8"
+      "sha256": "90d215694ae09f83af43bce52ea8b4b85b95b9cf5556c41a863e43ca86bd86f3"
     },
     {
       "path": "eslint.config.mjs",
@@ -266,27 +296,27 @@
     },
     {
       "path": "manifest/dependencies.json",
-      "sha256": "a2480a4a1b5e9c365014576970f308292115f9c851bf738c746370afec92da91"
+      "sha256": "9e4a8a60a2551f01bd400f17cf63e8e9516f47e818fbfa9b1f79d16116dddd3e"
     },
     {
       "path": "manifest/rule-checks.json",
-      "sha256": "b1a3045488b2205b67a6ca8eea7c3b60a71b53059ce23beb9af5fe2bc45f72c2"
+      "sha256": "c5578cc5da24f5522c825c07d7d06e35497ab51276f631526c6b035843d24828"
     },
     {
       "path": "manifest/technical-regulators.json",
-      "sha256": "bbd63625a515607dfddb8099fad2cff300a7c84608e4e7b35683339bf07ebafa"
+      "sha256": "772f307921c987ba8f908aea5fd35a80e27cb5582360721152ebe76c21e12972"
     },
     {
       "path": "manifest/test-corpus.json",
-      "sha256": "2e2856535037280b93e8a1520dd221c8fa4f5b8883bc4e082b36ab0451bac5bd"
+      "sha256": "acde167a852a45e267093fbb3b6d39ac50273dea0b9a651c09cef89b6f5c4993"
     },
     {
       "path": "proto-dev/package-lock.json",
-      "sha256": "1373191d5148a3988789419f386ed7e30ac2f69792fd373a57279e9311335a3d"
+      "sha256": "9586fb503bb94bff1186478cbfe92ed582257105aee4a2d9900515f4a4c48d70"
     },
     {
       "path": "proto-dev/package.json",
-      "sha256": "750d9c0b8bd1b8e3b0c0635096886510f1c3e14b4e6016e37df3cd5eb30ce8cc"
+      "sha256": "31e94b1059b6eb75aac1647fda55934e7e66ed3a3faa8e1e027c6d83ce61a0fb"
     },
     {
       "path": "proto-dev/tests/fixtures/bootstrap-context.js",
@@ -387,5 +417,6 @@
       "path": "proto-dev/src/localization/browser/language-adapter.js",
       "methods": ["boot", "dispose", "setLanguage", "applyLanguage"]
     }
-  ]
+  ],
+  "controlChange": "governance/decisions/2026-11-07-controls.json"
 }
