@@ -1,0 +1,18 @@
+{
+    "schemaVersion":  1,
+    "status":  "reviewed",
+    "date":  "2026-11-09T14:35:17.450Z",
+    "reviewers":  [
+                      "Sam Starling вЂ” owner-reviewed CI runner compatibility change on 2026-11-09"
+                  ],
+    "authority":  "governance/PROFILE.md (P06/P10); owner review",
+    "basis":  "https://github.com/Zhovten-Games/InterDeadProto/actions/runs/42631975936",
+    "scope":  "Pin candidate runner to Ubuntu 24.04 for Playwright 1.58.2 Chromium compatibility. Preserve all historical drivers, candidate gates, full WARDEN, frozen-artifact verification, and main-only guarded deployment.",
+    "changes":  [
+                    {
+                        "path":  ".github/workflows/proto-pipeline.yml",
+                        "before":  "4f361b3ca1bbbec59c5279647da4e236f04cf71a489da8c7f87ef35c21405cbf",
+                        "after":  "9afc43d4ea3e7bd503b7a8fd39e37ea088f69b08d6756d1ad04803a02aa58cef"
+                    }
+                ]
+}

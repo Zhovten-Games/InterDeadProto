@@ -176,7 +176,7 @@
   "protectedDependencies": [
     {
       "path": ".github/workflows/proto-pipeline.yml",
-      "sha256": "4f361b3ca1bbbec59c5279647da4e236f04cf71a489da8c7f87ef35c21405cbf"
+      "sha256": "9afc43d4ea3e7bd503b7a8fd39e37ea088f69b08d6756d1ad04803a02aa58cef"
     },
     {
       "path": "build/artifact-map.json",
@@ -418,5 +418,5 @@
       "methods": ["boot", "dispose", "setLanguage", "applyLanguage"]
     }
   ],
-  "controlChange": "governance/decisions/2026-11-07-controls.json"
+  "controlChange": "governance/decisions/2026-11-09-ubuntu-24.04-controls.json"
 }
