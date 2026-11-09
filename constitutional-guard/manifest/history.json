@@ -176,7 +176,7 @@
   "protectedDependencies": [
     {
       "path": ".github/workflows/proto-pipeline.yml",
-      "sha256": "3ca6073a037d9910ca12760587c94c56087579f89cab3735167724fb9f7400d4"
+      "sha256": "c55cb692dca2f09cb962f7e4d6b9504dcb94e23de1e4bf105b3ec606ae8e1c72"
     },
     {
       "path": "build/artifact-map.json",
@@ -418,5 +418,5 @@
       "methods": ["boot", "dispose", "setLanguage", "applyLanguage"]
     }
   ],
-  "controlChange": "governance/decisions/2026-11-10-butler-grep-controls.json"
+  "controlChange": "governance/decisions/2026-11-10-butler-stderr-controls.json"
 }
