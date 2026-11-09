@@ -36,7 +36,7 @@ concurrency:
 jobs:
   candidate:
     name: Full WARDEN (host acceptance reported separately)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     outputs:
       release-status: ${{ steps.verdict.outputs.release-status }}
     steps:
